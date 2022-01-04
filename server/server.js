@@ -19,14 +19,14 @@ const TWEET_HIDE_CARD = false;
 const app = express();
 
 // app.use(express.json());
-app.use(express.static(path.join(__dirname, "..", "..", "dist")));
+app.use(express.static(path.join(__dirname, "..", "dist")));
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${HOST}:${PORT}`);
 });
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "..", "dist", "index.html"));
+  res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
 });
 
 function getTweetId(tweetURL) {
@@ -56,9 +56,10 @@ app.get("/get-data", async (req, res) => {
 });
 
 app.post("/get-image", async (req, res) => {
+  console.log("query", req.query);
   const { tweetURL, theme, lang } = req.query;
 
-  const tweetsTxtPath = path.join(__dirname, "..", "..", "tweets.txt");
+  const tweetsTxtPath = path.join(__dirname, "..", "tweets.txt");
   const unixTime = Math.round(+new Date() / 1000);
   const dataToSave = `${tweetURL} ${unixTime}\n`;
 
