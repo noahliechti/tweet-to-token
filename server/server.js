@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const express = require("express");
 const axios = require("axios");
+const cors = require("cors");
 const createScreenshot = require("./create-screenshot");
 
 const PORT = process.env.PORT || 3000;
@@ -18,7 +19,13 @@ const TWEET_HIDE_CARD = false;
 
 const app = express();
 
-// app.use(express.json());
+app.use(express.json());
+app.use(
+  cors({
+    origin: ["http://127.0.0.1:1234", "http://localhost:1234"],
+  })
+);
+
 app.use(express.static(path.join(__dirname, "..", "dist")));
 
 app.listen(PORT, () => {
@@ -56,8 +63,8 @@ app.get("/get-data", async (req, res) => {
 });
 
 app.post("/get-image", async (req, res) => {
-  console.log("query", req.query);
-  const { tweetURL, theme, lang } = req.query;
+  const { tweetURL, theme, lang } = req.body;
+  // const { tweetURL, theme, lang } = req.query;
 
   const tweetsTxtPath = path.join(__dirname, "..", "tweets.txt");
   const unixTime = Math.round(+new Date() / 1000);
