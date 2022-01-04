@@ -1,0 +1,231 @@
+$formWidth: 550px;
+
+$mobile-max: 767px;
+$tablet-min: 768px;
+$tablet-max: 991px;
+$computer-min: 992px;
+$computer-max: 1199px;
+$largescreen-min: 1200px;
+$largescreen-max: 1919px;
+$widescreen-min: 1920px;
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  box-sizing: border-box;
+}
+
+body,
+input,
+select,
+button {
+  font-size: 18px;
+  font-family: -apple-system, Ubuntu, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+}
+
+fieldset {
+  border: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+form {
+  @media (max-width: $mobile-max) {
+    width: 100%;
+    padding: 30px;
+  }
+  @media (min-width: $tablet-min) {
+    width: $formWidth;
+    margin: 50px auto;
+  }
+}
+
+input,
+select,
+button {
+  width: 100%;
+  height: 40px;
+  font-size: 16px;
+  padding: 0 15px;
+  appearance: none;
+  border-radius: 4px;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid #cdd6dd;
+  &:focus {
+    border-color: #7fbdff;
+  }
+  &:disabled {
+    opacity: 1;
+    color: #aaa;
+    border-color: #ccc;
+    background-color: #fafaf9;
+  }
+  &.is-invalid {
+    border-color: #d63030;
+  }
+}
+button {
+  cursor: pointer;
+  background-color: #fafaf9;
+  &:hover {
+    background-color: darken(#fafaf9, 10%);
+  }
+}
+
+select {
+  background-repeat: no-repeat;
+  background-size: 5px 5px, 5px 5px;
+  background-position: right 20px top 18px, right 15px top 18px;
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+}
+
+.invalid-feedback {
+  display: none;
+  color: #d63030;
+  margin-top: 5px;
+}
+
+.narrowInputs {
+  margin-top: 10px;
+  &:after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+  &.one {
+    .inputWrapper {
+      width: 100%;
+    }
+  }
+  &.two {
+    .inputWrapper {
+      @media (max-width: $mobile-max) {
+        width: calc((100% / 2) - 5px);
+      }
+      @media (min-width: $tablet-min) {
+        width: calc(($formWidth - 10px) / 2);
+      }
+    }
+  }
+  &.three {
+    .inputWrapper {
+      @media (max-width: $mobile-max) {
+        width: calc((100% / 3) - (20px / 3));
+      }
+      @media (min-width: $tablet-min) {
+        width: calc(($formWidth - 20px) / 3);
+      }
+    }
+  }
+
+  .inputWrapper {
+    float: left;
+    margin-left: 10px;
+    position: relative;
+    &:first-child {
+      margin-left: 0;
+    }
+
+    .inputWithButton {
+      position: relative;
+
+      .submitButton {
+        padding: 0;
+        top: 10px;
+        width: 20px;
+        right: 10px;
+        height: 20px;
+        position: absolute;
+      }
+    }
+
+    label {
+      font-size: 10px;
+      margin-bottom: 3px;
+      text-transform: uppercase;
+    }
+
+    label,
+    input,
+    select {
+      display: block;
+    }
+  }
+}
+
+.generatedImageWrapper {
+  width: 100%;
+  margin-top: 20px;
+  position: relative;
+  border-radius: 4px;
+  border: 1px solid #cdd6dd;
+
+  .saveImageButton {
+    right: 25px;
+    width: 50px;
+    padding: 0;
+    color: #fff;
+    height: 50px;
+    bottom: 25px;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    text-align: center;
+    position: absolute;
+    border-radius: 50%;
+    background-color: #1ea1f3;
+    &:hover {
+      background-color: darken(#1ea1f3, 10%);
+    }
+  }
+
+  .generatedImage {
+    width: 100%;
+    border-radius: 4px;
+  }
+
+  .helpText {
+    min-height: 200px;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 4px;
+    background-color: #fafafa;
+    padding-top: calc((200px - 20px) / 2);
+  }
+}
+
+.socials {
+  position: fixed;
+  @media (max-width: $mobile-max) {
+    top: 10px;
+    right: 10px;
+  }
+  @media (min-width: $tablet-min) {
+    top: 20px;
+    right: 20px;
+  }
+
+  a {
+    font-size: 24px;
+    margin-left: 10px;
+    vertical-align: top;
+    display: inline-block;
+    &:first-child {
+      margin-left: 0;
+    }
+
+    .icon-github {
+      color: #161b21;
+    }
+    .icon-twitter {
+      color: #1ea1f3;
+    }
+  }
+}
