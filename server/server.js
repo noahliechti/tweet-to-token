@@ -16,11 +16,7 @@ const TWEET_HIDE_CARD = false;
 
 const app = express();
 
-app.use(
-  cors({
-    origin: "https://deploy-preview-1--nostalgic-turing-13f97d.netlify.app/",
-  })
-);
+app.use(cors());
 
 app.use(express.json());
 
