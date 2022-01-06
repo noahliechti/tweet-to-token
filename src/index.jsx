@@ -7,8 +7,7 @@ import "./style.scss";
 const apiURL =
   process.env.NODE_ENV === "DEV"
     ? "http://localhost:3000/get-image"
-    : "https://get-tweet-data-image.herokuapp.com/";
-console.log(apiURL);
+    : "https://get-tweet-data-image.herokuapp.com";
 
 const validations = {
   empty: [
@@ -53,7 +52,7 @@ const App = () => {
         postSubmit={postSubmit}
         postOptions={{
           method: "post",
-          url: { apiURL },
+          url: apiURL + "/get-image",
         }}
       >
         <fieldset disabled={formIsSubmitting}>
