@@ -3,30 +3,21 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "parcel": "npm run build && parcel ./client/src/index.html --open chrome",
-    "dev": "cross-env NODE_ENV=DEV nodemon --ignore .cache/ --ignore dist/ --ignore node_modules/ ./server/server.js",
-    "build": "parcel build ./client/src/index.html",
+    "build": "parcel build ./src/index.html",
     "prestart": "npm run build",
-    "start": "node server/server.js"
+    "start": "parcel ./src/index.html --open chrome"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.24.0",
-    "cors": "^2.8.5",
-    "cross-env": "^7.0.3",
-    "dotenv": "^10.0.0",
-    "express": "^4.17.2",
-    "puppeteer": "^13.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "rfv": "0.0.37",
-    "serverless-http": "^2.7.0"
+    "rfv": "0.0.37"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.0.1",
-    "nodemon": "^2.0.15",
     "parcel": "^2.0.1"
   }
 }
