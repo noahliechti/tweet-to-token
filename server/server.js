@@ -4,7 +4,7 @@ const path = require("path");
 const serverless = require("serverless-http");
 const express = require("express");
 const cors = require("cors");
-// const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer");
 
 const PORT = process.env.PORT || 3000;
 const HOST = "localhost";
