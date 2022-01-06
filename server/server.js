@@ -1,4 +1,4 @@
-require("dotenv").config();
+// require("dotenv").config();
 // const fs = require("fs");
 const path = require("path");
 const serverless = require("serverless-http");
@@ -27,25 +27,26 @@ app.post("/get-image", async (req, res) => {
   const { tweetURL, theme, lang } = req.body;
   // const { tweetURL, theme, lang } = req.query;
 
-  const tweetsTxtPath = path.join(__dirname, "..", "tweets.txt");
-  const unixTime = Math.round(+new Date() / 1000);
-  const dataToSave = `${tweetURL} ${unixTime}\n`;
+  // const tweetsTxtPath = path.join(__dirname, "..", "tweets.txt");
+  // const unixTime = Math.round(+new Date() / 1000);
+  // const dataToSave = `${tweetURL} ${unixTime}\n`;
 
-  // fs.appendFile(tweetsTxtPath, dataToSave, (err) => {
-  //   if (err) throw err;
+  // // fs.appendFile(tweetsTxtPath, dataToSave, (err) => {
+  // //   if (err) throw err;
+  // // });
+
+  // const screenshot = await createScreenshot({
+  //   width: TWEET_WIDTH,
+  //   theme,
+  //   padding: TWEET_PADDING,
+  //   tweetId: getTweetId(tweetURL),
+  //   hideCard: TWEET_HIDE_CARD,
+  //   hideThread: TWEET_HIDE_THREAD,
+  //   lang,
   // });
 
-  const screenshot = await createScreenshot({
-    width: TWEET_WIDTH,
-    theme,
-    padding: TWEET_PADDING,
-    tweetId: getTweetId(tweetURL),
-    hideCard: TWEET_HIDE_CARD,
-    hideThread: TWEET_HIDE_THREAD,
-    lang,
-  });
-
-  res.send(screenshot);
+  // res.send(screenshot);
+  res.send("hello");
 });
 
 const createScreenshot = async (props) => {
