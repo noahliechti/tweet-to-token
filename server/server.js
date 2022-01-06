@@ -16,11 +16,11 @@ const TWEET_HIDE_CARD = false;
 
 const app = express();
 
-app.use(
-  cors({
-    origin: "*",
-  })
-);
+// app.use(
+//   cors({
+//     origin: "*",
+//   })
+// );
 
 app.use(express.json());
 
@@ -120,10 +120,4 @@ function getTweetId(tweetURL) {
   return splitLastItem[0];
 }
 
-if (process.env.NODE_ENV === "DEV") {
-  app.listen(PORT, () => {
-    console.log(`Example app listening on port ${HOST}:${PORT}`);
-  });
-} else {
-  module.exports.handler = serverless(app);
-}
+module.exports.handler = serverless(app);
