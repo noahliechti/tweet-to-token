@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "bla": "parcel ./client/src/index.html --open chrome",
+    "parcel": "npm run build && parcel ./client/src/index.html --open chrome",
     "dev": "cross-env NODE_ENV=DEV nodemon --ignore .cache/ --ignore dist/ --ignore node_modules/ ./server/server.js",
+    "build": "parcel build ./client/src/index.html",
     "prestart": "npm run build",
-    "start": "node server/server.js",
-    "build": "parcel build ./client/src/index.html"
+    "start": "node server/server.js"
   },
   "keywords": [],
   "author": "",

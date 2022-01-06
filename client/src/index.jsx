@@ -47,7 +47,7 @@ const App = () => {
         postSubmit={postSubmit}
         postOptions={{
           method: "post",
-          url: "http://127.0.0.1:3000/get-image",
+          url: "/get-image",
         }}
       >
         <fieldset disabled={formIsSubmitting}>

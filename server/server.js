@@ -7,7 +7,7 @@ const cors = require("cors");
 const createScreenshot = require("./create-screenshot");
 
 const PORT = process.env.PORT || 3000;
-const HOST = "127.0.0.1";
+const HOST = "localhost";
 const HEADERS = {
   Authorization: "Bearer " + process.env.BEARER_TOKEN,
 };
@@ -20,11 +20,11 @@ const TWEET_HIDE_CARD = false;
 const app = express();
 
 app.use(express.json());
-app.use(
-  cors({
-    origin: ["http://127.0.0.1:1234", "http://localhost:1234"],
-  })
-);
+// app.use(
+//   cors({
+//     origin: ["http://127.0.0.1:1234", "http://localhost:1234"],
+//   })
+// );
 
 app.use(express.static(path.join(__dirname, "..", "dist")));
 
