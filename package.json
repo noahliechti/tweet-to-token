@@ -21,7 +21,8 @@
     "puppeteer": "^13.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "rfv": "0.0.37"
+    "rfv": "0.0.37",
+    "serverless-http": "^2.7.0"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.0.1",

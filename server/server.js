@@ -1,6 +1,7 @@
 require("dotenv").config();
 const fs = require("fs");
 const path = require("path");
+const serverless = require("serverless-http");
 const express = require("express");
 const axios = require("axios");
 const cors = require("cors");
@@ -86,3 +87,5 @@ app.post("/get-image", async (req, res) => {
 
   res.send(screenshot);
 });
+
+module.exports.handler = serverless(app);
