@@ -3,6 +3,7 @@
 const path = require("path");
 const serverless = require("serverless-http");
 const express = require("express");
+const cors = require("cors");
 // const puppeteer = require("puppeteer");
 
 const PORT = process.env.PORT || 3000;
@@ -14,6 +15,12 @@ const TWEET_HIDE_THREAD = true;
 const TWEET_HIDE_CARD = false;
 
 const app = express();
+
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 app.use(express.json());
 
