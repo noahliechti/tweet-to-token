@@ -29,10 +29,6 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname, "..", "dist")));
 
-// app.listen(PORT, () => {
-//   console.log(`Example app listening on port ${HOST}:${PORT}`);
-// });
-
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
 });
@@ -88,4 +84,10 @@ app.post("/get-image", async (req, res) => {
   res.send(screenshot);
 });
 
-module.exports.handler = serverless(app);
+if (process.env.NODE_ENV === "DEV") {
+  app.listen(PORT, () => {
+    console.log(`Example app listening on port ${HOST}:${PORT}`);
+  });
+} else {
+  module.exports.handler = serverless(app);
+}
