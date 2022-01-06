@@ -1,5 +1,5 @@
 require("dotenv").config();
-const fs = require("fs");
+// const fs = require("fs");
 const path = require("path");
 const serverless = require("serverless-http");
 const express = require("express");
@@ -31,9 +31,9 @@ app.post("/get-image", async (req, res) => {
   const unixTime = Math.round(+new Date() / 1000);
   const dataToSave = `${tweetURL} ${unixTime}\n`;
 
-  fs.appendFile(tweetsTxtPath, dataToSave, (err) => {
-    if (err) throw err;
-  });
+  // fs.appendFile(tweetsTxtPath, dataToSave, (err) => {
+  //   if (err) throw err;
+  // });
 
   const screenshot = await createScreenshot({
     width: TWEET_WIDTH,
