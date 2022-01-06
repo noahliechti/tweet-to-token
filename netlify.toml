@@ -1,6 +1,7 @@
 [build]
     functions="server"
+
 [[redirects]] 
-  to=”/.netlify/server/server:splat” 
-  from=”/*” 
-  status=200
+    to=”/.netlify/server/server:splat” 
+    from=”/*” 
+    status=200
