@@ -4,7 +4,7 @@ const path = require("path");
 const serverless = require("serverless-http");
 const express = require("express");
 const cors = require("cors");
-const puppeteer = require("puppeteer");
+// const puppeteer = require("puppeteer");
 
 const PORT = process.env.PORT || 3000;
 const HOST = "localhost";
@@ -16,11 +16,12 @@ const TWEET_HIDE_CARD = false;
 
 const app = express();
 
-// app.use(
-//   cors({
-//     origin: "*",
-//   })
-// );
+const cors = require("cors");
+app.use(
+  cors({
+    origin: "https://deploy-preview-1--nostalgic-turing-13f97d.netlify.app/",
+  })
+);
 
 app.use(express.json());
 
