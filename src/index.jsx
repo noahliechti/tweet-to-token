@@ -8,6 +8,7 @@ const apiURL =
   process.env.NODE_ENV === "DEV"
     ? "http://localhost:3000/get-image"
     : "https://get-tweet-data-image.herokuapp.com/";
+console.log(apiURL);
 
 const validations = {
   empty: [
@@ -52,7 +53,7 @@ const App = () => {
         postSubmit={postSubmit}
         postOptions={{
           method: "post",
-          url: "http://localhost:3000/get-image",
+          url: { apiURL },
         }}
       >
         <fieldset disabled={formIsSubmitting}>
