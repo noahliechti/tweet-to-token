@@ -4,6 +4,11 @@ import { Form, Input, Select } from "rfv";
 
 import "./style.scss";
 
+const apiURL =
+  process.env.NODE_ENV === "DEV"
+    ? "http://localhost:3000/get-image"
+    : "https://get-tweet-data-image.herokuapp.com/";
+
 const validations = {
   empty: [
     {
