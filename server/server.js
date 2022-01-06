@@ -16,7 +16,6 @@ const TWEET_HIDE_CARD = false;
 
 const app = express();
 
-const cors = require("cors");
 app.use(
   cors({
     origin: "https://deploy-preview-1--nostalgic-turing-13f97d.netlify.app/",
