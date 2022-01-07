@@ -5,7 +5,7 @@
   "scripts": {
     "build": "parcel build ./src/index.html",
     "prestart": "npm run build",
-    "dev": "npm run build && cross-env NODE_ENV=DEV parcel ./src/index.html --open chrome",
+    "dev": "cross-env NODE_ENV=development npm run build && parcel ./src/index.html --open chrome",
     "start": "parcel ./src/index.html --open chrome"
   },
   "keywords": [],
