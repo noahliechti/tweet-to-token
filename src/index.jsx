@@ -52,7 +52,7 @@ const App = () => {
         onSubmit={onSubmit}
         postSubmit={postSubmit}
         postOptions={{
-          method: "post",
+          method: "put",
           url: apiURL + "/get-image",
         }}
       >
