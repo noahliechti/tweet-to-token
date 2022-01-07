@@ -5,9 +5,10 @@ import { Form, Input, Select } from "rfv";
 import "./style.scss";
 
 const apiURL =
-  process.env.NODE_ENV === "development"
+  process.env.REACT_APP_ENV === "development"
     ? "http://localhost:3000"
     : "https://get-tweet-data-image.herokuapp.com";
+console.log(apiURL, process.env.REACT_APP_ENV);
 
 const validations = {
   empty: [
@@ -30,7 +31,7 @@ const App = () => {
     }
   };
   const postSubmit = (res) => {
-    console.log("post", res.items, res.data);
+    console.log("post submit", res.items, res.data);
     setFormIsSubmitting(false);
     setImageData(res.data);
   };

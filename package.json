@@ -4,8 +4,7 @@
   "description": "",
   "scripts": {
     "build": "parcel build ./src/index.html",
-    "prestart": "npm run build",
-    "dev": "cross-env NODE_ENV=development npm run build && parcel ./src/index.html --open chrome",
+    "dev": "REACT_APP_ENV=development parcel ./src/index.html",
     "start": "parcel ./src/index.html --open chrome"
   },
   "keywords": [],
@@ -13,7 +12,6 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.24.0",
-    "cross-env": "^7.0.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "rfv": "0.0.37"
