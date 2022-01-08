@@ -31,7 +31,7 @@ const App = () => {
     }
   };
   const postSubmit = (res) => {
-    console.log("post submit", res.items, res.data, res.buffer.data);
+    console.log("post submit", res.items, res.data, res.buffer);
     setFormIsSubmitting(false);
     setImageData(res.buffer.data);
   };
