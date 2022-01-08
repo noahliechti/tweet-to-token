@@ -7,7 +7,7 @@ import "./style.scss";
 const apiURL =
   process.env.REACT_APP_ENV === "development"
     ? "http://localhost:3000"
-    : "http://get-tweet-data-image.herokuapp.com";
+    : "https://get-tweet-data-image.herokuapp.com";
 console.log(apiURL, process.env.REACT_APP_ENV);
 
 const validations = {
