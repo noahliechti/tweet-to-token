@@ -7,50 +7,28 @@ const TWEET_HIDE_CARD = false;
 
 exports.handler = async (event, context) => {
   const { tweetURL, theme, lang } = JSON.parse(event.body);
-
-  const screenshot = await createScreenshot({
-    width: TWEET_WIDTH,
-    theme,
-    padding: TWEET_PADDING,
-    tweetId: getTweetId(tweetURL),
-    hideCard: TWEET_HIDE_CARD,
-    hideThread: TWEET_HIDE_THREAD,
-    lang,
-  });
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: `Complete screenshot`,
-      buffer: screenshot,
-    }),
-  };
-};
-
-const createScreenshot = async (props) => {
   try {
-    const { lang, width, theme, padding, hideCard, hideThread, tweetId } =
-      props;
-
     const browser = await chromium.puppeteer.launch({
       executablePath: await chromium.executablePath,
     });
 
     const page = await browser.newPage();
     await page.goto(
-      `https://platform.twitter.com/embed/index.html?dnt=true&embedId=twitter-widget-0&frame=false&hideCard=${hideCard}&hideThread=${hideThread}&id=${tweetId}&lang=${lang}&theme=${theme}&widgetsVersion=ed20a2b%3A1601588405575`,
+      `https://platform.twitter.com/embed/index.html?dnt=true&embedId=twitter-widget-0&frame=false&hideCard=${TWEET_HIDE_CARD}&hideThread=${TWEET_HIDE_THREAD}&id=${getTweetId(
+        tweetURL
+      )}&lang=${lang}&theme=${theme}&widgetsVersion=ed20a2b%3A1601588405575`,
       { waitUntil: "networkidle0" }
     );
 
     const embedDefaultWidth = 550;
-    const percent = width / embedDefaultWidth;
+    const percent = TWEET_WIDTH / embedDefaultWidth;
     const pageWidth = embedDefaultWidth * percent;
     const pageHeight = 100;
     await page.setViewport({ width: pageWidth, height: pageHeight });
 
     await page.evaluate(
       (props) => {
-        const { theme, padding, percent } = props;
+        // const { theme, padding, percent } = props;
 
         const style = document.createElement("style");
         style.innerHTML =
@@ -58,7 +36,7 @@ const createScreenshot = async (props) => {
         document.getElementsByTagName("head")[0].appendChild(style);
 
         const body = document.querySelector("body");
-        body.style.padding = `${padding}px`;
+        body.style.padding = `${TWEET_PADDING}px`;
         body.style.backgroundColor = theme === "dark" ? "#000" : "#fff";
         body.style.zoom = `${100 * percent}%`;
         const articleWrapper = document.querySelector("#app > div");
@@ -75,7 +53,13 @@ const createScreenshot = async (props) => {
 
     await browser.close();
 
-    return imageBuffer;
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: `Complete screenshot`,
+        buffer: imageBuffer,
+      }),
+    };
   } catch (err) {
     console.log(err);
   }
