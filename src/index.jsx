@@ -3,6 +3,27 @@ import ReactDOM from "react-dom";
 import { Form, Input, Select } from "rfv";
 
 import "./style.scss";
+// import handler from "../take-screenshot/take-screenshot";
+
+// console.log(handler);
+
+// const options = {
+//   method: "POST",
+//   headers: { "Content-Type": "application/json; charset=utf-8" },
+//   body: JSON.stringify({
+//     pageToScreenshot:
+//       "https://twitter.com/Rainmaker1973/status/1478285768493834240",
+//   }),
+// };
+fetch("./take-screenshot/take-screenshot", options)
+  .then((res) => res.json())
+  .then((res) => {
+    console.log("worked");
+  })
+  .catch((err) => {
+    console.log(err);
+    document.getElementById("result").textContent = `Error: ${err.toString()}`;
+  });
 
 const apiURL =
   process.env.REACT_APP_ENV === "development"
@@ -52,8 +73,8 @@ const App = () => {
         onSubmit={onSubmit}
         postSubmit={postSubmit}
         postOptions={{
-          method: "put",
-          url: apiURL + "/get-image",
+          method: "post",
+          url: "/.netlify/functions/take-screenshot",
         }}
       >
         <fieldset disabled={formIsSubmitting}>
