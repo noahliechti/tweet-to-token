@@ -18,12 +18,11 @@ exports.handler = async (event, context) => {
     lang,
   });
 
-  console.log("sc", screenshot);
-
   return {
     statusCode: 200,
     body: JSON.stringify({
-      message: screenshot,
+      message: `Complete screenshot`,
+      buffer: screenshot,
     }),
   };
 };
@@ -71,7 +70,7 @@ const createScreenshot = async (props) => {
     const imageBuffer = await page.screenshot({
       type: "png",
       fullPage: true,
-      encoding: "base64",
+      encoding: "binary",
     });
 
     await browser.close();
