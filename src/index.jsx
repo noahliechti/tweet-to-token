@@ -31,9 +31,9 @@ const App = () => {
     }
   };
   const postSubmit = (res) => {
-    console.log("post submit", res.items, res.data, res.buffer, res.json());
+    console.log("post submit", res.items, res.data, res.buffer);
     setFormIsSubmitting(false);
-    setImageData(res.buffer.data);
+    setImageData(res.buffer);
   };
 
   const saveBase64AsFile = (base64, fileName) => {
