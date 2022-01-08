@@ -20,7 +20,10 @@ exports.handler = async (event, context) => {
 
   return {
     statusCode: 200,
-    body: screenshot,
+    body: JSON.stringify({
+      message: `Screenshot of tweet ${getTweetId(tweetURL)}`,
+      buffer: screenshot,
+    }),
   };
 };
 

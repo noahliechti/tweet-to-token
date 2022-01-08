@@ -31,9 +31,9 @@ const App = () => {
     }
   };
   const postSubmit = (res) => {
-    console.log("post submit", res.items, res.data);
+    console.log("post submit", res.items, res.data, res.buffer.data);
     setFormIsSubmitting(false);
-    setImageData(res.data);
+    setImageData(res.buffer.data);
   };
 
   const saveBase64AsFile = (base64, fileName) => {
@@ -122,16 +122,6 @@ const App = () => {
           </div>
         </fieldset>
       </Form>
-
-      <div className="socials">
-        <a href="https://github.com/ozgrozer" target="_blank" rel="noreferrer">
-          <i className="icon icon-github" />
-        </a>
-
-        <a href="https://twitter.com/ozgrozer" target="_blank" rel="noreferrer">
-          <i className="icon icon-twitter" />
-        </a>
-      </div>
     </div>
   );
 };
