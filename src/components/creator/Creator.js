@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import ReactDOM from "react-dom";
 import { Form, Input, Select } from "rfv";
 
-import "./style.scss";
+import "./Creator.scss";
 
 const apiURL =
   process.env.REACT_APP_ENV === "development"
@@ -20,7 +19,7 @@ const validations = {
   ],
 };
 
-const App = () => {
+function Creator() {
   const [imageData, setImageData] = useState();
 
   const [formIsSubmitting, setFormIsSubmitting] = useState(false);
@@ -134,6 +133,6 @@ const App = () => {
       </div>
     </div>
   );
-};
+}
 
-ReactDOM.render(<App />, document.getElementById("root"));
+export default Creator;
