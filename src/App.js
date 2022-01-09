@@ -1,23 +1,27 @@
-import "./App.scss";
-import Header from "./Components/Header/Header";
-import Home from "./Components/Home/Home";
-import Creator from "./Components/Creator/Creator";
-import { Container } from "@mui/material";
+import Header from "./components/header/Header";
+import Home from "./components/home/Home";
+import Creator from "./components/creator/Creator";
+import { Grid, ThemeProvider, Container, CssBaseline } from "@mui/material";
+import theme from "./config/theme";
 
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 
 function App() {
   return (
     <Router className="App">
-      <Container>
+      <CssBaseline /> {/* normalize styles */}
+      <ThemeProvider theme={theme}>
         <Header />
-        <Routes>
-          <Route path="/" element={<Home></Home>} />
-          <Route path="/create" element={<Creator></Creator>} />
-          {/* <Route path="/home" element={<div>home</div>} /> */}
-          <Route path="*" element={<div>404</div>} />
-        </Routes>
-      </Container>
+        <Container>
+          <Grid container spacing={2}>
+            <Routes>
+              <Route path="/" element={<Home></Home>} />
+              <Route path="/create" element={<Creator></Creator>} />
+              <Route path="*" element={<div>404</div>} />
+            </Routes>
+          </Grid>
+        </Container>
+      </ThemeProvider>
     </Router>
   );
 }

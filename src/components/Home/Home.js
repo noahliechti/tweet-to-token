@@ -1,18 +1,49 @@
-import { Typography, Button } from "@mui/material";
+import { Typography, Button, Grid } from "@mui/material";
 import { Link } from "react-router-dom";
 
 function Home() {
   return (
     <>
-      <Typography variant="h1">
-        Create NFTs from your Tweets and sell them on Ethereum!
-      </Typography>
-      <Button component={Link} to="/create" variant="contained" color="primary">
-        Let's go!
-      </Button>
-      <Button component={Link} to="/home" variant="contained" color="secondary">
-        How?
-      </Button>
+      <Grid item xs={12}>
+        <Typography variant="h1">
+          Create NFTs from your Tweets and sell them on Ethereum!
+        </Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <Typography variant="subtitle1">
+          Connect to your wallet, your Twitter and start minting your Tweets
+          with one click!
+        </Typography>
+      </Grid>
+      <Grid item xs={6}>
+        <Button
+          component={Link}
+          to="/create"
+          variant="contained"
+          color="primary"
+        >
+          Let's go!
+        </Button>
+      </Grid>
+      <Grid item xs={6}>
+        <Button
+          component={Link}
+          to="/home"
+          variant="contained"
+          color="secondary"
+        >
+          How?
+        </Button>
+      </Grid>
+      <Grid item xs={12}>
+        <Typography variant="h2">Who is this for?</Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <Typography variant="body">
+          We have all types of people who mint their tweets, from celebrities to
+          people who just posted a tweet the first time.
+        </Typography>
+      </Grid>
     </>
   );
 }
