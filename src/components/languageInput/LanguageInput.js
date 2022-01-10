@@ -3,9 +3,9 @@ import { Autocomplete, Box, TextField } from "@mui/material";
 function LanguageInput() {
   return (
     <Autocomplete
-      sx={{ width: 1 / 1 }}
       options={countries}
       autoHighlight
+      sx={{ mt: 2 }}
       getOptionLabel={(option) => option.label}
       renderOption={(props, option) => (
         <Box component="li" {...props}>
@@ -14,6 +14,8 @@ function LanguageInput() {
       )}
       renderInput={(params) => (
         <TextField
+          required
+          fullWidth
           {...params}
           label="Choose a language"
           inputProps={{

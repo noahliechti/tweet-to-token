@@ -9,6 +9,8 @@ import {
   Typography,
   Paper,
   TextField,
+  ToggleButton,
+  Stack,
 } from "@mui/material";
 import LanguageInput from "../languageInput/LanguageInput";
 
@@ -40,18 +42,23 @@ function Steps() {
             <StepLabel>{step.label}</StepLabel>
             <StepContent>
               {step.content}
-              <Box sx={{ mb: 2 }}>
-                <Button variant="contained" onClick={handleNext} sx={{ mt: 1 }}>
+              <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+                <Button
+                  variant="contained"
+                  sx={{ flexGrow: 1 }}
+                  onClick={handleNext}
+                >
                   {step.buttonLabel}
                 </Button>
                 <Button
+                  variant="outlined"
                   disabled={index === 0 || (index === 1 && loggedIn === true)}
+                  sx={{ flexGrow: 1 }}
                   onClick={handleBack}
-                  sx={{ mt: 1 }}
                 >
                   Back
                 </Button>
-              </Box>
+              </Stack>
             </StepContent>
           </Step>
         ))}
@@ -78,12 +85,22 @@ const steps = [
     label: "Connect to your Twitter account and your Metamask wallet",
     content: (
       <Box sx={{ mb: 2 }}>
-        <Button variant="contained" sx={{ mt: 1 }}>
+        <ToggleButton
+          value="logged-in"
+          // variant="primary"
+          fullWidth
+          sx={{ mt: 1 }}
+        >
           connect to twitter
-        </Button>
-        <Button variant="contained" sx={{ mt: 1 }}>
+        </ToggleButton>
+        <ToggleButton
+          value="logged-in"
+          // variant="primary"
+          fullWidth
+          sx={{ mt: 1 }}
+        >
           connect wallet
-        </Button>
+        </ToggleButton>
       </Box>
     ),
     buttonLabel: "Continue",
@@ -113,8 +130,16 @@ const steps = [
             https://twitter.com/Rainmaker1973/status/1478285768493834240
           </code>
         </Box>
-        <TextField label="Tweet URL" sx={{ width: 1 / 1 }} />
-        <Button>Create image</Button>
+        <TextField
+          label="Tweet URL"
+          required
+          fullWidth
+          // helperText="More infos about the URL in the FAQ"
+          sx={{ mt: 2 }}
+        />
+        <Button variant="primary" sx={{ width: 1 / 1 }}>
+          Create image
+        </Button>
       </Box>
     ),
     buttonLabel: "Continue",
