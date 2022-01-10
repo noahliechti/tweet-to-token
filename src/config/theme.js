@@ -1,4 +1,5 @@
 import { createTheme } from "@mui/material";
+// import { grey } from "@mui/material/colors";
 
 const theme = createTheme({
   typography: {
@@ -8,12 +9,31 @@ const theme = createTheme({
       "BlinkMacSystemFont",
       "-apple-system",
     ].join(","),
-    fontSize: 5,
-    subtitle1: {
-      fontSize: 15,
-    },
+    h1: 40,
+    h2: 24,
+    // fontSize: 5,
+    // subtitle1: {
+    //   fontSize: 15,
+    // },
     button: {
-      fontSize: 20,
+      fontSize: 24,
+    },
+  },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          backgroundColor: "rgba(255, 255, 255, 0.932)",
+          color: "rgba(0, 0, 0, 0.87)",
+        },
+        code: {
+          padding: ".2em .4em",
+          margin: 0,
+          fontSize: "85%",
+          backgroundColor: "rgba(0, 0, 0, 0.08)",
+          borderRadius: 8,
+        },
+      },
     },
   },
 });

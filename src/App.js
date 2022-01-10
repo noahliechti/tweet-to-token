@@ -9,8 +9,8 @@ import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 function App() {
   return (
     <Router className="App">
-      <CssBaseline /> {/* normalize styles */}
       <ThemeProvider theme={theme}>
+        <CssBaseline /> {/* normalize and add custom global styles*/}
         <Header />
         <Container>
           <Grid container spacing={2}>
