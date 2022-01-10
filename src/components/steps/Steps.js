@@ -11,8 +11,13 @@ import {
   TextField,
   ToggleButton,
   Stack,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from "@mui/material";
 import LanguageInput from "../languageInput/LanguageInput";
+import ThemeToggle from "../themeToggle/ThemeToggle";
+import { ReactComponent as ExpandIcon } from "../../assets/icons/expand.svg";
 
 function Steps() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -112,6 +117,7 @@ const steps = [
         <Typography>
           Choose the theme and the language the Tweet should have.
         </Typography>
+        <ThemeToggle></ThemeToggle>
         <LanguageInput></LanguageInput>
       </Box>
     ),
@@ -123,13 +129,9 @@ const steps = [
       <Box>
         <Typography>
           Copy the link of the Tweet you want to mint and paste it into the
-          input field. The link should have the following format
+          input field.
         </Typography>
-        <Box sx={{ width: 1 / 1, wordWrap: "break-word" }}>
-          <code>
-            https://twitter.com/Rainmaker1973/status/1478285768493834240
-          </code>
-        </Box>
+
         <TextField
           label="Tweet URL"
           required
@@ -137,7 +139,37 @@ const steps = [
           // helperText="More infos about the URL in the FAQ"
           sx={{ mt: 2 }}
         />
-        <Button variant="primary" sx={{ width: 1 / 1 }}>
+        <Box sx={{ mt: 2 }}>
+          <Accordion disableGutters>
+            <AccordionSummary
+              expandIcon={<ExpandIcon />}
+              // aria-controls="panel1a-content"
+              // id="panel1a-header"
+            >
+              <Typography>How can I find the link of a Tweet?</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>
+                Finding the link to a Tweet you want to share isn't obvious, but
+                it's also not difficult. Here is an easy method.
+              </Typography>
+              <ol>
+                <li>Navigate to the Tweet</li>
+                <li>Open the Share Menu</li>
+                <li>Click the "Copy link to Tweet" Option</li>
+              </ol>
+              <Typography>
+                Check if your link has the following format:
+              </Typography>
+              <Box sx={{ width: 1, wordWrap: "break-word" }}>
+                <code>
+                  https://twitter.com/YourUsername/status/SomeRandomBigNumber
+                </code>
+              </Box>
+            </AccordionDetails>
+          </Accordion>
+        </Box>
+        <Button variant="contained" sx={{ width: 1, mt: 2 }}>
           Create image
         </Button>
       </Box>

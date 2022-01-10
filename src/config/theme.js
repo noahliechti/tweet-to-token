@@ -10,7 +10,13 @@ const theme = createTheme({
       "-apple-system",
     ].join(","),
     h1: 40,
-    h2: 24,
+    h2: {
+      fontSize: 24,
+      textAlign: "center",
+      fontWeight: "bold",
+      textTransform: "uppercase",
+      fontStyle: "italic",
+    },
     // fontSize: 5,
     // subtitle1: {
     //   fontSize: 15,
