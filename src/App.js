@@ -1,4 +1,4 @@
-import Home from "./components/home/Home";
+import Home from "./components/home/Home.js";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import theme from "./config/theme";

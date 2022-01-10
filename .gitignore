@@ -1,6 +1,5 @@
-.env
 node_modules
-dist
-.parcel-cache
-tweets.txt
+build
 .DS_Store
+.env
+tweets.txt
