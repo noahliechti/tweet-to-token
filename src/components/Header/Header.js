@@ -1,5 +1,4 @@
 import { AppBar, Toolbar, IconButton, Box } from "@mui/material";
-import { Link } from "react-router-dom";
 
 import { ReactComponent as LogoIcon } from "../../assets/icons/logo.svg";
 import { ReactComponent as MenuIcon } from "../../assets/icons/menu.svg";
@@ -12,8 +11,7 @@ function Header() {
           <IconButton
             size="large"
             aria-label="go to home page"
-            component={Link}
-            to="/"
+            href="/"
 
             // aria-controls="menu-appbar"
             // color="primary"

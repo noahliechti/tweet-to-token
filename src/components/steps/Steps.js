@@ -33,7 +33,7 @@ function Steps() {
   };
 
   return (
-    <Box id="steps" sx={{ maxWidth: 400 }}>
+    <Box sx={{ maxWidth: 400 }}>
       <Stepper activeStep={activeStep} orientation="vertical">
         {steps.map((step, index) => (
           <Step key={step.label}>

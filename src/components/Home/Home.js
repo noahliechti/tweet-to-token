@@ -2,9 +2,12 @@ import Footer from "../footer/Footer";
 import Header from "../header/Header";
 import CustomerCard from "../customerCard/CustomerCard";
 import Steps from "../steps/Steps";
+import About from "../about/About";
+import FAQ from "../faq/FAQ";
+import Team from "../team/Team";
 
-import { Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
+
 import { Typography, Button, Grid, Container } from "@mui/material";
 
 function Home() {
@@ -26,24 +29,14 @@ function Home() {
           </Grid>
           <Grid item xs={6}>
             <Button
-              component={Link}
-              to="/create"
               variant="contained"
               color="primary"
+              component={HashLink}
+              to="#steps"
+              smooth
               sx={{ width: 1 / 1, height: 40 }}
             >
               Let's go!
-            </Button>
-          </Grid>
-          <Grid item xs={6}>
-            <Button
-              component={HashLink}
-              to="#steps"
-              variant="contained"
-              color="secondary"
-              sx={{ width: 1 / 1, height: 40 }}
-            >
-              How?
             </Button>
           </Grid>
           <Grid item xs={12}>
@@ -64,11 +57,23 @@ function Home() {
           <Grid item xs={12}>
             <CustomerCard></CustomerCard>
           </Grid>
-          <Grid item xs={12}>
+          <Grid id="steps" item xs={12}>
             <Typography variant="h2">How does it work?</Typography>
           </Grid>
           <Grid item xs={12}>
             <Steps></Steps>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h2">About TTT</Typography>
+            <About></About>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h2">FAQ</Typography>
+            <FAQ></FAQ>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h2">Team</Typography>
+            <Team></Team>
           </Grid>
         </Grid>
       </Container>
