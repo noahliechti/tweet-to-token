@@ -5,10 +5,12 @@ import Steps from "../steps/Steps";
 import About from "../about/About";
 import FAQ from "../faq/FAQ";
 import Team from "../team/Team";
+import Milestones from "../milestones/Milestones";
 
 import { HashLink } from "react-router-hash-link";
 
 import { Typography, Button, Grid, Container } from "@mui/material";
+import MileStones from "../milestones/Milestones";
 
 function Home() {
   return (
@@ -59,8 +61,6 @@ function Home() {
           </Grid>
           <Grid id="steps" item xs={12}>
             <Typography variant="h2">How does it work?</Typography>
-          </Grid>
-          <Grid item xs={12}>
             <Steps></Steps>
           </Grid>
           <Grid item xs={12}>
@@ -72,9 +72,13 @@ function Home() {
             <FAQ></FAQ>
           </Grid>
           <Grid item xs={12}>
+            <Typography variant="h2">Milestones</Typography>
+            <Milestones></Milestones>
+          </Grid>
+          {/* <Grid item xs={12}>
             <Typography variant="h2">Team</Typography>
             <Team></Team>
-          </Grid>
+          </Grid> */}
         </Grid>
       </Container>
       <Footer />
