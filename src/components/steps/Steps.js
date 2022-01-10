@@ -14,8 +14,13 @@ import LanguageInput from "../languageInput/LanguageInput";
 
 function Steps() {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [loggedIn, setLoggedIn] = React.useState(false);
 
   const handleNext = () => {
+    if (activeStep === 0) {
+      setLoggedIn(() => true);
+    }
+
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -24,7 +29,7 @@ function Steps() {
   };
 
   const handleReset = () => {
-    setActiveStep(0);
+    setActiveStep(1);
   };
 
   return (
@@ -40,7 +45,7 @@ function Steps() {
                   {step.buttonLabel}
                 </Button>
                 <Button
-                  disabled={index === 0}
+                  disabled={index === 0 || (index === 1 && loggedIn === true)}
                   onClick={handleBack}
                   sx={{ mt: 1 }}
                 >

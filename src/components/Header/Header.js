@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, IconButton, Stack, Box } from "@mui/material";
+import { AppBar, Toolbar, IconButton, Box } from "@mui/material";
 import { Link } from "react-router-dom";
 
 import { ReactComponent as LogoIcon } from "../../assets/icons/logo.svg";
@@ -29,11 +29,6 @@ function Header() {
       </AppBar>
       {/* https://github.com/mui-org/material-ui/issues/16844#issuecomment-517205129 */}
       <Toolbar />
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-      ></Stack>
     </>
   );
 }
