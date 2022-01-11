@@ -1,20 +1,14 @@
 import { Card, CardContent, Typography } from "@mui/material";
 
-function CustomerCard() {
+function CustomerCard(props) {
   return (
-    <Card sx={{ boxShadow: 2 }}>
+    <Card>
       <CardContent>
-        <Typography
-          sx={{ fontSize: 14 }}
-          variant="h3"
-          color="text.secondary"
-          gutterBottom
-        >
-          🎩 Celebrity who wants to connect with fans
+        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+          {props.content.title}
         </Typography>
         <Typography variant="h5" component="div">
-          Whether you are verified or not, it is always good to give back to the
-          community.
+          {props.content.text}
         </Typography>
       </CardContent>
     </Card>

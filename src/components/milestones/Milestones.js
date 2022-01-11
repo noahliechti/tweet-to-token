@@ -10,7 +10,7 @@ import {
 } from "@mui/lab";
 function MileStones() {
   return (
-    <Timeline position="alternate">
+    <Timeline position="alternate" sx={{ mt: 0, pt: 0 }}>
       <TimelineItem>
         <TimelineOppositeContent color="text.secondary">
           1'000 Tweets

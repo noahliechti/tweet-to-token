@@ -1,11 +1,12 @@
 import React from "react";
 import { ToggleButtonGroup, ToggleButton } from "@mui/material";
 
-function ThemeToggle() {
+function ThemeToggle(props) {
   const [theme, setTheme] = React.useState("light");
 
-  const handleChange = (event, newTheme) => {
+  const handleChange = (e, newTheme) => {
     setTheme(newTheme);
+    props.handleConfigClick(e.target);
   };
   return (
     <ToggleButtonGroup
@@ -14,10 +15,10 @@ function ThemeToggle() {
       exclusive
       onChange={handleChange}
     >
-      <ToggleButton value="light" aria-label="light theme">
+      <ToggleButton name="theme" value="light" aria-label="light theme">
         Light
       </ToggleButton>
-      <ToggleButton value="dark" aria-label="dark theme">
+      <ToggleButton name="theme" value="dark" aria-label="dark theme">
         Dark
       </ToggleButton>
     </ToggleButtonGroup>

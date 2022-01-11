@@ -16,6 +16,8 @@ const theme = createTheme({
       fontWeight: "bold",
       textTransform: "uppercase",
       fontStyle: "italic",
+      marginTop: 56,
+      marginBottom: 16,
     },
     // fontSize: 5,
     // subtitle1: {
