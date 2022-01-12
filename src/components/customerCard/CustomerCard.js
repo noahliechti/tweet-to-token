@@ -1,14 +1,14 @@
 import { Card, CardContent, Typography } from "@mui/material";
 
-function CustomerCard(props) {
+function CustomerCard({ content }) {
   return (
     <Card>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {props.content.title}
+          {content.title}
         </Typography>
         <Typography variant="h5" component="div">
-          {props.content.text}
+          {content.text}
         </Typography>
       </CardContent>
     </Card>

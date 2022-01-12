@@ -1,9 +1,9 @@
 import React from "react";
 import { Box, FormControl, ToggleButton, FormHelperText } from "@mui/material";
 
-function Login(props) {
+function Login({ handleLoginButtonClick }) {
   const handleClick = (e) => {
-    props.handleLoginButtonClick(e.target);
+    handleLoginButtonClick(e.target);
   };
 
   // const error = !(loginStates.twitter && loginStates.wallet);

@@ -1,11 +1,16 @@
 import React, { useRef } from "react";
 import { Autocomplete, Box, TextField } from "@mui/material";
 
-function LanguageInput(props) {
+function LanguageInput({ defaultLanguage, handleConfigClick }) {
   const ref0 = useRef();
 
+  const [language, setLanguage] = React.useState(
+    languages.find((l) => l.code === defaultLanguage)
+  );
+
   const handleChange = (e, newValue, reason) => {
-    props.handleConfigClick({
+    setLanguage(newValue);
+    handleConfigClick({
       name: ref0.current.getAttribute("name"),
       value: reason === "clear" ? "" : newValue.code,
     });
@@ -17,6 +22,7 @@ function LanguageInput(props) {
       autoHighlight
       ref={ref0}
       name="language"
+      value={language}
       sx={{ mt: 2 }}
       onChange={handleChange}
       getOptionLabel={(option) => option.label}
@@ -27,13 +33,12 @@ function LanguageInput(props) {
       )}
       renderInput={(params) => (
         <TextField
-          required
           fullWidth
           {...params}
           label="Choose a language"
           inputProps={{
             ...params.inputProps,
-            autoComplete: "new-password", // disable autocomplete and autofill
+            autoComplete: "new-password", // disable autocomplete and autofill TODO: what is this?
           }}
         />
       )}
