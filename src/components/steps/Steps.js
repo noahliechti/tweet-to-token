@@ -20,6 +20,8 @@ import Config from "./config/Config";
 import ImageCreation from "./imageCreation/ImageCreation";
 import Minter from "./minter/Minter";
 
+import { apiURL } from "../../config/globals";
+
 function Steps() {
   const [activeStep, setActiveStep] = React.useState(0);
 
@@ -178,9 +180,3 @@ function Steps() {
 }
 
 export default Steps;
-
-const apiURL = "http://localhost:3000";
-//   process.env.REACT_APP_ENV === "development"
-//     ? "http://localhost:3000"
-//     : "https://get-tweet-data-image.herokuapp.com";
-// console.log(apiURL, process.env.REACT_APP_ENV);

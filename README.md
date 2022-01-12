@@ -1,3 +1,19 @@
+## TODO
+
+https://twitter.com/Rainmaker1973/status/1478285768493834240
+
+- FIX PROD
+- twitter url validation
+- node js error handling
+- snackbar
+- faq
+
+- mobile menu
+- responsive styling/fonts
+- login cookies
+- button sizes / color / style
+- react stepper design
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
