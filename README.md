@@ -2,7 +2,6 @@
 
 https://twitter.com/Rainmaker1973/status/1478285768493834240
 
-- FIX PROD
 - twitter url validation
 - node js error handling
 - snackbar
@@ -13,6 +12,10 @@ https://twitter.com/Rainmaker1973/status/1478285768493834240
 - login cookies
 - button sizes / color / style
 - react stepper design
+- add favicon etc / cleanup public folder
+- reduce package size
+- add tests
+- add google analytics
 
 # Getting Started with Create React App
 
