@@ -1,4 +1,5 @@
 import { Stack, Button } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 function Mover({
   handleNext,
   handleBack,
@@ -7,11 +8,11 @@ function Mover({
   isForm,
   nextBtnName,
   nextBtnText,
+  isLoading,
 }) {
   const handleClick = (e) => {
     switch (e.target.name) {
       case "next":
-        console.log("click");
         handleNext();
         break;
       case "back":
@@ -24,17 +25,31 @@ function Mover({
 
   return (
     <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
-      <Button
-        variant="contained"
-        name={nextBtnName}
-        sx={{ flexGrow: 1 }}
-        disabled={nextBtnDisabled}
-        onClick={handleClick}
-        type={isForm ? "submit" : "button"}
-        size={isForm ? "small" : "default"}
-      >
-        {nextBtnText}
-      </Button>
+      {isForm ? (
+        <LoadingButton
+          variant="contained"
+          name={nextBtnName}
+          sx={{ flexGrow: 1 }}
+          disabled={nextBtnDisabled}
+          onClick={handleClick}
+          type="submit"
+          size="small"
+          loading={isLoading}
+        >
+          {nextBtnText}
+        </LoadingButton>
+      ) : (
+        <Button
+          variant="contained"
+          name={nextBtnName}
+          sx={{ flexGrow: 1 }}
+          disabled={nextBtnDisabled}
+          onClick={handleClick}
+          size="default"
+        >
+          {nextBtnText}
+        </Button>
+      )}
       <Button
         variant="outlined"
         name="back"

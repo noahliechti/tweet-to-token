@@ -2,18 +2,15 @@ import { Typography } from "@mui/material";
 import ThemeToggle from "../themeToggle/ThemeToggle";
 import LanguageInput from "../languageInput/LanguageInput";
 
-function Config({ defaultTheme, handleConfigClick, defaultLanguage }) {
+function Config({ defaultTheme, handleChange, defaultLanguage }) {
   return (
     <>
       <Typography>
         Choose the theme and the language the Tweet should have.
       </Typography>
-      <ThemeToggle
-        defaultTheme={defaultTheme}
-        handleConfigClick={handleConfigClick}
-      />
+      <ThemeToggle defaultTheme={defaultTheme} handleChange={handleChange} />
       <LanguageInput
-        handleConfigClick={handleConfigClick}
+        handleChange={handleChange}
         defaultLanguage={defaultLanguage}
       />
     </>

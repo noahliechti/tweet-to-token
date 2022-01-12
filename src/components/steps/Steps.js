@@ -23,20 +23,25 @@ import Minter from "./minter/Minter";
 function Steps() {
   const [activeStep, setActiveStep] = React.useState(0);
 
-  const [loginStates, setLoginStates] = React.useState();
-  const [inputState, setInputState] = React.useState();
-  const [configStates, setConfigStates] = React.useState({
+  const [state, setState] = React.useState({
     theme: "light",
     language: "en",
+    tweetURL: "",
   });
 
+  const [formIsSubmitting, setFormIsSubmitting] = React.useState(false);
   const [imageData, setImageData] = React.useState();
 
-  const [formIsSubmitting, setFormIsSubmitting] = React.useState(false);
+  const handleChange = (target) => {
+    const { name, value } = target;
+    setState({
+      ...state,
+      [name]: value,
+    });
+  };
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    console.log("next");
   };
 
   const handleBack = () => {
@@ -45,6 +50,7 @@ function Steps() {
 
   const handleReset = () => {
     setActiveStep(1);
+    // TODO: reset state
   };
 
   const handleSubmit = (e) => {
@@ -53,11 +59,12 @@ function Steps() {
     setFormIsSubmitting(true);
     fetch(
       apiURL +
-        `/get-image?tweetURL=${inputState.tweetURL}&language=${configStates.language}&theme=${configStates.theme}`
+        `/get-image?tweetURL=${state.tweetURL}&language=${state.language}&theme=${state.theme}`
     )
-      .then((payload) => payload.json().image)
-      .then((image) => {
-        console.log("post submit", image);
+      .then((payload) => payload.json())
+      .then((data) => {
+        console.log("post submit", data.image);
+        const { image } = data;
         setFormIsSubmitting(false);
         setImageData(image);
         handleNext();
@@ -68,34 +75,10 @@ function Steps() {
       });
   };
 
-  const handleLoginButtonClick = (target) => {
-    const { name, value } = target;
-    setLoginStates({
-      ...loginStates,
-      [name]: value,
-    });
-  };
-
-  const handleConfigClick = (target) => {
-    const { name, value } = target;
-    setConfigStates({
-      ...configStates,
-      [name]: value,
-    });
-  };
-
-  const handleInputChange = (target) => {
-    const { name, value } = target;
-    setInputState({
-      ...inputState,
-      [name]: value,
-    });
-  };
-
   const steps = [
     {
       label: "Connect to your Twitter account and your Metamask wallet",
-      content: <Login handleLoginButtonClick={handleLoginButtonClick} />,
+      content: <Login handleChange={handleChange} />,
       nextBtnName: "next",
       nextBtnText: "Continue",
     },
@@ -103,9 +86,9 @@ function Steps() {
       label: "Select the theme and the language",
       content: (
         <Config
-          handleConfigClick={handleConfigClick}
-          defaultTheme={configStates.theme}
-          defaultLanguage={configStates.language}
+          handleChange={handleChange}
+          defaultTheme={state.theme}
+          defaultLanguage={state.language}
         />
       ),
       nextBtnName: "next",
@@ -119,8 +102,9 @@ function Steps() {
           label="Tweet URL"
           fullWidth
           name="tweetURL"
+          value={state.tweetURL}
           disabled={formIsSubmitting}
-          onChange={(e) => handleInputChange(e.target)}
+          onChange={(e) => handleChange(e.target)}
           // helperText="More infos about the URL in the FAQ"
           sx={{ mt: 2 }}
         />
@@ -130,15 +114,15 @@ function Steps() {
     },
     {
       label: "Mint NFT",
-      content: <Minter />,
+      content: <Minter imageData={imageData} />,
       nextBtnName: "mint-nft",
       nextBtnText: "Mint NFT",
     },
   ];
 
   const nextBtnDisabled = [
-    !(loginStates && loginStates.wallet && loginStates.twitter),
-    !(configStates && configStates.language && configStates.theme),
+    !(state && state.wallet && state.twitter),
+    !(state && state.language && state.theme),
   ];
 
   return (
@@ -160,6 +144,7 @@ function Steps() {
                     isForm={true}
                     nextBtnName={step.nextBtnName}
                     nextBtnText={step.nextBtnText}
+                    isLoading={formIsSubmitting}
                   />
                 </form>
               ) : (
