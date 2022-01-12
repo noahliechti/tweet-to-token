@@ -7,10 +7,10 @@ import { ReactComponent as MenuIcon } from "../../assets/icons/menu.svg";
 const pages = ["Customers", "Create", "About", "FAQ", "Milestones"];
 
 function Header() {
-  const [isOpen, setIsOpen] = React.useState(false);
+  // const [isOpen, setIsOpen] = React.useState(false);
 
   const toggleMenu = (event) => {
-    setIsOpen(event.currentTarget);
+    // setIsOpen(event.currentTarget);
   };
 
   return (
