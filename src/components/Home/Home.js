@@ -1,10 +1,10 @@
-import Footer from "../footer/Footer";
-import Header from "../header/Header";
-import CustomerCard from "../customerCard/CustomerCard";
-import Steps from "../steps/Steps";
-import About from "../about/About";
-import FAQ from "../faq/FAQ";
-import Milestones from "../milestones/Milestones";
+import Footer from "../Footer/Footer";
+import Header from "../Header/Header";
+import CustomerCard from "../CustomerCard/CustomerCard";
+import Steps from "../Steps/Steps";
+import About from "../About/About";
+import FAQ from "../Faq/FAQ";
+import Milestones from "../Milestones/Milestones";
 
 import { HashLink } from "react-router-hash-link";
 
