@@ -54,7 +54,7 @@ function Home() {
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h2">Who is this for?</Typography>
-          <Typography variant="body">
+          <Typography variant="body1" sx={{ textAlign: "center" }}>
             We have all types of people who mint their tweets, from celebrities
             to people who just posted a tweet the first time.
           </Typography>

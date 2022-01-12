@@ -19,6 +19,13 @@ const theme = createTheme({
       marginTop: 56,
       marginBottom: 16,
     },
+    h3: {
+      fontSize: 22,
+      fontWeight: "bold",
+    },
+    body1: {
+      fontSize: 18,
+    },
     // fontSize: 5,
     // subtitle1: {
     //   fontSize: 15,

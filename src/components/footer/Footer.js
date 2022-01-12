@@ -24,7 +24,7 @@ function Footer() {
         >
           <LogoIcon color="black" />
         </IconButton>
-        <Typography>
+        <Typography variant="body2">
           Copyright &copy; {new Date().getFullYear()} tweettotoken.io
         </Typography>
       </Toolbar>
