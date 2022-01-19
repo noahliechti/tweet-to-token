@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from "react";
+
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import CustomerCard from "../CustomerCard/CustomerCard";
@@ -12,6 +14,31 @@ import { HashLink } from "react-router-hash-link";
 import { Typography, Button, Grid, Container } from "@mui/material";
 
 function Home() {
+  const [state, setState] = useState({
+    twitterUser: null,
+  });
+
+  useEffect(() => {
+    fetch("http://localhost:4000/data", {
+      method: "GET",
+      credentials: "include", // Fetch does not send cookies. So we need this line
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) return response.json();
+      })
+      .then((responseJson) => {
+        const { user } = responseJson;
+        setState({
+          twitterUser: user ? user : null,
+        });
+      });
+  }, []);
+
   return (
     <Container maxWidth="xl">
       <Header />
@@ -53,7 +80,7 @@ function Home() {
         ))}
         <Grid id="steps" item xs={12}>
           <Typography variant="h2">How does it work?</Typography>
-          <Steps></Steps>
+          <Steps twitterUser={state.twitterUser}></Steps>
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h2">About TTT</Typography>

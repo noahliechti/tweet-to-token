@@ -19,7 +19,7 @@ import Minter from "./Minter/Minter";
 
 import { apiURL } from "../../config/globals";
 
-function Steps() {
+function Steps({ twitterUser }) {
   const [activeStep, setActiveStep] = React.useState(0);
 
   const [state, setState] = React.useState({
@@ -77,7 +77,12 @@ function Steps() {
   const steps = [
     {
       label: "Connect Twitter and Metamask",
-      content: <Login handleChange={handleChange} />,
+      content: (
+        <Login
+          twitterLoggedIn={twitterUser !== null}
+          handleChange={handleChange}
+        />
+      ),
       nextBtnName: "next",
       nextBtnText: "Continue",
     },
@@ -120,7 +125,7 @@ function Steps() {
   ];
 
   const nextBtnDisabled = [
-    !(state && state.wallet && state.twitter),
+    !(state && state.wallet && twitterUser),
     !(state && state.language && state.theme),
   ];
 

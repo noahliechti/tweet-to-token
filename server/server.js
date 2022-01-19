@@ -6,6 +6,7 @@ const MongoStore = require("connect-mongo");
 const passport = require("passport");
 const cors = require("cors");
 const authRoutes = require("./routes/auth");
+const dataRoutes = require("./routes/data");
 const globals = require("./config/globals");
 
 require("./config/passport");
@@ -51,5 +52,6 @@ app.use(
 
 // set up routes
 app.use("/auth", authRoutes);
+app.use("/data", dataRoutes);
 
 app.listen(port, () => console.log(`Server is running on port ${port}!`));

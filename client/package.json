@@ -1,5 +1,5 @@
 {
-  "name": "tweet-to-token",
+  "name": "tweet-to-token-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

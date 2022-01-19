@@ -4,11 +4,6 @@ const globals = require("../config/globals");
 
 const CLIENT_HOME_PAGE_URL = `http://localhost:${globals.clientPort}`;
 
-// send profile data if user is logged in
-router.get("/", (req, res) => {
-  res.status(200).json({ user: req.user });
-});
-
 router.get("/logout", (req, res) => {
   req.logout();
   // req.session.destroy(); // delete session from db after logout

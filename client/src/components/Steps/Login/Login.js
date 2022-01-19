@@ -1,8 +1,11 @@
 import React from "react";
-import { Box, ToggleButton } from "@mui/material";
+import { Box, ToggleButton, Link } from "@mui/material";
 
-function Login({ handleChange }) {
+function Login({ handleChange, twitterLoggedIn }) {
   const handleClick = (e) => {
+    if (e.target === "twitter") {
+      return;
+    }
     handleChange(e.target);
   };
 
@@ -15,6 +18,9 @@ function Login({ handleChange }) {
       <ToggleButton
         value="1"
         name="twitter"
+        component={Link}
+        href="http://localhost:4000/auth/login"
+        selected={twitterLoggedIn}
         // variant="primary"
         onClick={handleClick}
         fullWidth
