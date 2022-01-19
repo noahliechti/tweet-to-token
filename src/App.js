@@ -10,7 +10,6 @@ function App() {
         <CssBaseline /> {/* normalize and add custom global styles*/}
         <Routes>
           <Route path="/" element={<Home></Home>} />
-          {/* TODO: add a 404 page*/}
           <Route path="*" element={<div>404</div>} />
         </Routes>
       </ThemeProvider>

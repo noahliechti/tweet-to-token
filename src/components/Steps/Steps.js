@@ -76,13 +76,13 @@ function Steps() {
 
   const steps = [
     {
-      label: "Connect to your Twitter account and your Metamask wallet",
+      label: "Connect Twitter and Metamask",
       content: <Login handleChange={handleChange} />,
       nextBtnName: "next",
       nextBtnText: "Continue",
     },
     {
-      label: "Select the theme and the language",
+      label: "Configure appearance of Tweet",
       content: (
         <Config
           handleChange={handleChange}
@@ -94,7 +94,7 @@ function Steps() {
       nextBtnText: "Continue",
     },
     {
-      label: "Provide the link of your tweet",
+      label: "Provide link to Tweet",
       content: <ImageCreation />,
       formContent: (
         <TextField
@@ -112,7 +112,7 @@ function Steps() {
       nextBtnText: "Create Image",
     },
     {
-      label: "Mint NFT",
+      label: "Mint Tweet-NFT",
       content: <Minter imageData={imageData} />,
       nextBtnName: "mint-nft",
       nextBtnText: "Mint NFT",
@@ -129,11 +129,15 @@ function Steps() {
       <Stepper activeStep={activeStep} orientation="vertical">
         {steps.map((step, i) => (
           <Step key={step.label}>
-            <StepLabel sx={{ pt: 0 }}>{step.label}</StepLabel>
+            <StepLabel sx={{ pt: 0 }}>
+              <Typography variant="h3" color="text.secondary">
+                {step.label}
+              </Typography>
+            </StepLabel>
             <StepContent>
               {step.content}
               {step.formContent ? (
-                <form onSubmit={handleSubmit}>
+                <form autoComplete="off" onSubmit={handleSubmit}>
                   {step.formContent}
                   <Mover
                     nextBtnDisabled={nextBtnDisabled[i] || formIsSubmitting}

@@ -20,7 +20,7 @@ const theme = createTheme({
       marginBottom: 16,
     },
     h3: {
-      fontSize: 22,
+      fontSize: 21,
       fontWeight: "bold",
     },
     body1: {

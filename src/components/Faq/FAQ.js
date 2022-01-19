@@ -16,12 +16,12 @@ function FAQ() {
           // aria-controls="panel2a-content"
           // id="panel2a-header"
         >
-          <Typography>Accordion 2</Typography>
+          <Typography>Why do I have to sign in with Twitter?</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+            By signing in with Twitter we can ensure, that users only can mint
+            their own tweets.
           </Typography>
         </AccordionDetails>
       </Accordion>

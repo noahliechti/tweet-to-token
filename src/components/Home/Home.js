@@ -5,26 +5,13 @@ import Steps from "../Steps/Steps";
 import About from "../About/About";
 import FAQ from "../Faq/FAQ";
 import Milestones from "../Milestones/Milestones";
+import { cardsContent } from "../../config/globals";
 
 import { HashLink } from "react-router-hash-link";
 
 import { Typography, Button, Grid, Container } from "@mui/material";
 
 function Home() {
-  const cardsContent = [
-    {
-      title: "🎩 Celebrity who wants to connect with fans",
-      text: "Whether you are verified or not, it is always good to give back to the community.",
-    },
-    {
-      title: "🎉 NFT-beginner minting his first NFT",
-      text: "With our platform we made it easy to create your first NFT, even if you aren't very technical. ",
-    },
-    {
-      title: "📚 Twitter poet looking to monetize his work",
-      text: "Your tweets are art. Our platform allows you to generate an additional income stream.",
-    },
-  ];
   return (
     <Container maxWidth="xl">
       <Header />
