@@ -19,7 +19,7 @@ function Login({ handleChange, twitterLoggedIn }) {
         value="1"
         name="twitter"
         component={Link}
-        href="http://localhost:4000/auth/login"
+        href="http://localhost:5000/.netlify/functions/auth/login"
         selected={twitterLoggedIn}
         // variant="primary"
         onClick={handleClick}

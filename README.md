@@ -1,7 +1,7 @@
-# tweettotoken.io
+# tweettoken.io
 
 ## client
 
-## server
+### serverless function
 
 ## contracts

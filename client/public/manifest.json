@@ -1,6 +1,7 @@
 {
   "short_name": "TTT",
   "name": "tweettotoken.io",
+  "description": "TODO:",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +21,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "rgba(255, 255, 255, 0.932)",
+  "background_color": "rgba(255, 255, 255, 0.932)"
 }

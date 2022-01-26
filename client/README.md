@@ -2,28 +2,35 @@
 
 https://twitter.com/Rainmaker1973/status/1478285768493834240
 
-1 TESTNET DB, 1 LOCAL DB, 1 PROD DB
+1. connect to wallet with ethers.js -> walletconnect?
+2. write contract in hh with tests und so
+3. make app work (all steps)
 
-- use global faq
-- choosing language doesn't work
-- twitter url validation
-- node js error handling
-- snackbar -> creating screenshot 3s + enhancing with metadata 3s \_> confirmation -> show etherscan links of transaction
-- faq
-- 404 page
-- AGB und die Datenschutzrichtlinien -> IM FOOTER oder menu? NEUER TAB ÖFFNEN
-- view on opensea + share button
-- make it upgradeable -> deploy to polygon mainnet for testing
+4. make it upgradeable? -> deploy to polygon mainnet for testing
 
 - mobile menu
-- allow different wallets to login Web3Connect
+- view on opensea + share button
+- choosing language doesn't work
+- use arweave
+- use craco in production
+- twitter url validation
+- TWITTER BOT @BOT UND DANN DIREKT GEMINTED + BOT SCHREIBT COMMENTAR WENN FERTIG GEMINTED + LINK
+- snackbar -> creating screenshot 3s + enhancing with metadata 3s \_> confirmation -> show etherscan links of transaction
+- AGB und die Datenschutzrichtlinien -> IM FOOTER oder menu? NEUER TAB ÖFFNEN
+- make it a pwa
+
+- use global faq
+- faq
+- 404 page
+- node js error handling
 - responsive styling/fonts
-- login cookies
 - button sizes / color / style
 - react stepper design
 - add favicon etc / cleanup public folder
-- reduce package size
+- reduce package size -> mui
 - add tests
-- add google analytics -> https://plausible.io/
+- add analytics -> https://plausible.io/
 - aria labels?
-- use redux
+- use redux?
+
+before prod: twitter prod env, set cookie key, envs in netlify, test icons on devices

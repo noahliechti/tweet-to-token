@@ -36,9 +36,11 @@ function MileStones() {
         </TimelineSeparator>
         <TimelineContent sx={{ px: 0 }}>
           <Typography variant="h3" component="span">
-            Activity feed
+            Mobile friendly
           </Typography>
-          <Typography>Activity feed of recent created Tweets</Typography>
+          <Typography>
+            Enable Tweet Creation on mobile Browsers other than Metamask
+          </Typography>
         </TimelineContent>
       </TimelineItem>
       <TimelineItem>
@@ -51,9 +53,9 @@ function MileStones() {
         </TimelineSeparator>
         <TimelineContent sx={{ px: 0 }}>
           <Typography variant="h3" component="span">
-            Marketplace
+            Activity feed
           </Typography>
-          <Typography>In-App marketplace to buy and sell Tweets</Typography>
+          <Typography>Activity feed of recent created Tweets</Typography>
         </TimelineContent>
       </TimelineItem>
     </Timeline>
