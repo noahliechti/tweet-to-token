@@ -3,6 +3,6 @@
 
 [[redirects]]
   from = "/*"
-  to = "/#steps"
+  to = "/?success"
   query = {oauth_token = ":token", oauth_verifier = ":verifier"}
   force = true
