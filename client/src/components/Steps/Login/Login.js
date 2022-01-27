@@ -5,8 +5,7 @@ import { Box, ToggleButton, Link } from "@mui/material";
 import { BASE_URL, FUNCTIONS_PREFIX } from "../../../config/globals";
 
 function Login({ twitterLoggedIn }) {
-  const { active, account, library, connector, activate, deactivate } =
-    useWeb3React();
+  const { active, activate, deactivate } = useWeb3React();
 
   const handleClick = async (e) => {
     if (e.target.name === "wallet") {
