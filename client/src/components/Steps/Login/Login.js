@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, ToggleButton, Link } from "@mui/material";
+import { BASE_URL, FUNCTIONS_PREFIX } from "../../../config/globals";
 
 function Login({ handleChange, twitterLoggedIn }) {
   const handleClick = (e) => {
@@ -19,7 +20,7 @@ function Login({ handleChange, twitterLoggedIn }) {
         value="1"
         name="twitter"
         component={Link}
-        href="http://localhost:5000/.netlify/functions/auth/login"
+        href={`${BASE_URL}${FUNCTIONS_PREFIX}/auth/login`}
         selected={twitterLoggedIn}
         // variant="primary"
         onClick={handleClick}

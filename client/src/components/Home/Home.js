@@ -13,13 +13,15 @@ import { HashLink } from "react-router-hash-link";
 
 import { Typography, Button, Grid, Container } from "@mui/material";
 
+import { BASE_URL, FUNCTIONS_PREFIX } from "../../config/globals";
+
 function Home() {
   const [state, setState] = useState({
     twitterUser: null,
   });
 
   useEffect(() => {
-    fetch("http://localhost:5000/.netlify/functions/auth", {
+    fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/auth`, {
       method: "GET",
       credentials: "include", // Fetch does not send cookies. So we need this line
       headers: {

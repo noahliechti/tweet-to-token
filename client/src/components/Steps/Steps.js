@@ -17,7 +17,7 @@ import Config from "./Config/Config";
 import ImageCreation from "./ImageCreation/ImageCreation";
 import Minter from "./Minter/Minter";
 
-import { apiURL } from "../../config/globals";
+import { BASE_URL, FUNCTIONS_PREFIX } from "../../config/globals";
 
 function Steps({ twitterUser }) {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -56,7 +56,7 @@ function Steps({ twitterUser }) {
     e.preventDefault();
     setImageData("");
     setFormIsSubmitting(true);
-    fetch(apiURL + "/.netlify/functions/image", {
+    fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/image`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json;charset=utf-8",

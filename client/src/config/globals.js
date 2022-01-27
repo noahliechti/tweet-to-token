@@ -1,9 +1,10 @@
 import { Typography, Box } from "@mui/material";
 
-export const apiURL =
+export const BASE_URL =
   process.env.REACT_APP_ENV === "development"
     ? "http://localhost:5000"
     : "https://tweet-token.netlify.app";
+export const FUNCTIONS_PREFIX = "/.netlify/functions";
 
 export const cardsContent = [
   {
