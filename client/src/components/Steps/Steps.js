@@ -1,4 +1,6 @@
 import React from "react";
+import { useWeb3React } from "@web3-react/core";
+
 import {
   Box,
   Stepper,
@@ -84,12 +86,7 @@ function Steps({ twitterUser }) {
   const steps = [
     {
       label: "Connect Twitter and Metamask",
-      content: (
-        <Login
-          twitterLoggedIn={twitterUser !== null}
-          handleChange={handleChange}
-        />
-      ),
+      content: <Login twitterLoggedIn={twitterUser !== null} />,
       nextBtnName: "next",
       nextBtnText: "Continue",
     },
@@ -132,8 +129,7 @@ function Steps({ twitterUser }) {
   ];
 
   const nextBtnDisabled = [
-    false,
-    // !(state && state.wallet && twitterUser),
+    !(useWeb3React().active && twitterUser),
     !(state && state.language && state.theme),
   ];
 
