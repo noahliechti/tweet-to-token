@@ -2,11 +2,9 @@
 
 https://twitter.com/Rainmaker1973/status/1478285768493834240
 
-1. connect to wallet with ethers.js -> walletconnect?
-2. write contract in hh with tests und so
-3. make app work (all steps)
-
-4. make it upgradeable? -> deploy to polygon mainnet for testing
+1. write contract in hh with tests und so
+2. make app work (all steps)
+3. make it upgradeable? -> deploy to polygon mainnet for testing
 
 - mobile menu
 - view on opensea + share button
