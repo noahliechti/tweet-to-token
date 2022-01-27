@@ -16,6 +16,11 @@ exports.TWITTER_CONSUMER_SECRET =
     ? process.env.TWITTER_CONSUMER_SECRET_DEV
     : process.env.TWITTER_CONSUMER_SECRET;
 
+exports.CHROME_EXECUTABLE_PATH =
+  process.env.NODE_ENV === "development"
+    ? process.env.CHROME_EXECUTABLE_PATH
+    : null;
+
 exports.MONGO_URL =
   process.env.NODE_ENV === "development"
     ? "mongodb://localhost/userDB"
