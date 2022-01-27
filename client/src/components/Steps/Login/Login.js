@@ -11,20 +11,16 @@ function Login({ twitterLoggedIn }) {
   const handleClick = async (e) => {
     if (e.target.name === "wallet") {
       try {
-        await activate(injected);
+        if (active) {
+          deactivate();
+        } else {
+          await activate(injected);
+        }
       } catch (error) {
         console.log(error);
       }
     }
   };
-
-  async function disconnect() {
-    try {
-      deactivate();
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   // const error = !(loginStates.twitter && loginStates.wallet);
   // console.log(error, loginStates.twitter, loginStates.wallet);
