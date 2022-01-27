@@ -3,6 +3,7 @@ exports.BASE_URL =
     ? "http://localhost:5000"
     : "https://tweet-token.netlify.app";
 
+exports.FUNCTIONS_PREFIX = "/.netlify/functions";
 exports.COOKIE_KEY = process.env.COOKIE_KEY || "SUPERSECRET";
 
 exports.TWITTER_CONSUMER_KEY =

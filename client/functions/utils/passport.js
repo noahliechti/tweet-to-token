@@ -5,6 +5,7 @@ const {
   BASE_URL,
   TWITTER_CONSUMER_KEY,
   TWITTER_CONSUMER_SECRET,
+  FUNCTIONS_PREFIX,
 } = require("./config");
 
 // save user._id to session as req.session.passport.user = '..'
@@ -28,7 +29,7 @@ passport.use(
     {
       consumerKey: TWITTER_CONSUMER_KEY,
       consumerSecret: TWITTER_CONSUMER_SECRET,
-      callbackURL: `${BASE_URL}/.netlify/functions/auth/redirect`,
+      callbackURL: `${BASE_URL}${FUNCTIONS_PREFIX}/auth/redirect`,
     },
     async (token, tokenSecret, profile, done) => {
       const profileData = profile._json;
