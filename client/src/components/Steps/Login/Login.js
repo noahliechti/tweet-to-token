@@ -1,14 +1,30 @@
 import React from "react";
+import { useWeb3React } from "@web3-react/core";
+import { injected } from "../../../config/connectors";
 import { Box, ToggleButton, Link } from "@mui/material";
 import { BASE_URL, FUNCTIONS_PREFIX } from "../../../config/globals";
 
-function Login({ handleChange, twitterLoggedIn }) {
-  const handleClick = (e) => {
-    if (e.target === "twitter") {
-      return;
+function Login({ twitterLoggedIn }) {
+  const { active, account, library, connector, activate, deactivate } =
+    useWeb3React();
+
+  const handleClick = async (e) => {
+    if (e.target.name === "wallet") {
+      try {
+        await activate(injected);
+      } catch (error) {
+        console.log(error);
+      }
     }
-    handleChange(e.target);
   };
+
+  async function disconnect() {
+    try {
+      deactivate();
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   // const error = !(loginStates.twitter && loginStates.wallet);
   // console.log(error, loginStates.twitter, loginStates.wallet);
@@ -23,21 +39,21 @@ function Login({ handleChange, twitterLoggedIn }) {
         href={`${BASE_URL}${FUNCTIONS_PREFIX}/auth/login`}
         selected={twitterLoggedIn}
         // variant="primary"
-        onClick={handleClick}
         fullWidth
         sx={{ mt: 1 }}
       >
-        connect to twitter
+        login with twitter
       </ToggleButton>
       <ToggleButton
         value="1"
         name="wallet"
+        selected={active}
         // variant="primary"
         onClick={handleClick}
         fullWidth
         sx={{ mt: 1 }}
       >
-        connect wallet
+        connect with wallet
       </ToggleButton>
       {/* {error ? (
           <FormHelperText>

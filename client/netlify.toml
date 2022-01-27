@@ -6,3 +6,4 @@
   to = "/:splat/#steps"
   query = {oauth_token = ":token", oauth_verifier = ":verifier"}
   force = true
+  

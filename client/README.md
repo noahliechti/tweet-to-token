@@ -32,6 +32,5 @@ https://twitter.com/Rainmaker1973/status/1478285768493834240
 - add tests
 - add analytics -> https://plausible.io/
 - aria labels?
-- use redux?
 
 before prod: twitter prod env, set cookie key, envs in netlify, test icons on devices
