@@ -2,9 +2,8 @@ import { Typography, Box } from "@mui/material";
 
 export const apiURL =
   process.env.REACT_APP_ENV === "development"
-    ? "http://localhost:3002"
-    : "https://get-tweet-data-image.herokuapp.com";
-console.log(apiURL, process.env.REACT_APP_ENV);
+    ? "http://localhost:5000"
+    : "https://tweet-token.netlify.app";
 
 export const cardsContent = [
   {

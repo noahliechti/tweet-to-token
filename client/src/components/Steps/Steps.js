@@ -56,10 +56,17 @@ function Steps({ twitterUser }) {
     e.preventDefault();
     setImageData("");
     setFormIsSubmitting(true);
-    fetch(
-      apiURL +
-        `/get-image?tweetURL=${state.tweetURL}&language=${state.language}&theme=${state.theme}`
-    )
+    fetch(apiURL + "/.netlify/functions/image", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify({
+        tweetURL: state.tweetURL,
+        language: state.language,
+        theme: state.theme,
+      }),
+    })
       .then((payload) => payload.json())
       .then((data) => {
         console.log("post submit", data.image);
@@ -125,7 +132,8 @@ function Steps({ twitterUser }) {
   ];
 
   const nextBtnDisabled = [
-    !(state && state.wallet && twitterUser),
+    false,
+    // !(state && state.wallet && twitterUser),
     !(state && state.language && state.theme),
   ];
 

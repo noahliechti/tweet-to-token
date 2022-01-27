@@ -19,3 +19,10 @@ exports.MONGO_URL =
   process.env.NODE_ENV === "development"
     ? "mongodb://localhost/userDB"
     : `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PW}@users.s9tkz.mongodb.net/UserDB?retryWrites=true&w=majority`;
+
+exports.TWEET_SETTINGS = {
+  TWEET_WIDTH: 1000,
+  TWEET_PADDING: 25,
+  TWEET_HIDE_THREAD: true,
+  TWEET_HIDE_CARD: false,
+};

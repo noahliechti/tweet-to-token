@@ -2,12 +2,7 @@ import React, { useState } from "react";
 import { Form, Input, Select } from "rfv";
 
 import "./Creator.scss";
-
-const apiURL =
-  process.env.REACT_APP_ENV === "development"
-    ? "http://localhost:3000"
-    : "https://get-tweet-data-image.herokuapp.com";
-console.log(apiURL, process.env.REACT_APP_ENV);
+import { apiURL } from "../../config/globals";
 
 const validations = {
   empty: [
@@ -52,7 +47,7 @@ function Creator() {
         postSubmit={postSubmit}
         postOptions={{
           method: "put",
-          url: apiURL + "/get-image",
+          url: apiURL + "/image",
         }}
       >
         <fieldset disabled={formIsSubmitting}>

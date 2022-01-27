@@ -19,7 +19,7 @@ function Home() {
   });
 
   useEffect(() => {
-    fetch("http://localhost:4000/data", {
+    fetch("http://localhost:5000/.netlify/functions/auth", {
       method: "GET",
       credentials: "include", // Fetch does not send cookies. So we need this line
       headers: {
