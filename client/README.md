@@ -13,6 +13,7 @@ https://twitter.com/Rainmaker1973/status/1478285768493834240
 - choosing language doesn't work
 - use arweave
 - use craco in production
+- global globals file? does this work for the functions
 - twitter url validation
 - TWITTER BOT @BOT UND DANN DIREKT GEMINTED + BOT SCHREIBT COMMENTAR WENN FERTIG GEMINTED + LINK
 - snackbar -> creating screenshot 3s + enhancing with metadata 3s \_> confirmation -> show etherscan links of transaction
