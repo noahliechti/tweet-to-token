@@ -3,6 +3,6 @@
 
 [[redirects]]
   from = "/*"
-  to = "/:splat/#steps"
+  to = "/#steps"
   query = {oauth_token = ":token", oauth_verifier = ":verifier"}
   force = true
