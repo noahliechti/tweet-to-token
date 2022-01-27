@@ -1,5 +1,7 @@
 node_modules
 build
+mongo
 .DS_Store
 .env
-tweets.txt
+.netlify
+temp.md
