@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.6; // TODO: which version?
 
-// import "@openzeppelin/contracts/token/ERC721/ERC721.sol"; // TODO: needed?
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol"; // TODO: needed?
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Counter.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract TweetToken is ERC721URIStorage, Ownable {
+import "hardhat/console.sol";
+
+contract TweetToken is ERC721, ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenCounter; // TODO: public or private?
     bool public saleIsActive;
@@ -21,8 +23,9 @@ contract TweetToken is ERC721URIStorage, Ownable {
     // TODO: burn vs set tokenuri to null
     // TODO: what would be if I had a private mapping of the addresses?
 
-    constructor(string memory _baseURI) public ERC721("TweetToken", "TTT") {
-        baseURI = _baseURI;
+    constructor(string memory _newBaseURI) ERC721("TweetToken", "TTT") {
+        console.log(msg.sender, _newBaseURI);
+        baseURI = _newBaseURI;
         saleIsActive = false;
     }
 
@@ -60,19 +63,36 @@ contract TweetToken is ERC721URIStorage, Ownable {
         return baseURI;
     }
 
-    function setBaseURI(string memory _baseURI) public onlyOwner {
-        baseURI = _baseURI;
+    function setBaseURI(string memory _newBaseURI) public onlyOwner {
+        baseURI = _newBaseURI;
     }
 
     function flipSaleState() public onlyOwner {
         saleIsActive = !saleIsActive;
     }
 
-    function count() public returns (uint256) {
+    function getTokenCount() public view returns (uint256) {
         return _tokenCounter.current();
     }
+
     // function withdraw() public onlyOwner {
     //     uint256 balance = address(this).balance;
     //     msg.sender.transfer(balance);
     // }
+
+    function _burn(uint256 tokenId)
+        internal
+        override(ERC721, ERC721URIStorage)
+    {
+        super._burn(tokenId);
+    }
+
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        override(ERC721, ERC721URIStorage)
+        returns (string memory)
+    {
+        return super.tokenURI(tokenId);
+    }
 }

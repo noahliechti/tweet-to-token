@@ -14,12 +14,15 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const Greeter = await hre.ethers.getContractFactory("Greeter");
-  const greeter = await Greeter.deploy("Hello, Hardhat!");
+  const TTT = await hre.ethers.getContractFactory("TweetToken");
+  const ttt = await TTT.deploy("https://gateway.pinata.cloud/ipfs/");
 
-  await greeter.deployed();
+  await ttt.deployed();
 
-  console.log("Greeter deployed to:", greeter.address);
+  console.log("Deployer:", (await hre.ethers.getSigners())[0].address);
+  console.log("TweetToken deployed to:", ttt.address);
+
+  // TODO: publish source, from which account is deployed?
 }
 
 // We recommend this pattern to be able to use async/await everywhere
