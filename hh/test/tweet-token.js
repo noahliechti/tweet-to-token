@@ -1,23 +1,32 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-describe("TweetToken", function () {
+const BASE_URI = "https://gateway.pinata.cloud/ipfs/";
+
+async function deployContract() {
+  const TTT = await ethers.getContractFactory("TweetToken");
+  const ttt = await TTT.deploy(BASE_URI);
+  return await ttt.deployed();
+}
+
+describe("TweetToken", async function () {
   it("Should return the initial state of the deployed contract", async function () {
-    const baseURI = "https://gateway.pinata.cloud/ipfs/";
-
-    const TTT = await ethers.getContractFactory("TweetToken");
-    const ttt = await TTT.deploy(baseURI);
-    await ttt.deployed();
-
-    expect(await ttt.baseURI()).to.equal(baseURI);
+    const ttt = await deployContract();
+    expect(await ttt.baseURI()).to.equal(BASE_URI);
     expect(await ttt.saleIsActive()).to.equal(false);
   });
 
-  // const setGreetingTx = await greeter.setGreeting("Hola, mundo!");
-  // greeter.balanceOf(recipient)
+  it("Should update the baseURI", async function () {
+    const ttt = await deployContract();
+    const baseURI = await ttt.setBaseURI(BASE_URI + "update/");
+    await baseURI.wait();
+    expect(await ttt.baseURI()).to.equal(BASE_URI + "update/");
+  });
 
-  // // wait until the transaction is mined
-  // await setGreetingTx.wait();
-
-  // expect(await greeter.greet()).to.equal("Hola, mundo!");
+  it("Should flip sale state", async function () {
+    const ttt = await deployContract();
+    const saleState = await ttt.flipSaleState();
+    await saleState.wait();
+    expect(await ttt.saleIsActive()).to.equal(true);
+  });
 });

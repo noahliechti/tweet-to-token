@@ -24,7 +24,6 @@ contract TweetToken is ERC721, ERC721URIStorage, Ownable {
     // TODO: what would be if I had a private mapping of the addresses?
 
     constructor(string memory _newBaseURI) ERC721("TweetToken", "TTT") {
-        console.log(msg.sender, _newBaseURI);
         baseURI = _newBaseURI;
         saleIsActive = false;
     }
@@ -63,12 +62,16 @@ contract TweetToken is ERC721, ERC721URIStorage, Ownable {
         return baseURI;
     }
 
-    function setBaseURI(string memory _newBaseURI) public onlyOwner {
-        baseURI = _newBaseURI;
+    function setBaseURI(string memory _newBaseURI)
+        public
+        onlyOwner
+        returns (string memory)
+    {
+        return baseURI = _newBaseURI;
     }
 
-    function flipSaleState() public onlyOwner {
-        saleIsActive = !saleIsActive;
+    function flipSaleState() public onlyOwner returns (bool) {
+        return saleIsActive = !saleIsActive;
     }
 
     function getTokenCount() public view returns (uint256) {
