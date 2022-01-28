@@ -9,8 +9,9 @@ https://twitter.com/Rainmaker1973/status/1478285768493834240
 - mobile menu
 - view on opensea + share button
 - choosing language doesn't work
-- use arweave
+- use arweaved
 - use craco in production
+- cache tweet redis
 - global globals file? does this work for the functions
 - twitter url validation
 - TWITTER BOT @BOT UND DANN DIREKT GEMINTED + BOT SCHREIBT COMMENTAR WENN FERTIG GEMINTED + LINK

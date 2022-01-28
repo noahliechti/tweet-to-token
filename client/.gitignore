@@ -1,0 +1,7 @@
+node_modules
+build
+mongo
+.DS_Store
+.env
+.netlify
+temp.md
