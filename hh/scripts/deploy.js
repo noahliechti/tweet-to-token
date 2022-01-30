@@ -1,8 +1,8 @@
 const hre = require("hardhat");
 const { storeContractAddress, verifyContract } = require("./helper-functions");
+const ethers = hre.ethers;
 
 async function main() {
-  const ethers = hre.ethers;
   const contractName = "TweetToken";
   const args = ["https://gateway.pinata.cloud/ipfs/"];
 
@@ -14,7 +14,7 @@ async function main() {
   await verifyContract(ttt, args);
 
   console.log("Deployer:", (await ethers.getSigners())[0].address);
-  console.log("TweetToken deployed to:", ttt.address);
+  console.log(`${contractName} deployed to:`, ttt.address);
 }
 
 main().catch((error) => {

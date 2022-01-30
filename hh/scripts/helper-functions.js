@@ -66,14 +66,25 @@ exports.printEtherscanLink = (contractAddress, chainId) => {
     default:
       return;
   }
-  console.log(
-    `Using deployed contract ${contractAddress} available on ${link}${contractAddress}`
-  );
+  console.log(`Inspect deployed contract on ${link}${contractAddress}`);
+};
+
+const isLocalNetwork = () => hre.network.config.chainId === 31337;
+exports.isLocalNetwork = isLocalNetwork;
+
+exports.getProdSigners = () => {
+  const { PRIMARY_PRIVATE_KEY, SECONDARY_PRIVATE_KEY } = process.env;
+
+  return PRIMARY_PRIVATE_KEY
+    ? SECONDARY_PRIVATE_KEY
+      ? [PRIMARY_PRIVATE_KEY, SECONDARY_PRIVATE_KEY]
+      : [PRIMARY_PRIVATE_KEY]
+    : [];
 };
 
 exports.verifyContract = async (contract, args) => {
   const { address } = contract;
-  if (hre.network.config.chainId === 31337 || !hre.config.etherscan.apiKey) {
+  if (isLocalNetwork() || !hre.config.etherscan.apiKey) {
     return; // contract is deployed on local network or no apiKey is configured
   }
   console.log("Waiting 5 block confirmations...");

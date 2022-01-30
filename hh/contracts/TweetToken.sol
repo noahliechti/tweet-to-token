@@ -36,9 +36,8 @@ contract TweetToken is ERC721, ERC721URIStorage, Ownable {
             "You are not allowed to mint this tweet"
         );
 
-        _safeMint(msg.sender, tweetId); // checks if id is already minted
         _tokenCounter.increment();
-
+        _safeMint(msg.sender, tweetId); // checks if id is already minted
         _setTokenURI(tweetId, tweetIdToTokenURI[tweetId]);
 
         // TODO: delete account from mapping -> do people still see the address in the history?
@@ -83,6 +82,8 @@ contract TweetToken is ERC721, ERC721URIStorage, Ownable {
     //     uint256 balance = address(this).balance;
     //     msg.sender.transfer(balance);
     // }
+
+    // The following functions are overrides required by Solidity.
 
     function _burn(uint256 tokenId)
         internal
