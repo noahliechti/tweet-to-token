@@ -1,0 +1,12 @@
+node_modules
+build
+mongo
+.DS_Store
+.env
+.netlify
+temp.md
+
+cache
+**/artifacts/*
+!**/artifacts/contracts/*
+!**/artifacts/contracts
