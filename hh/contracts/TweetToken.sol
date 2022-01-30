@@ -28,7 +28,7 @@ contract TweetToken is ERC721, ERC721URIStorage, Ownable {
         saleIsActive = false;
     }
 
-    function mintTweet(uint256 tweetId) public returns (uint256) {
+    function mintTweet(uint256 tweetId) external returns (uint256) {
         // TODO: only allow to mint once -> how can I look trough minted ids?
         require(saleIsActive, "Minting is paused");
         require(
@@ -52,7 +52,7 @@ contract TweetToken is ERC721, ERC721URIStorage, Ownable {
         address _account,
         uint256 _tweetId,
         string memory _tokenURI
-    ) public onlyOwner {
+    ) external onlyOwner {
         addressTotweetId[_account] = _tweetId;
         tweetIdToTokenURI[_tweetId] = _tokenURI;
         // emit addressVerified(_account, _tweetId); // TODO: what about privacy
@@ -63,18 +63,19 @@ contract TweetToken is ERC721, ERC721URIStorage, Ownable {
     }
 
     function setBaseURI(string memory _newBaseURI)
-        public
+        external
         onlyOwner
         returns (string memory)
     {
         return baseURI = _newBaseURI;
     }
 
-    function flipSaleState() public onlyOwner returns (bool) {
+    function flipSaleState() external onlyOwner returns (bool) {
         return saleIsActive = !saleIsActive;
     }
 
     function getTokenCount() public view returns (uint256) {
+        // TODO: is public cheaper here?
         return _tokenCounter.current();
     }
 
