@@ -53,13 +53,27 @@ function writeFile(addresses) {
 }
 
 exports.printEtherscanLink = (contractAddress, chainId) => {
-  const link;
+  let link;
   if (chainId === 1) {
-    link = "https://etherscan.io/address/"
+    link = "https://etherscan.io/address/";
   } else if (chainId === 4) {
-    link = "https://rinkeby.etherscan.io/address/"
+    link = "https://rinkeby.etherscan.io/address/";
   }
   console.log(
     `Using deployed contract ${contractAddress} available on ${link}${contractAddress}`
   );
-}
+};
+
+exports.verifyContract = async (contract, args) => {
+  const { address } = contract;
+  if (hre.network.config.chainId === 31337 || !hre.config.etherscan.apiKey) {
+    console.log("return");
+    return;
+  }
+
+  await contract.deployTransaction.wait(5); // wait 5 additional block confirmations
+  await hre.run("verify:verify", {
+    address: address,
+    constructorArguments: args,
+  });
+};
