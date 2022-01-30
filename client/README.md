@@ -32,4 +32,4 @@ https://twitter.com/Rainmaker1973/status/1478285768493834240
 - add analytics -> https://plausible.io/
 - aria labels?
 
-before prod: twitter prod env, set cookie key, envs in netlify, test icons on devices
+before prod: twitter prod env, set cookie key, envs in netlify, test icons on devices, other api keys, etherscan/infura twitter

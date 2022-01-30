@@ -24,7 +24,7 @@ async function main() {
     const saleState = await ttt.flipSaleState();
     await saleState.wait();
   }
-  console.log(await ttt.saleIsActive());
+  console.log("Sale state: ", await ttt.saleIsActive());
 }
 
 function getTokenURIHash() {}

@@ -28,6 +28,9 @@ module.exports = {
     hardhat: {
       // TODO: forking
     },
+    localhost: {
+      chainId: 31337,
+    },
     rinkeby: {
       chainId: 4,
       url: `https://eth-rinkeby.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
