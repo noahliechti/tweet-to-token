@@ -15,7 +15,6 @@
     "@web3-react/injected-connector": "^6.0.7",
     "chrome-aws-lambda": "^10.1.0",
     "connect-mongo": "^4.6.0",
-    "dotenv": "^14.3.2",
     "express": "^4.17.2",
     "express-session": "^1.17.2",
     "mongoose": "^6.1.8",

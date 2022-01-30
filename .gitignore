@@ -5,3 +5,10 @@ mongo
 .env
 .netlify
 temp.md
+
+cache
+coverage
+coverage.json
+**/artifacts/*
+!**/artifacts/contracts/*
+!**/artifacts/contracts
