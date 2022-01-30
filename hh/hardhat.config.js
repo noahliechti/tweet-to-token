@@ -23,14 +23,14 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  */
 module.exports = {
   solidity: "0.8.6",
+  defaultNetwork: "hardhat",
   networks: {
-    // hardhat: {
-    //   forking: {
-    //     url: "",
-    //   },
-    // },
-    ropsten: {
-      url: process.env.ROPSTEN_URL || "",
+    hardhat: {
+      // TODO: forking
+    },
+    rinkeby: {
+      chainId: 4,
+      url: `https://eth-rinkeby.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
