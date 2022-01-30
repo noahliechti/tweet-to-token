@@ -54,10 +54,17 @@ function writeFile(addresses) {
 
 exports.printEtherscanLink = (contractAddress, chainId) => {
   let link;
-  if (chainId === 1) {
-    link = "https://etherscan.io/address/";
-  } else if (chainId === 4) {
-    link = "https://rinkeby.etherscan.io/address/";
+  switch (chainId) {
+    case 1:
+      link = "https://etherscan.io/address/";
+      break;
+    case 4:
+      link = "https://rinkeby.etherscan.io/address/";
+      break;
+    case 1337:
+      return;
+    default:
+      return;
   }
   console.log(
     `Using deployed contract ${contractAddress} available on ${link}${contractAddress}`
@@ -67,13 +74,19 @@ exports.printEtherscanLink = (contractAddress, chainId) => {
 exports.verifyContract = async (contract, args) => {
   const { address } = contract;
   if (hre.network.config.chainId === 31337 || !hre.config.etherscan.apiKey) {
-    console.log("return");
-    return;
+    return; // contract is deployed on local network or no apiKey is configured
   }
-
-  await contract.deployTransaction.wait(5); // wait 5 additional block confirmations
-  await hre.run("verify:verify", {
-    address: address,
-    constructorArguments: args,
-  });
+  console.log("Waiting 5 block confirmations...");
+  await contract.deployTransaction.wait(5); // needed if verifyContract() is called immediately after deployment
+  try {
+    console.log("Verifying contract...");
+    await hre.run("verify:verify", {
+      address: address,
+      constructorArguments: args,
+    });
+  } catch (err) {
+    if (err.message.includes("Reason: Already Verified")) {
+      console.log("Contract is already verified!");
+    }
+  }
 };
