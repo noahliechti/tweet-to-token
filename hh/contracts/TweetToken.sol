@@ -14,7 +14,7 @@ contract TweetToken is ERC721, ERC721URIStorage, Ownable {
     bool public saleIsActive;
     string public baseURI;
 
-    mapping(address => uint256) private addressTotweetId;
+    mapping(address => uint256) private addressTotweetId; //TODO: how private is this?
     mapping(uint256 => string) public tweetIdToTokenURI;
 
     event tokenCreated(uint256 indexed tweetId, string tokenURI);

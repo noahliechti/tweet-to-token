@@ -2,7 +2,7 @@ const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
 describe("TweetToken Contract", function () {
-  const BASE_URI = "https://gateway.pinata.cloud/ipfs/";
+  const BASE_URI = "ipfs://";
   const INITIAL_SALE_STATE = false;
   let ttt;
   let owner;

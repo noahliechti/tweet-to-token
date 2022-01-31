@@ -22,7 +22,13 @@ async function main() {
   const TTT = await ethers.getContractFactory(contractName);
   const ttt = await TTT.attach(deployedContractAddress);
 
-  console.log("Sale state:", await flipSaleState(ttt));
+  await flipSaleState(ttt);
+
+  if (await ttt.tweetIdToTokenURI(sampleTweetId)) {
+    console.log("Tweet was already minted.");
+    if (!isLocalNetwork()) logMarketplaceURL(ttt, sampleTweetId);
+    return;
+  }
   const tokenCount = await mintTweet(ttt, tweetOwner, sampleTweetId);
 
   console.log(
@@ -31,13 +37,16 @@ async function main() {
   );
 
   if (!isLocalNetwork()) {
-    console.log(
-      `View your NFT at https://testnets.opensea.io/assets/${ttt.address}/${sampleTweetId} 
-    or at https://rinkeby.rarible.com/token/${ttt.address}:${sampleTweetId}`
-    );
+    logMarketplaceURL(ttt, sampleTweetId);
   }
 }
 
+function logMarketplaceURL(contract, id) {
+  console.log(
+    `View your NFT at https://testnets.opensea.io/assets/${contract.address}/${id} 
+    or at https://rinkeby.rarible.com/token/${contract.address}:${id}`
+  );
+}
 async function mintTweet(contract, tweetOwner, tweetId) {
   let tx;
   tx = await contract.addVerifiedTweet(
@@ -93,7 +102,7 @@ async function uploadToPinata(pinataContent, fileName) {
     "pinataMetadata",
     JSON.stringify({
       keyvalues: {
-        env: "dev",
+        // env: "dev",
         date: new Date().toISOString(),
       },
     })

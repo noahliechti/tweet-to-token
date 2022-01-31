@@ -4,7 +4,7 @@ const ethers = hre.ethers;
 
 async function main() {
   const contractName = "TweetToken";
-  const args = ["https://gateway.pinata.cloud/ipfs/"];
+  const args = ["ipfs://"];
 
   const TTT = await ethers.getContractFactory(contractName);
   const ttt = await TTT.deploy(...args);
