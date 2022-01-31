@@ -1,16 +1,19 @@
+require("dotenv").config();
+
 const fs = require("fs");
 const path = require("path");
 
-const filePath = path.join(__dirname, "..", "artifacts/contracts/map.js");
+const relativeFilePath = path.join("..", "artifacts/contracts/map.js");
+const absoluteFilePath = path.join(__dirname, relativeFilePath);
 
 exports.storeContractAddress = async (contract, contractName) => {
   const { address, deployTransaction } = contract;
   const { chainId } = deployTransaction;
 
-  fs.stat(filePath, (err) => {
+  fs.stat(absoluteFilePath, (err) => {
     if (err == null) {
       // File exists
-      let { addresses } = require("../artifacts/contracts/map");
+      let { addresses } = require(relativeFilePath);
 
       if (!addresses[chainId]) {
         // Network does not exist yet
@@ -44,7 +47,7 @@ exports.storeContractAddress = async (contract, contractName) => {
 
 function writeFile(addresses) {
   fs.writeFile(
-    filePath,
+    absoluteFilePath,
     `exports.addresses = ${JSON.stringify(addresses)};`,
     (err) => {
       if (err) console.log(err);

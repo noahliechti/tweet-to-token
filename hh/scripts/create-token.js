@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const hre = require("hardhat");
 const fs = require("fs");
 const path = require("path");
@@ -19,8 +21,10 @@ async function main() {
 
   printEtherscanLink(deployedContractAddress, chainId);
 
-  const TTT = await ethers.getContractFactory(contractName);
-  const ttt = await TTT.attach(deployedContractAddress);
+  const ttt = await hre.ethers.getContractAt(
+    contractName,
+    deployedContractAddress
+  );
 
   await flipSaleState(ttt);
 
