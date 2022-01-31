@@ -82,6 +82,13 @@ exports.getProdSigners = () => {
     : [];
 };
 
+exports.logMarketplaceURL = (contract, id) => {
+  console.log(
+    `View your NFT at https://testnets.opensea.io/assets/${contract.address}/${id} 
+    or at https://rinkeby.rarible.com/token/${contract.address}:${id}`
+  );
+};
+
 exports.verifyContract = async (contract, args) => {
   const { address } = contract;
   if (isLocalNetwork() || !hre.config.etherscan.apiKey) {

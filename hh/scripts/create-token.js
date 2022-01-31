@@ -6,7 +6,7 @@ const FormData = require("form-data");
 
 const { isLocalNetwork } = require("./helper-functions");
 const { addresses } = require("../artifacts/contracts/map");
-const { printEtherscanLink } = require("./helper-functions");
+const { printEtherscanLink, logMarketplaceURL } = require("./helper-functions");
 
 const ethers = hre.ethers;
 
@@ -41,12 +41,6 @@ async function main() {
   }
 }
 
-function logMarketplaceURL(contract, id) {
-  console.log(
-    `View your NFT at https://testnets.opensea.io/assets/${contract.address}/${id} 
-    or at https://rinkeby.rarible.com/token/${contract.address}:${id}`
-  );
-}
 async function mintTweet(contract, tweetOwner, tweetId) {
   let tx;
   tx = await contract.addVerifiedTweet(
