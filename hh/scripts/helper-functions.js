@@ -48,7 +48,7 @@ exports.storeContractAddress = async (contract, contractName) => {
 function writeFile(addresses) {
   fs.writeFile(
     absoluteFilePath,
-    `exports.addresses = ${JSON.stringify(addresses)};`,
+    `exports.addresses = ${JSON.stringify(addresses, undefined, 2)};`,
     (err) => {
       if (err) console.log(err);
     }

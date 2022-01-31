@@ -1,18 +1,7 @@
 exports.addresses = {
-  4: {
-    TweetToken: [
-      "0x92b4475ef16Ab8f5Cb57D756fdA7dD669a1372E1",
-      "0x9Ee08b8Dc0A085fCd5a3642b51BeF82aeC7D2749",
-      "0xE0E91AB6d23C8b0d150A146bDe7526E837b61Dbf",
-      "0xd4e37557f61418c1A6F707bAC195537a06381733",
-    ],
-  },
-  31337: {
-    TweetToken: [
-      "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
-      "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-      "0x7A9Ec1d04904907De0ED7b6839CcdD59c3716AC9",
-      "0x1c85638e118b37167e9298c2268758e058DdfDA0",
-    ],
-  },
+  "31337": {
+    "TweetToken": [
+      "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853"
+    ]
+  }
 };

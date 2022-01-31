@@ -13,6 +13,8 @@ async function main() {
   await storeContractAddress(ttt, contractName);
   await verifyContract(ttt, args);
 
+  // console.log(await artifacts.readArtifactSync(contractName));
+
   console.log("Deployer:", (await ethers.getSigners())[0].address);
   console.log(`${contractName} deployed to:`, ttt.address);
 }
