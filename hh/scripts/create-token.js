@@ -3,20 +3,18 @@ const fs = require("fs");
 const path = require("path");
 const fetch = require("node-fetch");
 const FormData = require("form-data");
-const ethers = hre.ethers;
-const { isLocalNetwork } = require("./helper-functions");
 
+const { isLocalNetwork } = require("./helper-functions");
 const { addresses } = require("../artifacts/contracts/map");
 const { printEtherscanLink } = require("./helper-functions");
 
-const PINATA_REQUEST_URL = "https://api.pinata.cloud/pinning/pinFileToIPFS";
+const ethers = hre.ethers;
 
 async function main() {
   const contractName = "TweetToken";
   const chainId = hre.network.config.chainId;
   const deployedContractAddress = addresses[chainId][contractName][0];
   const [, tweetOwner] = await ethers.getSigners();
-  console.log(tweetOwner.address);
   const sampleTweetId = 1478285768493834240n; // using BigInt because number is too big
 
   printEtherscanLink(deployedContractAddress, chainId);
@@ -65,31 +63,43 @@ async function flipSaleState(contract) {
 }
 
 async function getTokenURIHash(tweetId) {
-  const basePath = path.join(__dirname, "img");
-  const imageName = `${tweetId}.png`;
-  const jsonName = `${tweetId}.json`;
-  await uploadFileToPinata(
-    imageName,
-    fs.createReadStream(path.join(basePath, imageName))
-  );
+  const imagePath = path.join(__dirname, "img", `${tweetId}.png`);
+  const ipfsImagePath = await uploadToPinata(fs.createReadStream(imagePath));
 
-  return await uploadFileToPinata(
-    jsonName,
-    fs.createReadStream(path.join(basePath, jsonName))
-  );
+  const metadata = {
+    name: "#1 from @Rainmaker1973",
+    description:
+      "Tweet by @Rainmaker1973 tweeted on 21.12.21. Original: https://twitter.com/Rainmaker1973/status/1478285768493834240",
+    image: ipfsImagePath,
+    attributes: [
+      { trait_type: "likes", value: 50 },
+      { trait_type: "retweets", value: 13 },
+      { trait_type: "comments", value: 3 },
+      { trait_type: "language", value: "en" },
+    ],
+  };
+
+  return await uploadToPinata(metadata, `${tweetId}.json`);
 }
 
-async function uploadFileToPinata(fileName, binary) {
+async function uploadToPinata(pinataContent, fileName) {
   let fd = new FormData();
-  fd.append("file", binary);
+  if (fileName) {
+    fd.append("file", JSON.stringify(pinataContent), fileName);
+  } else {
+    fd.append("file", pinataContent);
+  }
+  fd.append(
+    "pinataMetadata",
+    JSON.stringify({
+      keyvalues: {
+        env: "dev",
+        date: new Date().toISOString(),
+      },
+    })
+  );
 
-  const metadata = JSON.stringify({
-    name: fileName,
-    // keyvalues: { id: "" },
-  });
-  fd.append("pinataMetadata", metadata);
-
-  const ipfsFilePath = await fetch(PINATA_REQUEST_URL, {
+  return await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
     method: "POST",
     headers: {
       pinata_api_key: process.env.PINATA_API_KEY,
@@ -100,8 +110,6 @@ async function uploadFileToPinata(fileName, binary) {
     .then((res) => res.json())
     .then((json) => json.IpfsHash)
     .catch((err) => console.log(err));
-
-  return ipfsFilePath;
 }
 
 main().catch((error) => {
