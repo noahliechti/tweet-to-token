@@ -3,54 +3,70 @@ require("dotenv").config();
 const fs = require("fs");
 const path = require("path");
 
-const relativeFilePath = path.join("..", "artifacts/contracts/map.js");
+const fileName = "map.js";
+const relativeDirPath = path.join("..", "src", "config", "contracts");
+const absoluteDirPath = path.join(__dirname, relativeDirPath);
+const relativeFilePath = path.join(relativeDirPath, fileName);
 const absoluteFilePath = path.join(__dirname, relativeFilePath);
 
 exports.storeContractAddress = async (contract, contractName) => {
   const { address, deployTransaction } = contract;
   const { chainId } = deployTransaction;
 
-  fs.stat(absoluteFilePath, (err) => {
+  // console.log(await artifacts.readArtifactSync(contractName));
+  fs.stat(absoluteDirPath, (err) => {
+    // Directory exists
     if (err == null) {
-      // File exists
-      let { addresses } = require(relativeFilePath);
-
-      if (!addresses[chainId]) {
-        // Network does not exist yet
-        addresses[chainId] = {
-          [contractName]: [address],
-        };
-        writeFile(addresses);
-      } else if (!addresses[chainId][contractName]) {
-        // Network exists but contract does not
-        addresses[chainId][contractName] = [address];
-        writeFile(addresses);
-      } else if (addresses[chainId][contractName][0] !== address) {
-        // Network and contract exist but address does not
-        addresses[chainId][contractName].unshift(address);
-        writeFile(addresses);
-      }
+      createAndWritePersistentContractFiles(chainId, contractName, address);
     } else if (err.code === "ENOENT") {
-      // File does not exist
-      const addresses = {
-        [chainId]: {
-          [contractName]: [address],
-        },
-      };
-      writeFile(addresses);
+      // Directory does not exist
+      fs.mkdir(absoluteDirPath, (err) => {
+        if (err) {
+          console.error(`Error creating directory ${absoluteFilePath}:`, err);
+        } else {
+          createAndWritePersistentContractFiles(chainId, contractName, address);
+        }
+      });
     } else {
-      console.log("Some other error: ", err.code);
+      console.error(
+        `Error returning information about directory ${absoluteDirPath}:`,
+        err
+      );
     }
   });
   return contract.address;
 };
+
+function createAndWritePersistentContractFiles(chainId, contractName, address) {
+  fs.stat(absoluteFilePath, (err) => {
+    if (err == null) {
+      // File exists
+      let { addresses } = require(relativeFilePath);
+      addresses[chainId] = {
+        [contractName]: address,
+      };
+      writeFile(addresses);
+    } else if (err.code === "ENOENT") {
+      // File does not exist
+      const addresses = {
+        [chainId]: {
+          [contractName]: address,
+        },
+      };
+      writeFile(addresses);
+    } else {
+      console.error(`Error return information about ${absoluteFilePath}:`, err);
+    }
+  });
+}
 
 function writeFile(addresses) {
   fs.writeFile(
     absoluteFilePath,
     `exports.addresses = ${JSON.stringify(addresses, undefined, 2)};`,
     (err) => {
-      if (err) console.log(err);
+      if (err)
+        console.error(`Error writing the file ${absoluteFilePath}:`, err);
     }
   );
 }
