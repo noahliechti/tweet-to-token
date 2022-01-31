@@ -13,7 +13,6 @@ exports.storeContractAddress = async (contract, contractName) => {
   const { address, deployTransaction } = contract;
   const { chainId } = deployTransaction;
 
-  // console.log(await artifacts.readArtifactSync(contractName));
   fs.stat(absoluteDirPath, (err) => {
     // Directory exists
     if (err == null) {
@@ -38,6 +37,16 @@ exports.storeContractAddress = async (contract, contractName) => {
 };
 
 function createAndWritePersistentContractFiles(chainId, contractName, address) {
+  const absoluteArtifactPath = absoluteDirPath + `/${contractName}.json`;
+  fs.writeFile(
+    absoluteArtifactPath,
+    JSON.stringify(artifacts.readArtifactSync(contractName), null, 2),
+    (err) => {
+      if (err)
+        console.error(`Error writing the file ${absoluteArtifactPath}:`, err);
+    }
+  );
+
   fs.stat(absoluteFilePath, (err) => {
     if (err == null) {
       // File exists
@@ -45,7 +54,7 @@ function createAndWritePersistentContractFiles(chainId, contractName, address) {
       addresses[chainId] = {
         [contractName]: address,
       };
-      writeFile(addresses);
+      writeContractAddressFile(addresses);
     } else if (err.code === "ENOENT") {
       // File does not exist
       const addresses = {
@@ -53,14 +62,14 @@ function createAndWritePersistentContractFiles(chainId, contractName, address) {
           [contractName]: address,
         },
       };
-      writeFile(addresses);
+      writeContractAddressFile(addresses);
     } else {
       console.error(`Error return information about ${absoluteFilePath}:`, err);
     }
   });
 }
 
-function writeFile(addresses) {
+function writeContractAddressFile(addresses) {
   fs.writeFile(
     absoluteFilePath,
     `exports.addresses = ${JSON.stringify(addresses, undefined, 2)};`,
