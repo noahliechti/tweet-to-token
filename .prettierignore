@@ -1,8 +1,5 @@
 node_modules
-**/artifacts/*
-!**/artifacts/contracts/*
-!**/artifacts/contracts/
-**/artifacts/contracts/*.sol
+artifacts
 cache
 coverage*
 gasReporterOutput.json

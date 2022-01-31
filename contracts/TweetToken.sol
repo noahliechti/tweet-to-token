@@ -17,8 +17,8 @@ contract TweetToken is ERC721, ERC721URIStorage, Ownable {
     mapping(address => uint256) private addressTotweetId; //TODO: how private is this?
     mapping(uint256 => string) public tweetIdToTokenURI;
 
-    event tokenCreated(uint256 indexed tweetId, string tokenURI);
-    event postVerified(address account, uint256 indexed tweetId);
+    event TokenCreated(uint256 indexed tweetId, string tokenURI);
+    event PostVerified(address account, uint256 indexed tweetId);
 
     // TODO: burn vs set tokenuri to null
     // TODO: what would be if I had a private mapping of the addresses?
@@ -33,7 +33,7 @@ contract TweetToken is ERC721, ERC721URIStorage, Ownable {
         require(saleIsActive, "Minting is paused");
         require(
             addressTotweetId[msg.sender] == tweetId,
-            "You are not allowed to mint this tweet"
+            "You aren't allowed to mint tweet"
         );
 
         _tokenCounter.increment();
@@ -42,7 +42,7 @@ contract TweetToken is ERC721, ERC721URIStorage, Ownable {
 
         // TODO: delete account from mapping -> do people still see the address in the history?
 
-        emit tokenCreated(tweetId, tweetIdToTokenURI[tweetId]);
+        emit TokenCreated(tweetId, tweetIdToTokenURI[tweetId]);
         return tweetId;
     }
 
