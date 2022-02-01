@@ -2,7 +2,7 @@ const hre = require("hardhat");
 const fs = require("fs");
 const path = require("path");
 
-const fileName = "map.js";
+const fileName = "map.json";
 const relativeDirPath = path.join("..", "src", "config", "contracts");
 const absoluteDirPath = path.join(__dirname, relativeDirPath);
 const relativeFilePath = path.join(relativeDirPath, fileName);
@@ -13,7 +13,7 @@ const { artifacts } = hre;
 function writeContractAddressFile(addresses) {
   fs.writeFile(
     absoluteFilePath,
-    `export default ${JSON.stringify(addresses, undefined, 2)};`,
+    `${JSON.stringify(addresses, undefined, 2)}\n`, // \n adds end of life, so prettier is happy
     (err) => {
       if (err)
         console.error(`Error writing the file ${absoluteFilePath}:`, err);
@@ -25,21 +25,21 @@ function createAndWritePersistentContractFiles(chainId, contractName, address) {
   const absoluteArtifactPath = `${absoluteDirPath}/${contractName}.json`;
   fs.writeFile(
     absoluteArtifactPath,
-    JSON.stringify(artifacts.readArtifactSync(contractName), null, 2),
+    `${JSON.stringify(artifacts.readArtifactSync(contractName), null, 2)}\n`, // \n adds end of life, so prettier is happy
     (err) => {
       if (err)
         console.error(`Error writing the file ${absoluteArtifactPath}:`, err);
     }
   );
 
-  fs.stat(absoluteFilePath, (err) => {
+  fs.readFile(absoluteFilePath, "utf8", (err, data) => {
     if (err == null) {
       // File exists
-      // eslint-disable-next-line global-require, import/no-dynamic-require
-      const addresses = require(relativeFilePath);
+      const addresses = JSON.parse(data);
       addresses[chainId] = {
         [contractName]: address,
       };
+
       writeContractAddressFile(addresses);
     } else if (err.code === "ENOENT") {
       // File does not exist
