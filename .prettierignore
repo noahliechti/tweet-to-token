@@ -1,8 +1,21 @@
+# Standard
 node_modules
-**/artifacts/*
-!**/artifacts/contracts/*
-!**/artifacts/contracts/
-**/artifacts/contracts/*.sol
+.DS_Store
+.env
+
+# Netlify
+.netlify
+netlify.toml
+
+# MongoDB
+mongo
+
+# React
+build
+
+# Hardhat
 cache
-coverage*
+coverage
+coverage.json
+artifacts
 gasReporterOutput.json

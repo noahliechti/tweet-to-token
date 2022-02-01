@@ -1,4 +1,22 @@
+# Standard
 node_modules
-artifacts
+.DS_Store
+.env
+*.md
+
+# Netlify
+.netlify
+netlify.toml
+
+# MongoDB
+mongo
+
+# React
+build
+
+# Hardhat
 cache
 coverage
+coverage.json
+artifacts
+gasReporterOutput.json

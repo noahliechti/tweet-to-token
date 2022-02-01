@@ -1,22 +1,51 @@
 module.exports = {
   env: {
-    browser: false,
-    es2021: true,
+    browser: true,
+    es2021: true, // sets the ecmaVersion parser option to 12.
     mocha: true,
     node: true,
-  },
-  extends: [
-    "standard",
-    "plugin:prettier/recommended",
-    "plugin:node/recommended",
-  ],
-  parserOptions: {
-    ecmaVersion: 12,
   },
   overrides: [
     {
       files: ["hardhat.config.js"],
       globals: { task: true },
+    },
+    {
+      files: ["functions/**", "scripts/**"],
+      extends: ["plugin:node/recommended"],
+    },
+    {
+      files: "*",
+      extends: [
+        "plugin:prettier/recommended",
+        "plugin:json/recommended",
+        "airbnb",
+        "airbnb/hooks",
+        "prettier", // should be the last, disables all formatting-related ESLint rules
+      ],
+      rules: {
+        "no-unused-vars": "warn",
+        "object-shorthand": ["error", "consistent"],
+        "react/jsx-filename-extension": "off",
+        "react/react-in-jsx-scope": "off",
+        "react/prop-types": "off",
+        "react/no-unescaped-entities": "off",
+        "react/jsx-props-no-spreading": "off",
+        "import/no-extraneous-dependencies": [
+          "error",
+          {
+            devDependencies: [
+              "scripts/**",
+              "**/*.test.js",
+              "hardhat.config.js",
+            ],
+          },
+        ],
+      },
+    },
+    {
+      files: ["functions/**", "scripts/**"],
+      rules: { "no-console": "off" },
     },
   ],
 };
