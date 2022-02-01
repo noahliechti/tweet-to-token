@@ -1,12 +1,12 @@
 import React from "react";
 import { ToggleButtonGroup, ToggleButton } from "@mui/material";
 
-function ThemeToggle(props) {
-  const [theme, setTheme] = React.useState(props.defaultTheme);
+function ThemeToggle({ defaultTheme, handleChange: propsChange }) {
+  const [theme, setTheme] = React.useState(defaultTheme);
 
   const handleChange = (e, newTheme) => {
     setTheme(newTheme);
-    props.handleChange(e.target);
+    propsChange(e.target);
   };
   return (
     <ToggleButtonGroup

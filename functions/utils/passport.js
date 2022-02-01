@@ -11,6 +11,7 @@ const {
 // save user._id to session as req.session.passport.user = '..'
 passport.serializeUser((user, done) => {
   // TODO: how do I only save the id in the session but get the whole user in the db and req.user?
+  // eslint-disable-next-line no-underscore-dangle
   done(null, user._id);
 });
 
@@ -19,7 +20,7 @@ passport.deserializeUser((id, done) => {
     .then((user) => {
       done(null, user); // attach user object to the request as req.user
     })
-    .catch((e) => {
+    .catch(() => {
       done(new Error("Failed to deserialize an user"));
     });
 });
@@ -32,6 +33,7 @@ passport.use(
       callbackURL: `${BASE_URL}${FUNCTIONS_PREFIX}/auth/redirect`,
     },
     async (token, tokenSecret, profile, done) => {
+      // eslint-disable-next-line no-underscore-dangle
       const profileData = profile._json;
 
       // find current user in UserModel

@@ -1,7 +1,7 @@
 import React from "react";
 import { useWeb3React } from "@web3-react/core";
-import { injected } from "../../../config/connectors";
 import { Box, ToggleButton, Link } from "@mui/material";
+import { injected } from "../../../config/connectors";
 import { BASE_URL, FUNCTIONS_PREFIX } from "../../../config/globals";
 
 function Login({ twitterLoggedIn }) {
@@ -15,14 +15,13 @@ function Login({ twitterLoggedIn }) {
         } else {
           await activate(injected);
         }
-      } catch (error) {
-        console.log(error);
+      } catch (err) {
+        // console.log(err);
       }
     }
   };
 
   // const error = !(loginStates.twitter && loginStates.wallet);
-  // console.log(error, loginStates.twitter, loginStates.wallet);
   return (
     <Box sx={{ mb: 2 }}>
       {/* <FormControl error={error}> */}

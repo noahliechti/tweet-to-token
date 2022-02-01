@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 const userSchema = mongoose.Schema({
   // TODO: what attributes do I need?
   _id: Number,

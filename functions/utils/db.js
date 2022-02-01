@@ -7,6 +7,6 @@ mongoose
     useNewUrlParser: true,
   })
   .then(() => console.log("DB connection is successful."))
-  .catch(console.error);
+  .catch((err) => console.error(err));
 
 module.exports = mongoose.connection;

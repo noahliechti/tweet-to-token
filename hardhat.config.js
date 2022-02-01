@@ -4,16 +4,30 @@ require("@nomiclabs/hardhat-etherscan");
 require("@nomiclabs/hardhat-waffle");
 require("hardhat-gas-reporter");
 require("solidity-coverage");
-const { getProdSigners } = require("./scripts/helper-functions");
-const { ETHERSCAN_API_KEY, REPORT_GAS, ALCHEMY_API_KEY } = process.env;
+
+const {
+  ETHERSCAN_API_KEY,
+  REPORT_GAS,
+  ALCHEMY_API_KEY,
+  PRIMARY_PRIVATE_KEY,
+  SECONDARY_PRIVATE_KEY,
+} = process.env;
 
 task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   const accounts = await hre.ethers.getSigners();
-
-  for (const account of accounts) {
-    console.log(account.address);
-  }
+  // eslint-disable-next-line no-console
+  accounts.forEach((account) => console.log(account));
 });
+
+function getProdSigners() {
+  if (PRIMARY_PRIVATE_KEY) {
+    if (SECONDARY_PRIVATE_KEY) {
+      return [PRIMARY_PRIVATE_KEY, SECONDARY_PRIVATE_KEY];
+    }
+    return [PRIMARY_PRIVATE_KEY];
+  }
+  return [];
+}
 
 module.exports = {
   solidity: "0.8.6",

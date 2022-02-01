@@ -3,17 +3,17 @@ const puppeteer = require("puppeteer-core");
 
 const { CHROME_EXECUTABLE_PATH } = require("./config");
 
-exports.createScreenshot = async (props) => {
-  const {
-    language,
-    width,
-    theme,
-    padding,
-    hideCard,
-    hideThread,
-    tweetId,
-    tweetURL,
-  } = props;
+exports.createScreenshot = async ({
+  language,
+  width,
+  theme,
+  padding,
+  hideCard,
+  hideThread,
+  tweetId,
+  tweetURL,
+}) => {
+  let imageBuffer;
 
   try {
     const browser = await puppeteer.launch({
@@ -35,9 +35,7 @@ exports.createScreenshot = async (props) => {
     await page.setViewport({ width: pageWidth, height: pageHeight });
 
     await page.evaluate(
-      (props) => {
-        const { theme, padding, percent } = props;
-
+      () => {
         const style = document.createElement("style");
         style.innerHTML =
           "* { font-family: -apple-system, BlinkMacSystemFont, Ubuntu, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol' !important; }";
@@ -53,21 +51,20 @@ exports.createScreenshot = async (props) => {
       { theme, padding, percent }
     );
 
-    const imageBuffer = await page.screenshot({
+    imageBuffer = await page.screenshot({
       type: "png",
       fullPage: true,
       encoding: "base64",
     });
 
     await browser.close();
-
-    return imageBuffer;
   } catch (err) {
     console.log(
       `Error when creating the image of the tweet. Check if ${tweetURL} is a valid tweet url`,
       err
     );
   }
+  return imageBuffer;
 };
 
 exports.getTweetId = (tweetURL) => {

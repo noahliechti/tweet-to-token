@@ -9,7 +9,7 @@ const pages = ["Customers", "Create", "About", "FAQ", "Milestones"];
 function Header() {
   // const [isOpen, setIsOpen] = React.useState(false);
 
-  const toggleMenu = (event) => {
+  const toggleMenu = () => {
     // setIsOpen(event.currentTarget);
   };
 

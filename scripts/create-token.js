@@ -6,18 +6,92 @@ const path = require("path");
 const fetch = require("node-fetch");
 const FormData = require("form-data");
 
+async function uploadToPinata(pinataContent, fileName) {
+  const fd = new FormData();
+  if (fileName) {
+    fd.append("file", JSON.stringify(pinataContent), fileName);
+  } else {
+    fd.append("file", pinataContent);
+  }
+  fd.append(
+    "pinataMetadata",
+    JSON.stringify({
+      keyvalues: {
+        // env: "dev",
+        date: new Date().toISOString(),
+      },
+    })
+  );
+
+  return fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
+    method: "POST",
+    headers: {
+      pinata_api_key: process.env.PINATA_API_KEY,
+      pinata_secret_api_key: process.env.PINATA_API_SECRET,
+    },
+    body: fd,
+  })
+    .then((res) => res.json())
+    .then((json) => json.IpfsHash)
+    .catch((err) => console.log(err));
+}
+
 const { isLocalNetwork } = require("./helper-functions");
-const { addresses } = require("../artifacts/contracts/map");
+const { addresses } = require("../src/config/contracts/map");
 const { printEtherscanLink, logMarketplaceURL } = require("./helper-functions");
 
-const ethers = hre.ethers;
+const { ethers } = hre;
+
+async function getTokenURIHash(tweetId) {
+  const imagePath = path.join(__dirname, "img", `${tweetId}.png`);
+  const ipfsImagePath = await uploadToPinata(fs.createReadStream(imagePath));
+
+  const metadata = {
+    name: "#1 from @Rainmaker1973",
+    description:
+      "Tweet by @Rainmaker1973 tweeted on 21.12.21. Original: https://twitter.com/Rainmaker1973/status/1478285768493834240",
+    image: ipfsImagePath,
+    attributes: [
+      { trait_type: "likes", value: 50 },
+      { trait_type: "retweets", value: 13 },
+      { trait_type: "comments", value: 3 },
+      { trait_type: "language", value: "en" },
+    ],
+  };
+
+  return uploadToPinata(metadata, `${tweetId}.json`);
+}
+
+async function mintTweet(contract, tweetOwner, tweetId) {
+  let tx;
+  tx = await contract.addVerifiedTweet(
+    tweetOwner.address,
+    tweetId,
+    getTokenURIHash(tweetId)
+  );
+  await tx.wait();
+
+  tx = await contract.connect(tweetOwner).mintTweet(tweetId);
+  await tx.wait();
+
+  return contract.getTokenCount();
+}
+
+async function flipSaleState(contract) {
+  let tx;
+  if (!(await contract.saleIsActive())) {
+    tx = await contract.flipSaleState();
+    await tx.wait();
+  }
+  return contract.saleIsActive();
+}
 
 async function main() {
   const contractName = "TweetToken";
-  const chainId = hre.network.config.chainId;
+  const { chainId } = hre.network.config;
   const deployedContractAddress = addresses[chainId][contractName][0];
   const [, tweetOwner] = await ethers.getSigners();
-  const sampleTweetId = 1478285768493834240n; // using BigInt because number is too big
+  const sampleTweetId = BigInt(1478285768493834240); // using BigInt because number is too big
 
   printEtherscanLink(deployedContractAddress, chainId);
 
@@ -43,80 +117,6 @@ async function main() {
   if (!isLocalNetwork()) {
     logMarketplaceURL(ttt, sampleTweetId);
   }
-}
-
-async function mintTweet(contract, tweetOwner, tweetId) {
-  let tx;
-  tx = await contract.addVerifiedTweet(
-    tweetOwner.address,
-    tweetId,
-    getTokenURIHash(tweetId)
-  );
-  await tx.wait();
-
-  tx = await contract.connect(tweetOwner).mintTweet(tweetId);
-  await tx.wait();
-
-  return await contract.getTokenCount();
-}
-
-async function flipSaleState(contract) {
-  let tx;
-  if (!(await contract.saleIsActive())) {
-    tx = await contract.flipSaleState();
-    await tx.wait();
-  }
-  return await contract.saleIsActive();
-}
-
-async function getTokenURIHash(tweetId) {
-  const imagePath = path.join(__dirname, "img", `${tweetId}.png`);
-  const ipfsImagePath = await uploadToPinata(fs.createReadStream(imagePath));
-
-  const metadata = {
-    name: "#1 from @Rainmaker1973",
-    description:
-      "Tweet by @Rainmaker1973 tweeted on 21.12.21. Original: https://twitter.com/Rainmaker1973/status/1478285768493834240",
-    image: ipfsImagePath,
-    attributes: [
-      { trait_type: "likes", value: 50 },
-      { trait_type: "retweets", value: 13 },
-      { trait_type: "comments", value: 3 },
-      { trait_type: "language", value: "en" },
-    ],
-  };
-
-  return await uploadToPinata(metadata, `${tweetId}.json`);
-}
-
-async function uploadToPinata(pinataContent, fileName) {
-  let fd = new FormData();
-  if (fileName) {
-    fd.append("file", JSON.stringify(pinataContent), fileName);
-  } else {
-    fd.append("file", pinataContent);
-  }
-  fd.append(
-    "pinataMetadata",
-    JSON.stringify({
-      keyvalues: {
-        // env: "dev",
-        date: new Date().toISOString(),
-      },
-    })
-  );
-
-  return await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
-    method: "POST",
-    headers: {
-      pinata_api_key: process.env.PINATA_API_KEY,
-      pinata_secret_api_key: process.env.PINATA_API_SECRET,
-    },
-    body: fd,
-  })
-    .then((res) => res.json())
-    .then((json) => json.IpfsHash)
-    .catch((err) => console.log(err));
 }
 
 main().catch((error) => {

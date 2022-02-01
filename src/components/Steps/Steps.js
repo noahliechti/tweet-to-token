@@ -71,14 +71,14 @@ function Steps({ twitterUser }) {
     })
       .then((payload) => payload.json())
       .then((data) => {
-        console.log("post submit", data.image);
+        // console.log("post submit", data.image); // TODO: throw error?
         const { image } = data;
         setFormIsSubmitting(false);
         setImageData(image);
         handleNext();
       })
-      .catch((err) => {
-        console.log("ERROR. Something went wrong.", err);
+      .catch(() => {
+        // console.log("ERROR. Something went wrong.", err); // TODO:
         setFormIsSubmitting(false);
       });
   };
@@ -86,7 +86,7 @@ function Steps({ twitterUser }) {
   const steps = [
     {
       label: "Connect Twitter and Metamask",
-      content: <Login twitterLoggedIn={twitterUser !== null} />,
+      content: <Login twitterLoggedIn={!!twitterUser} />,
       nextBtnName: "next",
       nextBtnText: "Continue",
     },
@@ -153,7 +153,7 @@ function Steps({ twitterUser }) {
                     backBtnDisabled={activeStep < 2 || formIsSubmitting}
                     handleNext={handleNext}
                     handleBack={handleBack}
-                    isForm={true}
+                    isForm
                     nextBtnName={step.nextBtnName}
                     nextBtnText={step.nextBtnText}
                     isLoading={formIsSubmitting}

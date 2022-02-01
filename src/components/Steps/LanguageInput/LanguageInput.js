@@ -2,16 +2,16 @@ import React, { useRef } from "react";
 import { Autocomplete, Box, TextField } from "@mui/material";
 import { languages } from "../../../config/globals";
 
-function LanguageInput(props) {
+function LanguageInput({ defaultLanguage, handleChange: propsChange }) {
   const ref0 = useRef();
 
   const [language, setLanguage] = React.useState(
-    languages.find((l) => l.code === props.defaultLanguage)
+    languages.find((l) => l.code === defaultLanguage)
   );
 
   const handleChange = (e, newValue, reason) => {
     setLanguage(newValue);
-    props.handleChange({
+    propsChange({
       name: ref0.current.getAttribute("name"),
       value: reason === "clear" ? "" : newValue.code,
     });

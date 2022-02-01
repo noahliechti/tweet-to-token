@@ -1,5 +1,4 @@
-require("dotenv").config();
-
+const hre = require("hardhat");
 const fs = require("fs");
 const path = require("path");
 
@@ -9,35 +8,21 @@ const absoluteDirPath = path.join(__dirname, relativeDirPath);
 const relativeFilePath = path.join(relativeDirPath, fileName);
 const absoluteFilePath = path.join(__dirname, relativeFilePath);
 
-exports.storeContractAddress = async (contract, contractName) => {
-  const { address, deployTransaction } = contract;
-  const { chainId } = deployTransaction;
+const { artifacts } = hre;
 
-  fs.stat(absoluteDirPath, (err) => {
-    // Directory exists
-    if (err == null) {
-      createAndWritePersistentContractFiles(chainId, contractName, address);
-    } else if (err.code === "ENOENT") {
-      // Directory does not exist
-      fs.mkdir(absoluteDirPath, (err) => {
-        if (err) {
-          console.error(`Error creating directory ${absoluteFilePath}:`, err);
-        } else {
-          createAndWritePersistentContractFiles(chainId, contractName, address);
-        }
-      });
-    } else {
-      console.error(
-        `Error returning information about directory ${absoluteDirPath}:`,
-        err
-      );
+function writeContractAddressFile(addresses) {
+  fs.writeFile(
+    absoluteFilePath,
+    `export default ${JSON.stringify(addresses, undefined, 2)};`,
+    (err) => {
+      if (err)
+        console.error(`Error writing the file ${absoluteFilePath}:`, err);
     }
-  });
-  return contract.address;
-};
+  );
+}
 
 function createAndWritePersistentContractFiles(chainId, contractName, address) {
-  const absoluteArtifactPath = absoluteDirPath + `/${contractName}.json`;
+  const absoluteArtifactPath = `${absoluteDirPath}/${contractName}.json`;
   fs.writeFile(
     absoluteArtifactPath,
     JSON.stringify(artifacts.readArtifactSync(contractName), null, 2),
@@ -50,7 +35,8 @@ function createAndWritePersistentContractFiles(chainId, contractName, address) {
   fs.stat(absoluteFilePath, (err) => {
     if (err == null) {
       // File exists
-      let { addresses } = require(relativeFilePath);
+      // eslint-disable-next-line global-require, import/no-dynamic-require
+      const addresses = require(relativeFilePath);
       addresses[chainId] = {
         [contractName]: address,
       };
@@ -68,17 +54,35 @@ function createAndWritePersistentContractFiles(chainId, contractName, address) {
     }
   });
 }
-
-function writeContractAddressFile(addresses) {
-  fs.writeFile(
-    absoluteFilePath,
-    `exports.addresses = ${JSON.stringify(addresses, undefined, 2)};`,
-    (err) => {
-      if (err)
-        console.error(`Error writing the file ${absoluteFilePath}:`, err);
+function createContractDirectory(chainId, contractName, address) {
+  fs.mkdir(absoluteDirPath, (err) => {
+    if (err) {
+      console.error(`Error creating directory ${absoluteFilePath}:`, err);
+    } else {
+      createAndWritePersistentContractFiles(chainId, contractName, address);
     }
-  );
+  });
 }
+exports.storeContractAddress = async (contract, contractName) => {
+  const { address, deployTransaction } = contract;
+  const { chainId } = deployTransaction;
+
+  fs.stat(absoluteDirPath, (err) => {
+    if (err == null) {
+      // Directory exists
+      createAndWritePersistentContractFiles(chainId, contractName, address);
+    } else if (err.code === "ENOENT") {
+      // Directory does not exist
+      createContractDirectory(chainId, contractName, address);
+    } else {
+      console.error(
+        `Error returning information about directory ${absoluteDirPath}:`,
+        err
+      );
+    }
+  });
+  return contract.address;
+};
 
 exports.printEtherscanLink = (contractAddress, chainId) => {
   let link;
@@ -99,16 +103,6 @@ exports.printEtherscanLink = (contractAddress, chainId) => {
 
 const isLocalNetwork = () => hre.network.config.chainId === 31337;
 exports.isLocalNetwork = isLocalNetwork;
-
-exports.getProdSigners = () => {
-  const { PRIMARY_PRIVATE_KEY, SECONDARY_PRIVATE_KEY } = process.env;
-
-  return PRIMARY_PRIVATE_KEY
-    ? SECONDARY_PRIVATE_KEY
-      ? [PRIMARY_PRIVATE_KEY, SECONDARY_PRIVATE_KEY]
-      : [PRIMARY_PRIVATE_KEY]
-    : [];
-};
 
 exports.logMarketplaceURL = (contract, id) => {
   console.log(

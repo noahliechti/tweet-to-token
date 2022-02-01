@@ -2,6 +2,7 @@ const router = require("express").Router();
 const passport = require("passport");
 
 router.get("/", (req, res) => {
+  console.log("hallo", req.user);
   res.status(200).json({ user: req.user });
 });
 

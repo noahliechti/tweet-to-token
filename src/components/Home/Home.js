@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import { HashLink } from "react-router-hash-link";
+import { Typography, Button, Grid, Container } from "@mui/material";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import CustomerCard from "../CustomerCard/CustomerCard";
@@ -7,13 +9,8 @@ import Steps from "../Steps/Steps";
 import About from "../About/About";
 import FAQ from "../Faq/FAQ";
 import Milestones from "../Milestones/Milestones";
-import { cardsContent } from "../../config/globals";
 
-import { HashLink } from "react-router-hash-link";
-
-import { Typography, Button, Grid, Container } from "@mui/material";
-
-import { BASE_URL, FUNCTIONS_PREFIX } from "../../config/globals";
+import { cardsContent, BASE_URL, FUNCTIONS_PREFIX } from "../../config/globals";
 
 function Home() {
   const [state, setState] = useState({
@@ -32,12 +29,17 @@ function Home() {
     })
       .then((response) => {
         if (response.status === 200) return response.json();
+        throw new Error("no valid response"); // TODO:
       })
-      .then((responseJson) => {
-        const { user } = responseJson;
+      .then((response) => {
+        // console.log(response.json());
+        const { user } = response;
         setState({
-          twitterUser: user ? user : null,
+          twitterUser: user || null,
         });
+      })
+      .catch(() => {
+        // console.error("hallo", err); // TODO: no console.log
       });
   }, []);
 
@@ -77,24 +79,24 @@ function Home() {
         </Grid>
         {cardsContent.map((content) => (
           <Grid key={content.title} item xs={12}>
-            <CustomerCard content={content}></CustomerCard>
+            <CustomerCard content={content} />
           </Grid>
         ))}
         <Grid id="steps" item xs={12}>
           <Typography variant="h2">How does it work?</Typography>
-          <Steps twitterUser={state.twitterUser}></Steps>
+          <Steps twitterUser={state.twitterUser} />
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h2">About TTT</Typography>
-          <About></About>
+          <About />
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h2">FAQ</Typography>
-          <FAQ></FAQ>
+          <FAQ />
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h2">Milestones</Typography>
-          <Milestones></Milestones>
+          <Milestones />
         </Grid>
       </Grid>
       <Footer />

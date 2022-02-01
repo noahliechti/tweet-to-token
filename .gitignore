@@ -9,7 +9,7 @@ node_modules
 # Netlify
 .netlify
 
-# MongoDb
+# MongoDB
 mongo
 
 # React

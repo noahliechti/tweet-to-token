@@ -1,6 +1,6 @@
 import { Typography, Card, CardMedia } from "@mui/material";
+
 function Minter({ imageData }) {
-  console.log(imageData);
   return (
     <>
       <Typography>

@@ -1,6 +1,7 @@
 const hre = require("hardhat");
 const { storeContractAddress, verifyContract } = require("./helper-functions");
-const ethers = hre.ethers;
+
+const { ethers } = hre;
 
 async function main() {
   const contractName = "TweetToken";
