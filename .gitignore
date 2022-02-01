@@ -1,13 +1,22 @@
+# TODO: remove
+TEMP.md
+
+# Standard 
 node_modules
-build
-mongo
 .DS_Store
 .env
-.netlify
-temp.md
 
+# Netlify
+.netlify
+
+# MongoDb
+mongo
+
+# React
+build
+
+# Hardhat
 cache
 coverage
 coverage.json
 artifacts
-TEMP.md
