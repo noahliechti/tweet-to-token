@@ -21,7 +21,7 @@ passport.deserializeUser((id, done) => {
       done(null, user); // attach user object to the request as req.user
     })
     .catch(() => {
-      done(new Error("Failed to deserialize an user"));
+      done(new Error("Failed to deserialize a user"));
     });
 });
 
