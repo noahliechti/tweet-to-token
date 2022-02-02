@@ -5,11 +5,18 @@ import { Web3Provider } from "@ethersproject/providers"; // TODO: very big
 import theme from "./config/theme";
 import Home from "./components/Home/Home";
 
+// eslint-disable-next-line no-console
+console.log(
+  "%c👨🏽‍💻 Found a bug? Please open an issue here: https://github.com/noahliechti/tweet-to-token/issues",
+  "font-size:20px"
+); // TODO: privacy link
+
 function getLibrary(provider) {
-  const library = new Web3Provider(provider, "any");
+  const library = new Web3Provider(provider, "any"); // TODO: which?
   // library.pollingInterval = 15000; TODO: what's this?
   return library;
 }
+
 function App() {
   return (
     <Router className="App">
