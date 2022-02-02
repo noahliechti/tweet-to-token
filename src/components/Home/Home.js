@@ -29,7 +29,7 @@ function Home() {
     })
       .then((response) => {
         if (response.status === 200) return response.json();
-        throw new Error("no valid response"); // TODO:
+        throw new Error("Getting the twitter login status fails!"); // TODO:
       })
       .then((response) => {
         // console.log(response.json());
@@ -39,7 +39,7 @@ function Home() {
         });
       })
       .catch(() => {
-        // console.error("hallo", err); // TODO: no console.log
+        // console.error(err); // TODO: what do I show then?
       });
   }, []);
 

@@ -18,10 +18,18 @@ exports.handler = async (event) => {
     language: language,
   });
 
+  if (screenshot) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        image: screenshot,
+      }),
+    };
+  }
   return {
-    statusCode: 200,
+    statusCode: 400,
     body: JSON.stringify({
-      image: screenshot,
+      error: "Screenshot creation has failed!",
     }),
   };
 };
