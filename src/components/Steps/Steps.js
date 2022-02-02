@@ -69,7 +69,10 @@ function Steps({ twitterUser }) {
         theme: state.theme,
       }),
     })
-      .then((payload) => payload.json())
+      .then((response) => {
+        if (response.status === 200) return response.json();
+        throw new Error("Screenshot couldn't be created");
+      })
       .then((data) => {
         // console.log("post submit", data.image); // TODO: throw error?
         const { image } = data;
@@ -78,7 +81,7 @@ function Steps({ twitterUser }) {
         handleNext();
       })
       .catch(() => {
-        // console.log("ERROR. Something went wrong.", err); // TODO:
+        // console.log(err); // TODO: this works
         setFormIsSubmitting(false);
       });
   };

@@ -35,16 +35,16 @@ exports.createScreenshot = async ({
     await page.setViewport({ width: pageWidth, height: pageHeight });
 
     await page.evaluate(
-      () => {
+      (props) => {
         const style = document.createElement("style");
         style.innerHTML =
           "* { font-family: -apple-system, BlinkMacSystemFont, Ubuntu, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol' !important; }";
         document.getElementsByTagName("head")[0].appendChild(style);
 
         const body = document.querySelector("body");
-        body.style.padding = `${padding}px`;
-        body.style.backgroundColor = theme === "dark" ? "#000" : "#fff";
-        body.style.zoom = `${100 * percent}%`;
+        body.style.padding = `${props.padding}px`;
+        body.style.backgroundColor = props.theme === "dark" ? "#000" : "#fff";
+        body.style.zoom = `${100 * props.percent}%`;
         const articleWrapper = document.querySelector("#app > div");
         articleWrapper.style.border = "none";
       },

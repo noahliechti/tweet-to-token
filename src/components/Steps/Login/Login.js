@@ -6,6 +6,7 @@ import { BASE_URL, FUNCTIONS_PREFIX } from "../../../config/globals";
 
 function Login({ twitterLoggedIn }) {
   const { active, activate, deactivate } = useWeb3React();
+  const loginLinkToggle = twitterLoggedIn ? "/auth/logout" : "/auth/login";
 
   const handleClick = async (e) => {
     if (e.target.name === "wallet") {
@@ -30,13 +31,14 @@ function Login({ twitterLoggedIn }) {
         value="1"
         name="twitter"
         component={Link}
-        href={`${BASE_URL}${FUNCTIONS_PREFIX}/auth/login`}
+        href={`${BASE_URL}${FUNCTIONS_PREFIX}${loginLinkToggle}`}
         selected={twitterLoggedIn}
+        onClick={handleClick}
         // variant="primary"
         fullWidth
         sx={{ mt: 1 }}
       >
-        login with twitter
+        {twitterLoggedIn ? "logout from twitter" : "login with twitter"}
       </ToggleButton>
       <ToggleButton
         value="1"
@@ -47,7 +49,7 @@ function Login({ twitterLoggedIn }) {
         fullWidth
         sx={{ mt: 1 }}
       >
-        connect with wallet
+        {active ? "logout from wallet" : "connect with wallet"}
       </ToggleButton>
       {/* {error ? (
           <FormHelperText>

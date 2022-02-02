@@ -2,13 +2,12 @@ const router = require("express").Router();
 const passport = require("passport");
 
 router.get("/", (req, res) => {
-  console.log("hallo", req.user);
   res.status(200).json({ user: req.user });
 });
 
 router.get("/logout", (req, res) => {
   req.logout();
-  res.redirect("/");
+  res.redirect("/#steps");
 });
 
 router.get("/login", passport.authenticate("twitter"));
@@ -16,8 +15,8 @@ router.get("/login", passport.authenticate("twitter"));
 router.get(
   "/redirect",
   passport.authenticate("twitter", {
-    successRedirect: "/",
-    failureRedirect: "/",
+    successRedirect: "/#steps",
+    failureRedirect: "/#steps",
   })
 );
 
