@@ -132,7 +132,7 @@ function Steps({ twitterUser }) {
   ];
 
   const nextBtnDisabled = [
-    !(useWeb3React().active && twitterUser),
+    !(useWeb3React().active && twitterUser), // TODO: pass as prop; only if valid network and contract exists
     !(state && state.language && state.theme),
   ];
 

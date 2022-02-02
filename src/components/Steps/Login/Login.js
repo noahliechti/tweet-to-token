@@ -6,6 +6,18 @@ import { BASE_URL, FUNCTIONS_PREFIX } from "../../../config/globals";
 
 function Login({ twitterLoggedIn }) {
   const { active, activate, deactivate } = useWeb3React();
+
+  // useEffect(() => {
+  //   console.log(
+  //     "library",
+  //     active,
+  //     library,
+  //     library ? library.getSigner() : null,
+  //     connector,
+  //     chainId
+  //   );
+  // }, [active, chainId, connector, library]);
+
   const loginLinkToggle = twitterLoggedIn ? "/auth/logout" : "/auth/login";
 
   const handleClick = async (e) => {
@@ -16,8 +28,9 @@ function Login({ twitterLoggedIn }) {
         } else {
           await activate(injected);
         }
+        window.localStorage.setItem("ConnectedMM", !active);
       } catch (err) {
-        // console.log(err);
+        // console.log(err); // TODO: error message
       }
     }
   };

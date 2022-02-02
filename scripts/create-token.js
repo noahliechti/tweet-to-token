@@ -6,6 +6,12 @@ const path = require("path");
 const fetch = require("node-fetch");
 const FormData = require("form-data");
 
+const { isLocalNetwork } = require("./helper-functions");
+const { addresses } = require("../src/config/contracts/map.json");
+const { printEtherscanLink, logMarketplaceURL } = require("./helper-functions");
+
+const { ethers } = hre;
+
 async function uploadToPinata(pinataContent, fileName) {
   const fd = new FormData();
   if (fileName) {
@@ -35,12 +41,6 @@ async function uploadToPinata(pinataContent, fileName) {
     .then((json) => json.IpfsHash)
     .catch((err) => console.log(err));
 }
-
-const { isLocalNetwork } = require("./helper-functions");
-const { addresses } = require("../src/config/contracts/map");
-const { printEtherscanLink, logMarketplaceURL } = require("./helper-functions");
-
-const { ethers } = hre;
 
 async function getTokenURIHash(tweetId) {
   const imagePath = path.join(__dirname, "img", `${tweetId}.png`);

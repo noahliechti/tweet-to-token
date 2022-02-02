@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { HashLink } from "react-router-hash-link";
 import { Typography, Button, Grid, Container } from "@mui/material";
+import { useWeb3React } from "@web3-react/core";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import CustomerCard from "../CustomerCard/CustomerCard";
@@ -11,11 +12,55 @@ import FAQ from "../Faq/FAQ";
 import Milestones from "../Milestones/Milestones";
 
 import { cardsContent, BASE_URL, FUNCTIONS_PREFIX } from "../../config/globals";
+import { injected } from "../../config/connectors";
+import addressMap from "../../config/contracts/map.json";
 
 function Home() {
+  const { active, activate, chainId, library, connector } = useWeb3React();
+
   const [state, setState] = useState({
     twitterUser: null,
   });
+
+  if (connector && !chainId) {
+    // console.log("Network not supported");
+    // TODO: change network
+  }
+
+  if (library) {
+    library.getSigner();
+  }
+
+  useEffect(() => {
+    if (active) {
+      window.localStorage.setItem("ConnectedMM", active);
+    }
+  }, [active]);
+
+  useEffect(() => {
+    const activateMetaMask = async () => {
+      try {
+        await activate(injected);
+      } catch (err) {
+        // console.log(err); // TODO:
+      }
+    };
+    if (window.localStorage.getItem("ConnectedMM") === "true") {
+      activateMetaMask();
+    }
+  }, [activate]);
+
+  useEffect(() => {
+    if (chainId) {
+      if (addressMap[chainId]) {
+        // const contractAddress = addressMap[chainId].TweetToken;
+        // console.log("Deployed contract", contractAddress);
+        // TODO: connect to contract
+      } else {
+        // console.log("Smart contract doesn't seem to deployed on this network"); // TODO: notification?
+      }
+    }
+  }, [chainId]);
 
   useEffect(() => {
     fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/auth`, {
