@@ -153,7 +153,7 @@ function Steps({ twitterUser }) {
                   {step.formContent}
                   <Mover
                     nextBtnDisabled={nextBtnDisabled[i] || formIsSubmitting}
-                    backBtnDisabled={activeStep < 2 || formIsSubmitting}
+                    backBtnDisabled={activeStep < 1 || formIsSubmitting}
                     handleNext={handleNext}
                     handleBack={handleBack}
                     isForm
@@ -165,7 +165,7 @@ function Steps({ twitterUser }) {
               ) : (
                 <Mover
                   nextBtnDisabled={nextBtnDisabled[i] || formIsSubmitting}
-                  backBtnDisabled={activeStep < 2 || formIsSubmitting}
+                  backBtnDisabled={activeStep < 1 || formIsSubmitting}
                   handleNext={handleNext}
                   handleBack={handleBack}
                   isForm={false}
