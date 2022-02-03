@@ -18,6 +18,7 @@ import Mover from "./Mover/Mover";
 import Config from "./Config/Config";
 import ImageCreation from "./ImageCreation/ImageCreation";
 import Minter from "./Minter/Minter";
+import ConditionalFormWrapper from "./ConditionalFormWrapper/ConditionalFormWrapper";
 
 import { BASE_URL, FUNCTIONS_PREFIX } from "../../config/globals";
 
@@ -49,15 +50,22 @@ function Steps({ twitterUser }) {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+  const handleMint = () => {
+    handleNext();
+    // get tokenuri
+    // set allowed tweet
+    // mint tweet
+  };
+
   const handleReset = () => {
     setActiveStep(1);
     // TODO: reset state
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setImageData("");
+  const handleImageFetch = () => {
+    // TODO: CACHE IMAGE, AND USE CACHED IMAGE
     setFormIsSubmitting(true);
+    setImageData("");
     fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/image`, {
       method: "POST",
       headers: {
@@ -74,7 +82,6 @@ function Steps({ twitterUser }) {
         throw new Error("Screenshot couldn't be created");
       })
       .then((data) => {
-        // console.log("post submit", data.image); // TODO: throw error?
         const { image } = data;
         setFormIsSubmitting(false);
         setImageData(image);
@@ -82,7 +89,7 @@ function Steps({ twitterUser }) {
       })
       .catch(() => {
         // console.log(err); // TODO: this works
-        setFormIsSubmitting(false);
+        // setFormIsSubmitting(false);
       });
   };
 
@@ -90,9 +97,10 @@ function Steps({ twitterUser }) {
     {
       label: "Connect Twitter and Metamask",
       content: <Login twitterLoggedIn={!!twitterUser} />,
-      nextBtnName: "next",
       nextBtnText: "Continue",
+      handleNext: handleNext,
     },
+
     {
       label: "Configure appearance of Tweet",
       content: (
@@ -102,32 +110,35 @@ function Steps({ twitterUser }) {
           defaultLanguage={state.language}
         />
       ),
-      nextBtnName: "next",
       nextBtnText: "Continue",
+      handleNext: handleNext,
     },
     {
       label: "Provide link to Tweet",
-      content: <ImageCreation />,
-      formContent: (
-        <TextField
-          label="Tweet URL"
-          fullWidth
-          name="tweetURL"
-          value={state.tweetURL}
-          disabled={formIsSubmitting}
-          onChange={(e) => handleChange(e.target)}
-          // helperText="More infos about the URL in the FAQ"
-          sx={{ mt: 2 }}
-        />
+      isForm: true,
+      content: (
+        <>
+          <ImageCreation />
+          <TextField
+            label="Tweet URL"
+            fullWidth
+            name="tweetURL"
+            value={state.tweetURL}
+            disabled={formIsSubmitting}
+            onChange={(e) => handleChange(e.target)}
+            // helperText="More infos about the URL in the FAQ"
+            sx={{ mt: 2 }}
+          />
+        </>
       ),
-      nextBtnName: "create-image",
       nextBtnText: "Create Image",
+      handleNext: handleImageFetch,
     },
     {
       label: "Mint Tweet-NFT",
       content: <Minter imageData={imageData} />,
-      nextBtnName: "mint-nft",
       nextBtnText: "Mint NFT",
+      handleNext: handleMint,
     },
   ];
 
@@ -147,32 +158,18 @@ function Steps({ twitterUser }) {
               </Typography>
             </StepLabel>
             <StepContent>
-              {step.content}
-              {step.formContent ? (
-                <form autoComplete="off" onSubmit={handleSubmit}>
-                  {step.formContent}
-                  <Mover
-                    nextBtnDisabled={nextBtnDisabled[i] || formIsSubmitting}
-                    backBtnDisabled={activeStep < 1 || formIsSubmitting}
-                    handleNext={handleNext}
-                    handleBack={handleBack}
-                    isForm
-                    nextBtnName={step.nextBtnName}
-                    nextBtnText={step.nextBtnText}
-                    isLoading={formIsSubmitting}
-                  />
-                </form>
-              ) : (
+              <ConditionalFormWrapper condition={step.isForm}>
+                {step.content}
                 <Mover
                   nextBtnDisabled={nextBtnDisabled[i] || formIsSubmitting}
                   backBtnDisabled={activeStep < 1 || formIsSubmitting}
-                  handleNext={handleNext}
+                  handleNext={step.handleNext}
                   handleBack={handleBack}
-                  isForm={false}
-                  nextBtnName={step.nextBtnName}
+                  isForm={step.isForm}
                   nextBtnText={step.nextBtnText}
+                  isLoading={formIsSubmitting}
                 />
-              )}
+              </ConditionalFormWrapper>
             </StepContent>
           </Step>
         ))}

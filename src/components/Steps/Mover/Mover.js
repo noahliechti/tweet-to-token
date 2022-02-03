@@ -7,7 +7,6 @@ function Mover({
   backBtnDisabled,
   nextBtnDisabled,
   isForm,
-  nextBtnName,
   nextBtnText,
   isLoading,
 }) {
@@ -26,31 +25,18 @@ function Mover({
 
   return (
     <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
-      {isForm ? (
-        <LoadingButton
-          variant="contained"
-          name={nextBtnName}
-          sx={{ flexGrow: 1 }}
-          disabled={nextBtnDisabled}
-          onClick={handleClick}
-          type="submit"
-          size="small"
-          loading={isLoading}
-        >
-          {nextBtnText}
-        </LoadingButton>
-      ) : (
-        <Button
-          variant="contained"
-          name={nextBtnName}
-          sx={{ flexGrow: 1 }}
-          disabled={nextBtnDisabled}
-          onClick={handleClick}
-          size="default"
-        >
-          {nextBtnText}
-        </Button>
-      )}
+      <LoadingButton
+        variant="contained"
+        name="next"
+        sx={{ flexGrow: 1 }}
+        disabled={nextBtnDisabled}
+        onClick={handleClick}
+        type={isForm ? "submit" : "button"}
+        size="small"
+        loading={isLoading}
+      >
+        {nextBtnText}
+      </LoadingButton>
       <Button
         variant="outlined"
         name="back"
