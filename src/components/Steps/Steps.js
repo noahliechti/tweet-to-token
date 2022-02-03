@@ -50,16 +50,19 @@ function Steps({ twitterUser }) {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+  const handleReset = () => {
+    setActiveStep(2);
+    setState({
+      ...state,
+      tweetURL: "",
+    });
+  };
+
   const handleMint = () => {
     handleNext();
     // get tokenuri
     // set allowed tweet
     // mint tweet
-  };
-
-  const handleReset = () => {
-    setActiveStep(1);
-    // TODO: reset state
   };
 
   const handleImageFetch = () => {
