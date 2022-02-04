@@ -1,6 +1,6 @@
 const chromium = require("chrome-aws-lambda");
 const puppeteer = require("puppeteer-core");
-const request = require("request");
+const fetch = require("node-fetch");
 
 const { CHROME_EXECUTABLE_PATH, TWITTER_BEARER_TOKEN } = require("./config");
 
@@ -85,30 +85,28 @@ exports.checkTweetURL = (tweetURL) => {
   const tweetId = getTweetId(tweetURL);
   const tweetAuthor = getTweetAuthor(tweetURL);
 
-  const options = {
-    method: "GET",
-    url: `https://api.twitter.com/2/tweets/${tweetId}?expansions=author_id`,
-    headers: {
-      Authorization: `Bearer ${TWITTER_BEARER_TOKEN}`,
-    },
+  const api = `https://api.twitter.com/2/tweets/${tweetId}?expansions=author_id`;
+  const headers = {
+    Authorization: `Bearer ${TWITTER_BEARER_TOKEN}`,
   };
 
   return new Promise((resolve, reject) => {
-    request(options, (error, res, body) => {
-      const data = JSON.parse(body);
-
-      // TODO: check for res.statusCode === 200?
-
-      if (error) {
-        reject(error);
-      } else if (data.errors) {
-        if (data.errors[0].title === "Not Found Error") {
-          reject(new Error("This Tweet doesn't seem to exist!"));
+    fetch(api, { method: "GET", headers: headers })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.errors) {
+          if (data.errors[0].title === "Not Found Error") {
+            reject(new Error("This Tweet doesn't seem to exist!"));
+          }
+          reject(new Error(data.errors[0].detail));
+        } else {
+          resolve(tweetAuthor === data.includes.users[0].username);
         }
-        reject(new Error(data.errors[0].detail));
-      } else {
-        resolve(tweetAuthor === data.includes.users[0].username);
-      }
-    });
+      })
+      .catch((err) => {
+        reject(err);
+      });
+
+    // TODO: check for res.statusCode === 200?
   });
 };
