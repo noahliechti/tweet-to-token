@@ -4,7 +4,7 @@ exports.BASE_URL =
     : "https://tweet-token.netlify.app";
 
 exports.FUNCTIONS_PREFIX = "/.netlify/functions";
-exports.COOKIE_KEY = process.env.COOKIE_KEY || "SUPERSECRET";
+exports.COOKIE_KEY = process.env.COOKIE_KEY;
 
 exports.TWITTER_CONSUMER_KEY =
   process.env.NODE_ENV === "development"

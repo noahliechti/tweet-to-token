@@ -94,6 +94,7 @@ exports.checkTweetURL = (tweetURL) => {
     fetch(api, { method: "GET", headers: headers })
       .then((res) => res.json())
       .then((data) => {
+        // TODO: check for res.statusCode === 200?
         if (data.errors) {
           if (data.errors[0].title === "Not Found Error") {
             reject(new Error("This Tweet doesn't seem to exist!"));
@@ -106,7 +107,5 @@ exports.checkTweetURL = (tweetURL) => {
       .catch((err) => {
         reject(err);
       });
-
-    // TODO: check for res.statusCode === 200?
   });
 };
