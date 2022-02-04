@@ -22,23 +22,35 @@ import ConditionalFormWrapper from "./ConditionalFormWrapper/ConditionalFormWrap
 
 import { BASE_URL, FUNCTIONS_PREFIX } from "../../config/globals";
 
+const tweetURLPattern =
+  /^((?:http:\/\/)?|(?:https:\/\/)?)?(?:www\.)?twitter\.com\/(\w+)\/status\/(\d+)$/i;
+
 function Steps({ twitterUser }) {
   const [activeStep, setActiveStep] = React.useState(0);
-
+  const [formIsSubmitting, setFormIsSubmitting] = React.useState(false);
+  const [imageData, setImageData] = React.useState();
   const [state, setState] = React.useState({
     theme: "light",
     language: "en",
     tweetURL: "",
+    invalidTweetURLMessage: "",
   });
 
-  const [formIsSubmitting, setFormIsSubmitting] = React.useState(false);
-  const [imageData, setImageData] = React.useState();
-
   const handleChange = (target) => {
-    const { name, value } = target;
+    const { value } = target;
+    const { name } = target;
+
+    let invalidTweetURLMessage;
+
+    if (name === "tweetURL") {
+      invalidTweetURLMessage =
+        value && !tweetURLPattern.test(value) ? "This URL is not valid." : "";
+    }
+
     setState({
       ...state,
       [name]: value,
+      invalidTweetURLMessage: invalidTweetURLMessage,
     });
   };
 
@@ -90,9 +102,10 @@ function Steps({ twitterUser }) {
         setImageData(image);
         handleNext();
       })
-      .catch(() => {
-        // console.log(err); // TODO: this works
-        // setFormIsSubmitting(false);
+      .catch((err) => {
+        console.log(err.message);
+        // TODO: show error message err.message
+        setFormIsSubmitting(false);
       });
   };
 
@@ -129,7 +142,8 @@ function Steps({ twitterUser }) {
             value={state.tweetURL}
             disabled={formIsSubmitting}
             onChange={(e) => handleChange(e.target)}
-            // helperText="More infos about the URL in the FAQ"
+            error={!!state.invalidTweetURLMessage}
+            helperText={state.invalidTweetURLMessage}
             sx={{ mt: 2 }}
           />
         </>
