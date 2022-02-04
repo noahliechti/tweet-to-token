@@ -34,6 +34,7 @@ function Steps({ twitterUser }) {
     language: "en",
     tweetURL: "",
     invalidTweetURLMessage: "",
+    formErrorMessage: "",
   });
 
   const handleChange = (target) => {
@@ -92,33 +93,41 @@ function Steps({ twitterUser }) {
         theme: state.theme,
       }),
     })
-      .then((response) => {
+      // eslint-disable-next-line consistent-return
+      .then(async (response) => {
         if (response.status === 200) return response.json();
-        throw new Error("Screenshot couldn't be created");
+        const errorMessage = (await response.json()).error;
+        throw new Error(errorMessage || "Clone couldn't be created");
       })
       .then((data) => {
         const { image } = data;
         setFormIsSubmitting(false);
         setImageData(image);
+        setState({
+          ...state,
+          formErrorMessage: "",
+        });
         handleNext();
       })
       .catch((err) => {
-        console.log(err.message);
-        // TODO: show error message err.message
+        setState({
+          ...state,
+          formErrorMessage: err.message,
+        });
         setFormIsSubmitting(false);
       });
   };
 
   const steps = [
     {
-      label: "Connect Twitter and Metamask",
+      label: "Establish Connection",
       content: <Login twitterLoggedIn={!!twitterUser} />,
       nextBtnText: "Continue",
       handleNext: handleNext,
     },
 
     {
-      label: "Configure appearance of Tweet",
+      label: "Choose Tweet Style",
       content: (
         <Config
           handleChange={handleChange}
@@ -130,7 +139,7 @@ function Steps({ twitterUser }) {
       handleNext: handleNext,
     },
     {
-      label: "Provide link to Tweet",
+      label: "Clone Tweet",
       isForm: true,
       content: (
         <>
@@ -148,7 +157,7 @@ function Steps({ twitterUser }) {
           />
         </>
       ),
-      nextBtnText: "Create Image",
+      nextBtnText: "Clone",
       handleNext: handleImageFetch,
     },
     {
@@ -162,6 +171,7 @@ function Steps({ twitterUser }) {
   const nextBtnDisabled = [
     !(useWeb3React().active && twitterUser), // TODO: pass as prop; only if valid network and contract exists
     !(state && state.language && state.theme),
+    !!state.invalidTweetURLMessage || !state.tweetURL,
   ];
 
   return (
@@ -175,7 +185,10 @@ function Steps({ twitterUser }) {
               </Typography>
             </StepLabel>
             <StepContent>
-              <ConditionalFormWrapper condition={step.isForm}>
+              <ConditionalFormWrapper
+                condition={step.isForm}
+                error={state.formErrorMessage}
+              >
                 {step.content}
                 <Mover
                   nextBtnDisabled={nextBtnDisabled[i] || formIsSubmitting}

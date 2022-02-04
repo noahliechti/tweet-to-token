@@ -18,7 +18,7 @@ function ImageCreation() {
       <Box sx={{ mt: 2 }}>
         <Accordion disableGutters>
           <AccordionSummary expandIcon={<ExpandIcon />}>
-            <Typography>How can I find the link of a Tweet?</Typography>
+            <Typography>Where can I find the link?</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Typography>

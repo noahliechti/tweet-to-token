@@ -9,19 +9,22 @@ function ThemeToggle({ defaultTheme, handleChange: propsChange }) {
     propsChange(e.target);
   };
   return (
-    <ToggleButtonGroup
-      fullWidth
-      value={theme}
-      exclusive
-      onChange={handleChange}
-    >
-      <ToggleButton name="theme" value="light" aria-label="light theme">
-        Light
-      </ToggleButton>
-      <ToggleButton name="theme" value="dark" aria-label="dark theme">
-        Dark
-      </ToggleButton>
-    </ToggleButtonGroup>
+    <>
+      {/* <FormLabel component="legend">Select a theme</FormLabel> */}
+      <ToggleButtonGroup
+        fullWidth
+        value={theme}
+        exclusive
+        onChange={handleChange}
+      >
+        <ToggleButton name="theme" value="light" aria-label="light theme">
+          Light
+        </ToggleButton>
+        <ToggleButton name="theme" value="dark" aria-label="dark theme">
+          Dark
+        </ToggleButton>
+      </ToggleButtonGroup>
+    </>
   );
 }
 

@@ -16,6 +16,11 @@ exports.TWITTER_CONSUMER_SECRET =
     ? process.env.TWITTER_CONSUMER_SECRET_DEV
     : process.env.TWITTER_CONSUMER_SECRET;
 
+exports.TWITTER_BEARER_TOKEN =
+  process.env.NODE_ENV === "development"
+    ? process.env.TWITTER_BEARER_TOKEN_DEV
+    : process.env.TWITTER_BEARER_TOKEN;
+
 exports.CHROME_EXECUTABLE_PATH =
   process.env.NODE_ENV === "development"
     ? process.env.CHROME_EXECUTABLE_PATH

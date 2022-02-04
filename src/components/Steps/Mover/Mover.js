@@ -32,7 +32,6 @@ function Mover({
         disabled={nextBtnDisabled}
         onClick={handleClick}
         type={isForm ? "submit" : "button"}
-        size="small"
         loading={isLoading}
       >
         {nextBtnText}

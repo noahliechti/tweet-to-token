@@ -1,7 +1,25 @@
 const chromium = require("chrome-aws-lambda");
 const puppeteer = require("puppeteer-core");
+const request = require("request");
 
-const { CHROME_EXECUTABLE_PATH } = require("./config");
+const { CHROME_EXECUTABLE_PATH, TWITTER_BEARER_TOKEN } = require("./config");
+
+const getTweetId = (tweetURL) => {
+  const splitTweetURL = tweetURL.split("/");
+  const lastItem = splitTweetURL[splitTweetURL.length - 1];
+  const splitLastItem = lastItem.split("?");
+  return splitLastItem[0];
+};
+
+exports.getTweetId = getTweetId;
+
+const getTweetAuthor = (tweetURL) => {
+  const splitTweetURL = tweetURL.split("/");
+  const thirdLastItem = splitTweetURL[splitTweetURL.length - 3];
+  return thirdLastItem;
+};
+
+exports.getTweetAuthor = this.getTweetAuthor;
 
 exports.createScreenshot = async ({
   language,
@@ -11,10 +29,7 @@ exports.createScreenshot = async ({
   hideCard,
   hideThread,
   tweetId,
-  tweetURL,
 }) => {
-  let imageBuffer;
-
   try {
     const browser = await puppeteer.launch({
       args: chromium.args,
@@ -51,25 +66,49 @@ exports.createScreenshot = async ({
       { theme, padding, percent }
     );
 
-    imageBuffer = await page.screenshot({
+    const imageBuffer = await page.screenshot({
       type: "png",
       fullPage: true,
       encoding: "base64",
     });
 
     await browser.close();
+    return imageBuffer;
   } catch (err) {
-    console.log(
-      `Error when creating the image of the tweet. Check if ${tweetURL} is a valid tweet url`,
-      err
-    );
+    const msg = "Error when cloning the Tweet";
+    console.log(msg, err);
+    return new Error(msg);
   }
-  return imageBuffer;
 };
 
-exports.getTweetId = (tweetURL) => {
-  const splitTweetURL = tweetURL.split("/");
-  const lastItem = splitTweetURL[splitTweetURL.length - 1];
-  const splitLastItem = lastItem.split("?");
-  return splitLastItem[0];
+exports.checkTweetURL = (tweetURL) => {
+  const tweetId = getTweetId(tweetURL);
+  const tweetAuthor = getTweetAuthor(tweetURL);
+
+  const options = {
+    method: "GET",
+    url: `https://api.twitter.com/2/tweets/${tweetId}?expansions=author_id`,
+    headers: {
+      Authorization: `Bearer ${TWITTER_BEARER_TOKEN}`,
+    },
+  };
+
+  return new Promise((resolve, reject) => {
+    request(options, (error, res, body) => {
+      const data = JSON.parse(body);
+
+      // TODO: check for res.statusCode === 200?
+
+      if (error) {
+        reject(error);
+      } else if (data.errors) {
+        if (data.errors[0].title === "Not Found Error") {
+          reject(new Error("This Tweet doesn't seem to exist!"));
+        }
+        reject(new Error(data.errors[0].detail));
+      } else {
+        resolve(tweetAuthor === data.includes.users[0].username);
+      }
+    });
+  });
 };
