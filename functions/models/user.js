@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const userSchema = mongoose.Schema({
   // TODO: what attributes do I need?
-  _id: Number,
+  userId: String,
   name: String,
   screenName: String,
   photo: String,

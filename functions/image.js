@@ -9,10 +9,10 @@ const { TWEET_WIDTH, TWEET_PADDING, TWEET_HIDE_CARD, TWEET_HIDE_THREAD } =
   TWEET_SETTINGS;
 
 exports.handler = async (event) => {
-  const { language, theme, tweetURL } = JSON.parse(event.body);
+  const { language, theme, tweetURL, twitterUserId } = JSON.parse(event.body);
 
   try {
-    const isValid = await checkTweetURL(tweetURL);
+    const isValid = await checkTweetURL(tweetURL, twitterUserId);
     if (!isValid) {
       return {
         statusCode: 400,

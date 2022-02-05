@@ -13,13 +13,13 @@ const getTweetId = (tweetURL) => {
 
 exports.getTweetId = getTweetId;
 
-const getTweetAuthor = (tweetURL) => {
+const getTweetAuthorName = (tweetURL) => {
   const splitTweetURL = tweetURL.split("/");
   const thirdLastItem = splitTweetURL[splitTweetURL.length - 3];
   return thirdLastItem;
 };
 
-exports.getTweetAuthor = this.getTweetAuthor;
+exports.getTweetAuthorName = this.getTweetAuthorName;
 
 exports.createScreenshot = async ({
   language,
@@ -81,9 +81,9 @@ exports.createScreenshot = async ({
   }
 };
 
-exports.checkTweetURL = (tweetURL) => {
+exports.checkTweetURL = (tweetURL, twitterUserId) => {
   const tweetId = getTweetId(tweetURL);
-  const tweetAuthor = getTweetAuthor(tweetURL);
+  const tweetAuthorName = getTweetAuthorName(tweetURL);
 
   const api = `https://api.twitter.com/2/tweets/${tweetId}?expansions=author_id`;
   const headers = {
@@ -93,15 +93,19 @@ exports.checkTweetURL = (tweetURL) => {
   return new Promise((resolve, reject) => {
     fetch(api, { method: "GET", headers: headers })
       .then((res) => res.json())
-      .then((data) => {
+      .then((res) => {
         // TODO: check for res.statusCode === 200?
-        if (data.errors) {
-          if (data.errors[0].title === "Not Found Error") {
+        if (res.errors) {
+          if (res.errors[0].title === "Not Found Error") {
             reject(new Error("This Tweet doesn't seem to exist!"));
           }
-          reject(new Error(data.errors[0].detail));
+          reject(new Error(res.errors[0].detail));
         } else {
-          resolve(tweetAuthor === data.includes.users[0].username);
+          // Users should only be able to mint their own tweets
+          if (twitterUserId === res.data.author_id) {
+            resolve(tweetAuthorName === res.includes.users[0].username);
+          }
+          reject(new Error("You are not the author of this tweet!"));
         }
       })
       .catch((err) => {

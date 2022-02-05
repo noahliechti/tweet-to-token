@@ -21,7 +21,7 @@ passport.deserializeUser((id, done) => {
       done(null, user); // attach user object to the request as req.user
     })
     .catch(() => {
-      done(new Error("Failed to deserialize a user"));
+      done(new Error("Failed to deserialize user"));
     });
 });
 
@@ -35,28 +35,22 @@ passport.use(
     async (token, tokenSecret, profile, done) => {
       // eslint-disable-next-line no-underscore-dangle
       const profileData = profile._json;
+      const user = {
+        userId: profileData.id_str,
+        name: profileData.name,
+        screenName: profileData.screen_name,
+        photo: profileData.profile_image_url,
+        verified: profileData.verified,
+      };
 
       // find current user in UserModel
-      let currentUser = await User.findOne({ _id: profileData.id });
+      let currentUser = await User.findOne({ userId: profileData.id_str });
       // if user already exist then update user fields
       if (currentUser) {
-        const user = {
-          _id: profileData.id,
-          name: profileData.name,
-          screenName: profileData.screen_name,
-          photo: profileData.profile_image_url,
-          verified: profileData.verified,
-        };
-        await User.updateOne({ _id: profileData.id }, { $set: user });
+        await User.updateOne({ userId: profileData.id_str }, { $set: user });
       } else {
         // create new user if the database doesn't have this user
-        currentUser = await new User({
-          _id: profileData.id,
-          name: profileData.name,
-          screenName: profileData.screen_name,
-          photo: profileData.profile_image_url,
-          verified: profileData.verified,
-        }).save();
+        currentUser = await new User(user).save();
       }
       done(null, currentUser);
     }

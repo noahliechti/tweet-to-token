@@ -72,10 +72,21 @@ function Steps({ twitterUser }) {
   };
 
   const handleMint = () => {
-    handleNext();
-    // get tokenuri
+    // Get TokenURI
+    // fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/token`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json;charset=utf-8",
+    //   },
+    //   body: JSON.stringify({
+    //     // metadata: ,
+    //     // image: imageData,
+    //     // tweetId: state.theme,
+    //   }),
+    // });
     // set allowed tweet
     // mint tweet
+    handleNext();
   };
 
   const handleImageFetch = () => {
@@ -91,6 +102,7 @@ function Steps({ twitterUser }) {
         tweetURL: state.tweetURL,
         language: state.language,
         theme: state.theme,
+        twitterUserId: twitterUser.userId,
       }),
     })
       // eslint-disable-next-line consistent-return
