@@ -1,8 +1,10 @@
 import React from "react";
 import { useWeb3React } from "@web3-react/core";
-import { Box, ToggleButton, Link } from "@mui/material";
+import { Box, Link, Button } from "@mui/material";
 import { injected } from "../../../config/connectors";
 import { BASE_URL, FUNCTIONS_PREFIX } from "../../../config/globals";
+import { ReactComponent as TwitterIcon } from "../../../assets/icons/twitter.svg";
+import { ReactComponent as WalletIcon } from "../../../assets/icons/wallet.svg";
 
 const beautifyAddress = (address) =>
   `${address.substr(0, 6)}...${address.substr(-4)}`;
@@ -28,30 +30,32 @@ function Login({ twitterLoggedIn }) {
     <Box sx={{ mb: 2 }}>
       {/* <FormControl error={error}> */}
       {/* <FormGroup></FormGroup> */}
-      <ToggleButton
+      <Button
         value="1"
         name="twitter"
         component={Link}
         href={`${BASE_URL}${FUNCTIONS_PREFIX}${loginLinkToggle}`}
-        selected={twitterLoggedIn}
+        // selected={twitterLoggedIn}
         onClick={handleClick}
-        // variant="primary"
+        variant="contained"
         fullWidth
+        endIcon={<TwitterIcon />}
         sx={{ mt: 1 }}
       >
-        {twitterLoggedIn ? "logout from twitter" : "login with twitter"}
-      </ToggleButton>
-      <ToggleButton
+        {twitterLoggedIn ? "disconnect" : "connect"}
+      </Button>
+      <Button
         value="1"
         name="wallet"
-        selected={active}
-        // variant="primary"
+        // selected={active}
+        variant="contained"
         onClick={handleClick}
         fullWidth
+        endIcon={<WalletIcon />}
         sx={{ mt: 1 }}
       >
-        {active ? beautifyAddress(account) : "connect metamask"}
-      </ToggleButton>
+        {active ? beautifyAddress(account) : "connect"}
+      </Button>
       {/* {error ? (
           <FormHelperText>
             You have to be logged in to Twitter and your wallet to continue
