@@ -10,6 +10,7 @@ const { TWEET_WIDTH, TWEET_PADDING, TWEET_HIDE_CARD, TWEET_HIDE_THREAD } =
 
 exports.handler = async (event) => {
   const { language, theme, tweetURL, userId } = JSON.parse(event.body);
+  let tweetClone;
 
   try {
     const isValid = await checkTweetURL(tweetURL, userId);
@@ -21,6 +22,15 @@ exports.handler = async (event) => {
         }),
       };
     }
+    tweetClone = await createScreenshot({
+      width: TWEET_WIDTH,
+      theme: theme,
+      padding: TWEET_PADDING,
+      tweetId: getTweetId(tweetURL),
+      hideCard: TWEET_HIDE_CARD,
+      hideThread: TWEET_HIDE_THREAD,
+      language: language,
+    });
   } catch (err) {
     return {
       statusCode: 400,
@@ -30,28 +40,10 @@ exports.handler = async (event) => {
     };
   }
 
-  try {
-    const tweetClone = await createScreenshot({
-      width: TWEET_WIDTH,
-      theme: theme,
-      padding: TWEET_PADDING,
-      tweetId: getTweetId(tweetURL),
-      hideCard: TWEET_HIDE_CARD,
-      hideThread: TWEET_HIDE_THREAD,
-      language: language,
-    });
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        image: tweetClone,
-      }),
-    };
-  } catch (err) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({
-        error: err.message,
-      }),
-    };
-  }
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      image: tweetClone,
+    }),
+  };
 };
