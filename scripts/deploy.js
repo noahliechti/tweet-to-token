@@ -1,9 +1,14 @@
 const hre = require("hardhat");
-const { storeContractAddress, verifyContract } = require("./helper-functions");
+const {
+  storeContractAddress,
+  verifyContract,
+  printEtherscanLink,
+} = require("./helper-functions");
 
-const { ethers } = hre;
+const { ethers, network } = hre;
 
 async function main() {
+  const { chainId } = network.config;
   const contractName = "TweetToken";
   const args = ["ipfs://"];
 
@@ -16,6 +21,8 @@ async function main() {
 
   console.log("Deployer:", (await ethers.getSigners())[0].address);
   console.log(`${contractName} deployed to:`, ttt.address);
+
+  printEtherscanLink(ttt.address, chainId);
 }
 
 main().catch((error) => {

@@ -4,7 +4,7 @@
   "private": true,
   "files": [],
   "engines": {
-    "node": ">=10.8.0"
+    "node": ">=12.3.0"
   },
   "dependencies": {
     "@emotion/react": "^11.7.1",
@@ -19,9 +19,12 @@
     "@web3-react/injected-connector": "^6.0.7",
     "chrome-aws-lambda": "^10.1.0",
     "connect-mongo": "^4.6.0",
+    "ethers": "^5.5.4",
     "express": "^4.17.2",
     "express-session": "^1.17.2",
+    "form-data": "^4.0.0",
     "mongoose": "^6.1.8",
+    "node-fetch": "^2.6.7",
     "passport": "^0.5.2",
     "passport-twitter": "^1.0.4",
     "puppeteer-core": "^13.1.2",
@@ -52,11 +55,8 @@
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "ethereum-waffle": "^3.4.0",
-    "ethers": "^5.5.3",
-    "form-data": "^4.0.0",
     "hardhat": "^2.8.3",
     "hardhat-gas-reporter": "^1.0.7",
-    "node-fetch": "^2.6.7",
     "prettier": "^2.5.1",
     "prettier-plugin-solidity": "^1.0.0-beta.19",
     "solhint": "^3.3.6",
@@ -71,12 +71,12 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "lint": "eslint '*' --no-error-on-unmatched-pattern && npm run solhint",
-    "lint:fix": "eslint '*' --no-error-on-unmatched-pattern --fix && npm run solhint:fix",
+    "lint": "eslint '**' --no-error-on-unmatched-pattern && npm run solhint",
+    "lint:fix": "eslint '**' --no-error-on-unmatched-pattern --fix && npm run solhint:fix",
     "solhint": "solhint contracts/*.sol",
     "solhint:fix": "solhint contracts/*.sol --fix",
-    "format": "prettier * -c --no-error-on-unmatched-pattern",
-    "format:fix": "prettier * -w --no-error-on-unmatched-pattern"
+    "format": "prettier '**' -c --no-error-on-unmatched-pattern --ignore-unknown",
+    "format:fix": "prettier '**' -w --no-error-on-unmatched-pattern --ignore-unknown"
   },
   "eslintConfig": {
     "extends": [

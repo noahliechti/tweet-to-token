@@ -24,7 +24,7 @@ app.use(
     store: MongoStore.create({
       mongoUrl: MONGO_URL, // TODO: use redis or serverless mongodb link
     }),
-    cookie: { maxAge: 1000 * 60 * 60 * 24 * 90 }, // 90 Days
+    cookie: { secure: true, maxAge: 1000 * 60 * 60 * 24 * 90 }, // 90 Days
   })
 );
 

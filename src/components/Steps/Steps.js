@@ -1,4 +1,5 @@
 import React from "react";
+import { ethers } from "ethers";
 import { useWeb3React } from "@web3-react/core";
 
 import {
@@ -18,30 +19,57 @@ import Mover from "./Mover/Mover";
 import Config from "./Config/Config";
 import ImageCreation from "./ImageCreation/ImageCreation";
 import Minter from "./Minter/Minter";
+import ConditionalFormWrapper from "./ConditionalFormWrapper/ConditionalFormWrapper";
 
 import { BASE_URL, FUNCTIONS_PREFIX } from "../../config/globals";
 
-function Steps({ twitterUser }) {
-  const [activeStep, setActiveStep] = React.useState(0);
+const tweetURLPattern =
+  /^((?:http:\/\/)?|(?:https:\/\/)?)?(?:www\.)?twitter\.com\/(\w+)\/status\/(\d+)$/i;
 
+// TODO: DRY
+const getTweetId = (tweetURL) => {
+  const splitTweetURL = tweetURL.split("/");
+  const lastItem = splitTweetURL[splitTweetURL.length - 1];
+  const splitLastItem = lastItem.split("?");
+  return splitLastItem[0];
+};
+
+function Steps({ userId, contract, signer, deployer }) {
+  const [activeStep, setActiveStep] = React.useState(0);
+  const [formIsSubmitting, setFormIsSubmitting] = React.useState(false);
+  const [imageData, setImageData] = React.useState();
   const [state, setState] = React.useState({
     theme: "light",
     language: "en",
     tweetURL: "",
+    invalidTweetURLMessage: "",
+    formErrorMessage: "",
   });
-
-  const [formIsSubmitting, setFormIsSubmitting] = React.useState(false);
-  const [imageData, setImageData] = React.useState();
+  const { active, account } = useWeb3React();
 
   const handleChange = (target) => {
-    const { name, value } = target;
+    const { value } = target;
+    const { name } = target;
+
+    let invalidTweetURLMessage;
+
+    if (name === "tweetURL") {
+      invalidTweetURLMessage =
+        value && !tweetURLPattern.test(value) ? "This URL is not valid." : "";
+    }
+
     setState({
       ...state,
       [name]: value,
+      invalidTweetURLMessage: invalidTweetURLMessage,
     });
   };
 
   const handleNext = () => {
+    setState({
+      ...state,
+      formErrorMessage: "",
+    });
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -50,14 +78,70 @@ function Steps({ twitterUser }) {
   };
 
   const handleReset = () => {
-    setActiveStep(1);
-    // TODO: reset state
+    setActiveStep(2);
+    setState({
+      ...state,
+      tweetURL: "",
+    });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setImageData("");
+  const getTokenURI = () =>
+    fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify({
+        metadata: "",
+        imageData: imageData,
+        tweetURL: state.tweetURL,
+      }),
+    })
+      .then(async (res) => {
+        if (res.status === 200) return res.json();
+        const errorMessage = (await res.json()).error;
+        throw new Error(errorMessage);
+      })
+      .then((data) => data.tokenURI)
+      .catch((err) => {
+        // TODO: set error message
+        setState({
+          ...state,
+          formErrorMessage: err.message,
+        });
+        setFormIsSubmitting(false);
+      });
+
+  const handleMint = async () => {
     setFormIsSubmitting(true);
+
+    const tokenURI = await getTokenURI();
+
+    const tweetId = ethers.BigNumber.from(getTweetId(state.tweetURL));
+
+    // Set allowed tweet
+    let tx = await contract
+      .connect(deployer)
+      .addVerifiedTweet(account, tweetId, tokenURI);
+    await tx.wait();
+
+    // Mint Tweet
+    tx = await contract.connect(signer).mintTweet(tweetId);
+    await tx.wait();
+
+    // TODO: what if there is no connection anymore also twitter
+    // TODO: don't mint twice
+    // return contract.getTokenCount();
+
+    setFormIsSubmitting(false);
+    handleNext();
+  };
+
+  const handleImageFetch = () => {
+    // TODO: CACHE IMAGE, AND USE CACHED IMAGE
+    setFormIsSubmitting(true);
+    setImageData("");
+
     fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/image`, {
       method: "POST",
       headers: {
@@ -67,34 +151,40 @@ function Steps({ twitterUser }) {
         tweetURL: state.tweetURL,
         language: state.language,
         theme: state.theme,
+        userId: userId,
       }),
     })
-      .then((response) => {
-        if (response.status === 200) return response.json();
-        throw new Error("Screenshot couldn't be created");
+      // eslint-disable-next-line consistent-return
+      .then(async (res) => {
+        if (res.status === 200) return res.json();
+        const errorMessage = (await res.json()).error;
+        throw new Error(errorMessage);
       })
       .then((data) => {
-        // console.log("post submit", data.image); // TODO: throw error?
         const { image } = data;
         setFormIsSubmitting(false);
         setImageData(image);
         handleNext();
       })
-      .catch(() => {
-        // console.log(err); // TODO: this works
+      .catch((err) => {
+        setState({
+          ...state,
+          formErrorMessage: err.message,
+        });
         setFormIsSubmitting(false);
       });
   };
 
   const steps = [
     {
-      label: "Connect Twitter and Metamask",
-      content: <Login twitterLoggedIn={!!twitterUser} />,
-      nextBtnName: "next",
+      label: "Establish Connection",
+      content: <Login twitterLoggedIn={!!userId} />,
       nextBtnText: "Continue",
+      handleNext: handleNext,
     },
+
     {
-      label: "Configure appearance of Tweet",
+      label: "Choose Tweet Style",
       content: (
         <Config
           handleChange={handleChange}
@@ -102,38 +192,44 @@ function Steps({ twitterUser }) {
           defaultLanguage={state.language}
         />
       ),
-      nextBtnName: "next",
       nextBtnText: "Continue",
+      handleNext: handleNext,
     },
     {
-      label: "Provide link to Tweet",
-      content: <ImageCreation />,
-      formContent: (
-        <TextField
-          label="Tweet URL"
-          fullWidth
-          name="tweetURL"
-          value={state.tweetURL}
-          disabled={formIsSubmitting}
-          onChange={(e) => handleChange(e.target)}
-          // helperText="More infos about the URL in the FAQ"
-          sx={{ mt: 2 }}
-        />
+      label: "Clone Tweet",
+      isForm: true,
+      content: (
+        <>
+          <ImageCreation />
+          <TextField
+            label="Tweet URL"
+            fullWidth
+            name="tweetURL"
+            value={state.tweetURL}
+            disabled={formIsSubmitting}
+            onChange={(e) => handleChange(e.target)}
+            error={!!state.invalidTweetURLMessage}
+            helperText={state.invalidTweetURLMessage}
+            sx={{ mt: 2 }}
+          />
+        </>
       ),
-      nextBtnName: "create-image",
-      nextBtnText: "Create Image",
+      nextBtnText: "Clone",
+      handleNext: handleImageFetch,
     },
     {
       label: "Mint Tweet-NFT",
+      isForm: true,
       content: <Minter imageData={imageData} />,
-      nextBtnName: "mint-nft",
       nextBtnText: "Mint NFT",
+      handleNext: handleMint,
     },
   ];
 
   const nextBtnDisabled = [
-    !(useWeb3React().active && twitterUser),
+    !(active && userId), // TODO: pass as prop; only if valid network and contract exists
     !(state && state.language && state.theme),
+    !!state.invalidTweetURLMessage || !state.tweetURL,
   ];
 
   return (
@@ -147,32 +243,21 @@ function Steps({ twitterUser }) {
               </Typography>
             </StepLabel>
             <StepContent>
-              {step.content}
-              {step.formContent ? (
-                <form autoComplete="off" onSubmit={handleSubmit}>
-                  {step.formContent}
-                  <Mover
-                    nextBtnDisabled={nextBtnDisabled[i] || formIsSubmitting}
-                    backBtnDisabled={activeStep < 2 || formIsSubmitting}
-                    handleNext={handleNext}
-                    handleBack={handleBack}
-                    isForm
-                    nextBtnName={step.nextBtnName}
-                    nextBtnText={step.nextBtnText}
-                    isLoading={formIsSubmitting}
-                  />
-                </form>
-              ) : (
+              <ConditionalFormWrapper
+                condition={step.isForm}
+                error={state.formErrorMessage}
+              >
+                {step.content}
                 <Mover
                   nextBtnDisabled={nextBtnDisabled[i] || formIsSubmitting}
-                  backBtnDisabled={activeStep < 2 || formIsSubmitting}
-                  handleNext={handleNext}
+                  backBtnDisabled={activeStep < 1 || formIsSubmitting}
+                  handleNext={step.handleNext}
                   handleBack={handleBack}
-                  isForm={false}
-                  nextBtnName={step.nextBtnName}
+                  isForm={step.isForm}
                   nextBtnText={step.nextBtnText}
+                  isLoading={formIsSubmitting}
                 />
-              )}
+              </ConditionalFormWrapper>
             </StepContent>
           </Step>
         ))}

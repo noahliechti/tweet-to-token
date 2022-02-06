@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-
+import { ethers } from "ethers";
 import { HashLink } from "react-router-hash-link";
 import { Typography, Button, Grid, Container } from "@mui/material";
+import { useWeb3React, UnsupportedChainIdError } from "@web3-react/core";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import CustomerCard from "../CustomerCard/CustomerCard";
@@ -11,11 +12,69 @@ import FAQ from "../Faq/FAQ";
 import Milestones from "../Milestones/Milestones";
 
 import { cardsContent, BASE_URL, FUNCTIONS_PREFIX } from "../../config/globals";
+import { injected } from "../../config/connectors";
+
+import tweetToken from "../../config/contracts/TweetToken.json";
+import addressMap from "../../config/contracts/map.json";
 
 function Home() {
-  const [state, setState] = useState({
-    twitterUser: null,
-  });
+  const { active, activate, chainId, library, error } = useWeb3React();
+
+  const [contract, setContract] = useState();
+  const [twitterUser, setTwitterUser] = useState();
+  const [signer, setSigner] = useState();
+  const [deployer, setDeployer] = useState();
+
+  useEffect(() => {
+    injected.isAuthorized().then((isAuthorized) => {
+      const connectedToMM = window.localStorage.getItem("ConnectedToMM");
+      if (isAuthorized && !active && !error && connectedToMM) {
+        activate(injected);
+        window.localStorage.setItem("ConnectedToMM", true);
+      } else if (!isAuthorized) {
+        window.localStorage.removeItem("ConnectedToMM");
+      }
+      if (error instanceof UnsupportedChainIdError) {
+        // TODO: change network
+        // console.log(error.message);
+      }
+    });
+  }, [activate, active, error]);
+
+  useEffect(() => {
+    const saveSigners = async () => {
+      if (library) {
+        setSigner(await library.getSigner());
+        setDeployer(
+          new ethers.Wallet(process.env.REACT_APP_DEPLOYER_PRIVATE_KEY, library)
+        );
+      }
+    };
+    saveSigners();
+  }, [library]);
+
+  useEffect(() => {
+    // const saleState = async () => {
+    // console.log("contract is active", await contract.saleIsActive());
+    // };
+    if (chainId) {
+      if (addressMap[chainId]) {
+        const tweetTokenAddress = addressMap[chainId].TweetToken;
+        if (signer) {
+          const TweetToken = new ethers.Contract(
+            tweetTokenAddress,
+            tweetToken.abi,
+            signer
+          );
+          // saleState(TweetToken);
+          setContract(TweetToken);
+        }
+      } else {
+        // console.err("Smart contract doesn't seem to deployed on this network");
+        // TODO: notification? or disable button?
+      }
+    }
+  }, [chainId, signer]);
 
   useEffect(() => {
     fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/auth`, {
@@ -32,11 +91,8 @@ function Home() {
         throw new Error("Getting the twitter login status fails!"); // TODO:
       })
       .then((response) => {
-        // console.log(response.json());
         const { user } = response;
-        setState({
-          twitterUser: user || null,
-        });
+        setTwitterUser(user || null);
       })
       .catch(() => {
         // console.error(err); // TODO: what do I show then?
@@ -84,7 +140,12 @@ function Home() {
         ))}
         <Grid id="steps" item xs={12}>
           <Typography variant="h2">How does it work?</Typography>
-          <Steps twitterUser={state.twitterUser} />
+          <Steps
+            userId={twitterUser ? twitterUser.userId : null}
+            contract={contract}
+            signer={signer}
+            deployer={deployer}
+          />
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h2">About TTT</Typography>

@@ -4,6 +4,7 @@ export const BASE_URL =
   process.env.REACT_APP_ENV === "development"
     ? "http://localhost:5000"
     : "https://tweet-token.netlify.app";
+
 export const FUNCTIONS_PREFIX = "/.netlify/functions";
 
 export const cardsContent = [
@@ -45,9 +46,7 @@ export const faqs = [
         </ol>
         <Typography>Check if your link has the following format:</Typography>
         <Box sx={{ width: 1, wordWrap: "break-word" }}>
-          <code>
-            https://twitter.com/YourUsername/status/SomeRandomBigNumber
-          </code>
+          <code>https://twitter.com/YourUsername/status/SomeLargeNumber</code>
         </Box>
       </>
     ),

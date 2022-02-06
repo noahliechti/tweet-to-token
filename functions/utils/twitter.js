@@ -1,7 +1,25 @@
 const chromium = require("chrome-aws-lambda");
 const puppeteer = require("puppeteer-core");
+const fetch = require("node-fetch");
 
-const { CHROME_EXECUTABLE_PATH } = require("./config");
+const { CHROME_EXECUTABLE_PATH, TWITTER_BEARER_TOKEN } = require("./config");
+
+const getTweetId = (tweetURL) => {
+  const splitTweetURL = tweetURL.split("/");
+  const lastItem = splitTweetURL[splitTweetURL.length - 1];
+  const splitLastItem = lastItem.split("?");
+  return splitLastItem[0];
+};
+
+exports.getTweetId = getTweetId;
+
+const getTweetAuthorName = (tweetURL) => {
+  const splitTweetURL = tweetURL.split("/");
+  const thirdLastItem = splitTweetURL[splitTweetURL.length - 3];
+  return thirdLastItem;
+};
+
+exports.getTweetAuthorName = this.getTweetAuthorName;
 
 exports.createScreenshot = async ({
   language,
@@ -11,10 +29,7 @@ exports.createScreenshot = async ({
   hideCard,
   hideThread,
   tweetId,
-  tweetURL,
 }) => {
-  let imageBuffer;
-
   try {
     const browser = await puppeteer.launch({
       args: chromium.args,
@@ -51,25 +66,50 @@ exports.createScreenshot = async ({
       { theme, padding, percent }
     );
 
-    imageBuffer = await page.screenshot({
+    const imageBuffer = await page.screenshot({
       type: "png",
       fullPage: true,
       encoding: "base64",
     });
 
     await browser.close();
+    return imageBuffer;
   } catch (err) {
-    console.log(
-      `Error when creating the image of the tweet. Check if ${tweetURL} is a valid tweet url`,
-      err
-    );
+    const msg = "Could not clone the Tweet!";
+    console.log(msg, err);
+    throw new Error(msg);
   }
-  return imageBuffer;
 };
 
-exports.getTweetId = (tweetURL) => {
-  const splitTweetURL = tweetURL.split("/");
-  const lastItem = splitTweetURL[splitTweetURL.length - 1];
-  const splitLastItem = lastItem.split("?");
-  return splitLastItem[0];
+exports.checkTweetURL = (tweetURL, twitterUserId) => {
+  const tweetId = getTweetId(tweetURL);
+  const tweetAuthorName = getTweetAuthorName(tweetURL);
+
+  const api = `https://api.twitter.com/2/tweets/${tweetId}?expansions=author_id`;
+  const headers = {
+    Authorization: `Bearer ${TWITTER_BEARER_TOKEN}`,
+  };
+
+  return new Promise((resolve, reject) => {
+    fetch(api, { method: "GET", headers: headers })
+      .then((res) => res.json())
+      .then((res) => {
+        // TODO: check for res.statusCode === 200?
+        if (res.errors) {
+          if (res.errors[0].title === "Not Found Error") {
+            reject(new Error("This Tweet doesn't seem to exist!"));
+          }
+          reject(new Error(res.errors[0].detail));
+        } else {
+          // Users should only be able to mint their own tweets
+          if (twitterUserId === res.data.author_id) {
+            resolve(tweetAuthorName === res.includes.users[0].username);
+          }
+          reject(new Error("You are not the author of this tweet!"));
+        }
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
 };

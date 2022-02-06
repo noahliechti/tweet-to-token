@@ -3,6 +3,12 @@ node_modules
 .DS_Store
 .env
 *.md
+*.ico
+*.png
+*.txt
+*.svg
+*.html
+*.sol
 
 # Netlify
 .netlify

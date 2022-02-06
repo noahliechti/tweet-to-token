@@ -1,56 +1,61 @@
 import React from "react";
 import { useWeb3React } from "@web3-react/core";
-import { Box, ToggleButton, Link } from "@mui/material";
+import { Box, Link, Button } from "@mui/material";
 import { injected } from "../../../config/connectors";
 import { BASE_URL, FUNCTIONS_PREFIX } from "../../../config/globals";
+import { ReactComponent as TwitterIcon } from "../../../assets/icons/twitter.svg";
+import { ReactComponent as WalletIcon } from "../../../assets/icons/wallet.svg";
+
+const beautifyAddress = (address) =>
+  `${address.substr(0, 6)}...${address.substr(-4)}`;
 
 function Login({ twitterLoggedIn }) {
-  const { active, activate, deactivate } = useWeb3React();
+  const { active, activate, deactivate, account } = useWeb3React();
+
   const loginLinkToggle = twitterLoggedIn ? "/auth/logout" : "/auth/login";
 
   const handleClick = async (e) => {
     if (e.target.name === "wallet") {
-      try {
-        if (active) {
-          deactivate();
-        } else {
-          await activate(injected);
-        }
-      } catch (err) {
-        // console.log(err);
+      if (active) {
+        deactivate();
+        window.localStorage.removeItem("ConnectedToMM");
+      } else {
+        await activate(injected);
+        window.localStorage.setItem("ConnectedToMM", true);
       }
     }
   };
 
-  // const error = !(loginStates.twitter && loginStates.wallet);
   return (
     <Box sx={{ mb: 2 }}>
       {/* <FormControl error={error}> */}
       {/* <FormGroup></FormGroup> */}
-      <ToggleButton
+      <Button
         value="1"
         name="twitter"
         component={Link}
         href={`${BASE_URL}${FUNCTIONS_PREFIX}${loginLinkToggle}`}
-        selected={twitterLoggedIn}
+        // selected={twitterLoggedIn}
         onClick={handleClick}
-        // variant="primary"
+        variant="contained"
         fullWidth
+        endIcon={<TwitterIcon />}
         sx={{ mt: 1 }}
       >
-        {twitterLoggedIn ? "logout from twitter" : "login with twitter"}
-      </ToggleButton>
-      <ToggleButton
+        {twitterLoggedIn ? "disconnect" : "connect"}
+      </Button>
+      <Button
         value="1"
         name="wallet"
-        selected={active}
-        // variant="primary"
+        // selected={active}
+        variant="contained"
         onClick={handleClick}
         fullWidth
+        endIcon={<WalletIcon />}
         sx={{ mt: 1 }}
       >
-        {active ? "logout from wallet" : "connect with wallet"}
-      </ToggleButton>
+        {active ? beautifyAddress(account) : "connect"}
+      </Button>
       {/* {error ? (
           <FormHelperText>
             You have to be logged in to Twitter and your wallet to continue
