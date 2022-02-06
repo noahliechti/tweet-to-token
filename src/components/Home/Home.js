@@ -20,11 +20,10 @@ import addressMap from "../../config/contracts/map.json";
 function Home() {
   const { active, activate, chainId, library, error } = useWeb3React();
 
-  const [state, setState] = useState({
-    twitterUser: null,
-  });
-
+  const [contract, setContract] = useState();
+  const [twitterUser, setTwitterUser] = useState();
   const [signer, setSigner] = useState();
+  const [deployer, setDeployer] = useState();
 
   useEffect(() => {
     injected.isAuthorized().then((isAuthorized) => {
@@ -43,18 +42,21 @@ function Home() {
   }, [activate, active, error]);
 
   useEffect(() => {
-    const saveSigner = async () => {
+    const saveSigners = async () => {
       if (library) {
         setSigner(await library.getSigner());
+        setDeployer(
+          new ethers.Wallet(process.env.REACT_APP_DEPLOYER_PRIVATE_KEY, library)
+        );
       }
     };
-    saveSigner();
+    saveSigners();
   }, [library]);
 
   useEffect(() => {
-    const saleState = async () => {
-      // console.log("contract is active", await contract.saleIsActive());
-    };
+    // const saleState = async () => {
+    // console.log("contract is active", await contract.saleIsActive());
+    // };
     if (chainId) {
       if (addressMap[chainId]) {
         const tweetTokenAddress = addressMap[chainId].TweetToken;
@@ -64,7 +66,8 @@ function Home() {
             tweetToken.abi,
             signer
           );
-          saleState(TweetToken);
+          // saleState(TweetToken);
+          setContract(TweetToken);
         }
       } else {
         // console.err("Smart contract doesn't seem to deployed on this network");
@@ -89,9 +92,7 @@ function Home() {
       })
       .then((response) => {
         const { user } = response;
-        setState({
-          twitterUser: user || null,
-        });
+        setTwitterUser(user || null);
       })
       .catch(() => {
         // console.error(err); // TODO: what do I show then?
@@ -139,7 +140,12 @@ function Home() {
         ))}
         <Grid id="steps" item xs={12}>
           <Typography variant="h2">How does it work?</Typography>
-          <Steps twitterUser={state.twitterUser} />
+          <Steps
+            userId={twitterUser ? twitterUser.userId : null}
+            contract={contract}
+            signer={signer}
+            deployer={deployer}
+          />
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h2">About TTT</Typography>

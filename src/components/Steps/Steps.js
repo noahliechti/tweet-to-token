@@ -1,4 +1,5 @@
 import React from "react";
+import { ethers } from "ethers";
 import { useWeb3React } from "@web3-react/core";
 
 import {
@@ -25,7 +26,15 @@ import { BASE_URL, FUNCTIONS_PREFIX } from "../../config/globals";
 const tweetURLPattern =
   /^((?:http:\/\/)?|(?:https:\/\/)?)?(?:www\.)?twitter\.com\/(\w+)\/status\/(\d+)$/i;
 
-function Steps({ twitterUser }) {
+// TODO: DRY
+const getTweetId = (tweetURL) => {
+  const splitTweetURL = tweetURL.split("/");
+  const lastItem = splitTweetURL[splitTweetURL.length - 1];
+  const splitLastItem = lastItem.split("?");
+  return splitLastItem[0];
+};
+
+function Steps({ userId, contract, signer, deployer }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [formIsSubmitting, setFormIsSubmitting] = React.useState(false);
   const [imageData, setImageData] = React.useState();
@@ -33,9 +42,11 @@ function Steps({ twitterUser }) {
     theme: "light",
     language: "en",
     tweetURL: "",
+    tokenURI: "",
     invalidTweetURLMessage: "",
     formErrorMessage: "",
   });
+  const { active, account } = useWeb3React();
 
   const handleChange = (target) => {
     const { value } = target;
@@ -56,6 +67,10 @@ function Steps({ twitterUser }) {
   };
 
   const handleNext = () => {
+    setState({
+      ...state,
+      formErrorMessage: "",
+    });
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -68,13 +83,11 @@ function Steps({ twitterUser }) {
     setState({
       ...state,
       tweetURL: "",
+      tokenURI: "",
     });
   };
 
-  const handleMint = () => {
-    setFormIsSubmitting(true);
-
-    // Get TokenURI
+  const getTokenURI = () =>
     fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/token`, {
       method: "POST",
       headers: {
@@ -91,31 +104,53 @@ function Steps({ twitterUser }) {
         const errorMessage = (await res.json()).error;
         throw new Error(errorMessage);
       })
-      .then((data) => {
-        const { tokenURI } = data;
-        setFormIsSubmitting(false);
-        // TODO: set state
-        handleNext();
-        return tokenURI;
-      })
-      .catch(() => {
-        // TODO: set error message
+      .then(
+        (data) => data.tokenURI
+        // console.log(tokenURI);
         // setState({
         //   ...state,
-        //   formErrorMessage: err.message,
+        //   tokenURI: tokenURI,
         // });
+      )
+      .catch((err) => {
+        // TODO: set error message
+        setState({
+          ...state,
+          formErrorMessage: err.message,
+        });
         setFormIsSubmitting(false);
       });
 
-    // Set allowed tweet
+  const handleMint = async () => {
+    setFormIsSubmitting(true);
 
-    // Mint tweet
+    const tokenURI = await getTokenURI();
+
+    const tweetId = ethers.BigNumber.from(getTweetId(state.tweetURL));
+
+    // Set allowed tweet
+    let tx = await contract
+      .connect(deployer)
+      .addVerifiedTweet(account, tweetId, tokenURI);
+    await tx.wait();
+
+    // Mint Tweet
+    tx = await contract.connect(signer).mintTweet(tweetId);
+    await tx.wait();
+
+    // TODO: what if there is no connection anymore also twitter
+    // TODO: don't mint twice
+    // return contract.getTokenCount();
+
+    setFormIsSubmitting(false);
+    handleNext();
   };
 
   const handleImageFetch = () => {
     // TODO: CACHE IMAGE, AND USE CACHED IMAGE
     setFormIsSubmitting(true);
     setImageData("");
+
     fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/image`, {
       method: "POST",
       headers: {
@@ -125,7 +160,7 @@ function Steps({ twitterUser }) {
         tweetURL: state.tweetURL,
         language: state.language,
         theme: state.theme,
-        twitterUserId: twitterUser.userId,
+        userId: userId,
       }),
     })
       // eslint-disable-next-line consistent-return
@@ -138,10 +173,6 @@ function Steps({ twitterUser }) {
         const { image } = data;
         setFormIsSubmitting(false);
         setImageData(image);
-        setState({
-          ...state,
-          formErrorMessage: "",
-        });
         handleNext();
       })
       .catch((err) => {
@@ -156,7 +187,7 @@ function Steps({ twitterUser }) {
   const steps = [
     {
       label: "Establish Connection",
-      content: <Login twitterLoggedIn={!!twitterUser} />,
+      content: <Login twitterLoggedIn={!!userId} />,
       nextBtnText: "Continue",
       handleNext: handleNext,
     },
@@ -197,6 +228,7 @@ function Steps({ twitterUser }) {
     },
     {
       label: "Mint Tweet-NFT",
+      isForm: true,
       content: <Minter imageData={imageData} />,
       nextBtnText: "Mint NFT",
       handleNext: handleMint,
@@ -204,7 +236,7 @@ function Steps({ twitterUser }) {
   ];
 
   const nextBtnDisabled = [
-    !(useWeb3React().active && twitterUser), // TODO: pass as prop; only if valid network and contract exists
+    !(active && userId), // TODO: pass as prop; only if valid network and contract exists
     !(state && state.language && state.theme),
     !!state.invalidTweetURLMessage || !state.tweetURL,
   ];

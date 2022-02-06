@@ -21,7 +21,7 @@ async function uploadToPinata(pinataContent, fileName, isJSON = false) {
     "pinataMetadata",
     JSON.stringify({
       keyvalues: {
-        // env: "dev",
+        // env: "dev", // TODO: should I make folders?
         date: new Date().toISOString(),
       },
     })
@@ -50,23 +50,23 @@ exports.handler = async (event) => {
       false
     );
 
-    // const metadata2 = {
-    //   name: "#1 from @Rainmaker1973",
-    //   description:
-    //     "Tweet by @Rainmaker1973 tweeted on 21.12.21. Original: https://twitter.com/Rainmaker1973/status/1478285768493834240",
-    //   image: ipfsImagePath,
-    //   attributes: [
-    //     { trait_type: "likes", value: 50 },
-    //     { trait_type: "retweets", value: 13 },
-    //     { trait_type: "comments", value: 3 },
-    //     { trait_type: "language", value: "en" },
-    //   ],
-    // };
+    const metadata2 = {
+      name: "#1 from @Rainmaker1973",
+      description:
+        "Tweet by @Rainmaker1973 tweeted on 21.12.21. Original: https://twitter.com/Rainmaker1973/status/1478285768493834240",
+      image: ipfsImagePath,
+      attributes: [
+        { trait_type: "likes", value: 50 },
+        { trait_type: "retweets", value: 13 },
+        { trait_type: "comments", value: 3 },
+        { trait_type: "language", value: "en" },
+      ],
+    };
 
     metadata.image = ipfsImagePath;
     // console.log(metadata);
 
-    const tokenURI = await uploadToPinata(metadata, `${tweetId}.json`, true);
+    const tokenURI = await uploadToPinata(metadata2, `${tweetId}.json`, true);
     return {
       statusCode: 200,
       body: JSON.stringify({
@@ -76,9 +76,9 @@ exports.handler = async (event) => {
   } catch (err) {
     console.log(err);
     return {
-      statusCode: 200,
+      statusCode: 400,
       body: JSON.stringify({
-        error: new Error("Could not upload to Pinata"),
+        error: "Could not upload to Pinata",
       }),
     };
   }
