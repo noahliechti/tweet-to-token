@@ -8,9 +8,9 @@ const FormData = require("form-data");
 
 const { isLocalNetwork } = require("./helper-functions");
 const { addresses } = require("../src/config/contracts/map.json");
-const { printEtherscanLink, logMarketplaceURL } = require("./helper-functions");
+const { logMarketplaceURL } = require("./helper-functions");
 
-const { ethers } = hre;
+const { ethers, network } = hre;
 
 async function uploadToPinata(pinataContent, fileName) {
   const fd = new FormData();
@@ -77,30 +77,14 @@ async function mintTweet(contract, tweetOwner, tweetId) {
   return contract.getTokenCount();
 }
 
-async function flipSaleState(contract) {
-  let tx;
-  if (!(await contract.saleIsActive())) {
-    tx = await contract.flipSaleState();
-    await tx.wait();
-  }
-  return contract.saleIsActive();
-}
-
 async function main() {
   const contractName = "TweetToken";
-  const { chainId } = hre.network.config;
+  const { chainId } = network.config;
   const deployedContractAddress = addresses[chainId][contractName][0];
   const [, tweetOwner] = await ethers.getSigners();
   const sampleTweetId = BigInt(1478285768493834240); // using BigInt because number is too big
 
-  printEtherscanLink(deployedContractAddress, chainId);
-
-  const ttt = await hre.ethers.getContractAt(
-    contractName,
-    deployedContractAddress
-  );
-
-  await flipSaleState(ttt);
+  const ttt = await ethers.getContractAt(contractName, deployedContractAddress);
 
   if (await ttt.tweetIdToTokenURI(sampleTweetId)) {
     console.log("Tweet was already minted.");
