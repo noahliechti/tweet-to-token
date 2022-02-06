@@ -72,21 +72,44 @@ function Steps({ twitterUser }) {
   };
 
   const handleMint = () => {
+    setFormIsSubmitting(true);
+
     // Get TokenURI
-    // fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/token`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json;charset=utf-8",
-    //   },
-    //   body: JSON.stringify({
-    //     // metadata: ,
-    //     // image: imageData,
-    //     // tweetId: state.theme,
-    //   }),
-    // });
-    // set allowed tweet
-    // mint tweet
-    handleNext();
+    fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify({
+        metadata: "",
+        imageData: imageData,
+        tweetURL: state.tweetURL,
+      }),
+    })
+      .then(async (res) => {
+        if (res.status === 200) return res.json();
+        const errorMessage = (await res.json()).error;
+        throw new Error(errorMessage);
+      })
+      .then((data) => {
+        const { tokenURI } = data;
+        setFormIsSubmitting(false);
+        // TODO: set state
+        handleNext();
+        return tokenURI;
+      })
+      .catch(() => {
+        // TODO: set error message
+        // setState({
+        //   ...state,
+        //   formErrorMessage: err.message,
+        // });
+        setFormIsSubmitting(false);
+      });
+
+    // Set allowed tweet
+
+    // Mint tweet
   };
 
   const handleImageFetch = () => {
@@ -106,10 +129,10 @@ function Steps({ twitterUser }) {
       }),
     })
       // eslint-disable-next-line consistent-return
-      .then(async (response) => {
-        if (response.status === 200) return response.json();
-        const errorMessage = (await response.json()).error;
-        throw new Error(errorMessage || "Clone couldn't be created");
+      .then(async (res) => {
+        if (res.status === 200) return res.json();
+        const errorMessage = (await res.json()).error;
+        throw new Error(errorMessage);
       })
       .then((data) => {
         const { image } = data;

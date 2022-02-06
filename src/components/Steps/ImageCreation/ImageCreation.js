@@ -35,7 +35,7 @@ function ImageCreation() {
             </Typography>
             <Box sx={{ width: 1, wordWrap: "break-word" }}>
               <code>
-                https://twitter.com/YourUsername/status/SomeRandomBigNumber
+                https://twitter.com/YourUsername/status/SomeLargeNumber
               </code>
             </Box>
           </AccordionDetails>

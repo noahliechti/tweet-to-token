@@ -4,7 +4,7 @@
   "private": true,
   "files": [],
   "engines": {
-    "node": ">=10.8.0"
+    "node": ">=12.3.0"
   },
   "dependencies": {
     "@emotion/react": "^11.7.1",
@@ -22,6 +22,7 @@
     "ethers": "^5.5.4",
     "express": "^4.17.2",
     "express-session": "^1.17.2",
+    "form-data": "^4.0.0",
     "mongoose": "^6.1.8",
     "node-fetch": "^2.6.7",
     "passport": "^0.5.2",
@@ -54,7 +55,6 @@
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "ethereum-waffle": "^3.4.0",
-    "form-data": "^4.0.0",
     "hardhat": "^2.8.3",
     "hardhat-gas-reporter": "^1.0.7",
     "prettier": "^2.5.1",
