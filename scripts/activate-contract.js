@@ -3,7 +3,7 @@ const addresses = require("../src/config/contracts/map.json");
 
 const { ethers, network } = hre;
 
-async function flipSaleState(contract) {
+async function activateContract(contract) {
   let tx;
   if (!(await contract.saleIsActive())) {
     tx = await contract.flipSaleState();
@@ -17,7 +17,7 @@ async function main() {
   const { chainId } = network.config;
   const deployedContractAddress = addresses[chainId][contractName];
   const ttt = await ethers.getContractAt(contractName, deployedContractAddress);
-  await flipSaleState(ttt);
+  await activateContract(ttt);
 }
 
 main().catch((error) => {

@@ -6,7 +6,7 @@ mongoose
     // keepAlive: true, TODO:
     useNewUrlParser: true,
   })
-  .then(() => console.error("DB connection is successful."))
+  .then(() => console.log("DB connection is successful."))
   .catch((err) => console.error(err));
 
 module.exports = mongoose.connection;

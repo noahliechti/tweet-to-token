@@ -43,6 +43,8 @@ async function uploadToPinata(pinataContent, fileName, isJSON = false) {
 exports.handler = async (event) => {
   const { metadata, imageData, tweetURL } = JSON.parse(event.body);
   const tweetId = getTweetId(tweetURL);
+  let tokenURI;
+
   try {
     const ipfsImagePath = await uploadToPinata(
       imageData,
@@ -66,13 +68,7 @@ exports.handler = async (event) => {
     metadata.image = ipfsImagePath;
     // console.log(metadata);
 
-    const tokenURI = await uploadToPinata(metadata2, `${tweetId}.json`, true);
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        tokenURI: tokenURI,
-      }),
-    };
+    tokenURI = await uploadToPinata(metadata2, `${tweetId}.json`, true);
   } catch (err) {
     console.log(err);
     return {
@@ -82,4 +78,11 @@ exports.handler = async (event) => {
       }),
     };
   }
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      tokenURI: tokenURI,
+    }),
+  };
 };

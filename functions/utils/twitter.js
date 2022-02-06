@@ -75,7 +75,7 @@ exports.createScreenshot = async ({
     await browser.close();
     return imageBuffer;
   } catch (err) {
-    const msg = "Could not clone the Tweet! Please try again.";
+    const msg = "Could not clone the Tweet!";
     console.log(msg, err);
     throw new Error(msg);
   }

@@ -42,7 +42,6 @@ function Steps({ userId, contract, signer, deployer }) {
     theme: "light",
     language: "en",
     tweetURL: "",
-    tokenURI: "",
     invalidTweetURLMessage: "",
     formErrorMessage: "",
   });
@@ -83,7 +82,6 @@ function Steps({ userId, contract, signer, deployer }) {
     setState({
       ...state,
       tweetURL: "",
-      tokenURI: "",
     });
   };
 
@@ -104,14 +102,7 @@ function Steps({ userId, contract, signer, deployer }) {
         const errorMessage = (await res.json()).error;
         throw new Error(errorMessage);
       })
-      .then(
-        (data) => data.tokenURI
-        // console.log(tokenURI);
-        // setState({
-        //   ...state,
-        //   tokenURI: tokenURI,
-        // });
-      )
+      .then((data) => data.tokenURI)
       .catch((err) => {
         // TODO: set error message
         setState({
