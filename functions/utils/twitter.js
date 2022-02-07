@@ -95,7 +95,7 @@ const getAttributes = ({ data, includes }, theme) => [
 
 exports.getMetadata = async (tweetURL, theme) => {
   const tweetId = getTweetId(tweetURL);
-  const api = `https://api.twitter.com/2/tweets/${tweetId}?tweet.fields=attachments,author_id,created_at,id,lang,source,text,public_metrics&user.fields=verified&expansions=author_id`;
+  const api = `https://api.twitter.com/2/tweets/${tweetId}?tweet.fields=attachments,created_at,lang,text,public_metrics&user.fields=verified&expansions=author_id`;
   const headers = {
     Authorization: `Bearer ${TWITTER_BEARER_TOKEN}`,
   };

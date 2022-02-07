@@ -117,7 +117,6 @@ function Steps({ userId, contract, signer, deployer }) {
     setFormIsSubmitting(true);
 
     const tokenURI = await getTokenURI();
-
     const tweetId = ethers.BigNumber.from(getTweetId(state.tweetURL));
 
     // Set allowed tweet
@@ -131,16 +130,29 @@ function Steps({ userId, contract, signer, deployer }) {
     await tx.wait();
 
     // TODO: what if there is no connection anymore also twitter
-    // TODO: don't mint twice
 
     setFormIsSubmitting(false);
     handleNext();
   };
 
-  const handleImageFetch = () => {
+  const preventDuplicatedTweets = async () => {
+    const tweetId = ethers.BigNumber.from(getTweetId(state.tweetURL));
+    if (await contract.tweetIdToTokenURI(tweetId)) {
+      setState({
+        ...state,
+        formErrorMessage: "This Tweet was already minted!",
+      });
+      setFormIsSubmitting(false); // TODO: only one setFormIsSubmitting(false) in this function
+    }
+  };
+
+  const handleImageFetch = async () => {
     // TODO: CACHE IMAGE, AND USE CACHED IMAGE
+
     setFormIsSubmitting(true);
     setImageData("");
+
+    await preventDuplicatedTweets();
 
     fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/image`, {
       method: "POST",
@@ -154,7 +166,6 @@ function Steps({ userId, contract, signer, deployer }) {
         userId: userId,
       }),
     })
-      // eslint-disable-next-line consistent-return
       .then(async (res) => {
         if (res.status === 200) return res.json();
         const errorMessage = (await res.json()).error;
@@ -162,8 +173,6 @@ function Steps({ userId, contract, signer, deployer }) {
       })
       .then((data) => {
         const { image, metadata } = data;
-        console.log(metadata);
-
         setFormIsSubmitting(false);
         setImageData(image);
         setNftMetadata(metadata);
