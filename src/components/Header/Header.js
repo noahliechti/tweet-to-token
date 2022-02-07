@@ -17,7 +17,10 @@ function Header() {
     <AppBar
       position="static"
       color="transparent"
-      sx={{ boxShadow: 0, mt: 2, mb: 2 }}
+      sx={{
+        boxShadow: 0,
+        mb: 2,
+      }}
     >
       <Toolbar
         disableGutters

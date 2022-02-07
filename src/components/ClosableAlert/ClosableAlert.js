@@ -5,7 +5,7 @@ import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg";
 function ClosableAlert({ message }) {
   const [open, setOpen] = React.useState(true);
   return (
-    <Box sx={{ position: "sticky", top: 2, zIndex: "snackbar" }}>
+    <Box sx={{ position: "sticky", top: 16, zIndex: "snackbar" }}>
       <Slide direction="down" in={open} mountOnEnter unmountOnExit>
         <Alert
           severity="error"
@@ -23,8 +23,7 @@ function ClosableAlert({ message }) {
           }
           sx={{
             width: 1,
-            mr: 2,
-            mt: 2,
+            mb: 2,
           }}
         >
           {message}
