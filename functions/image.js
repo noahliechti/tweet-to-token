@@ -1,6 +1,6 @@
 const { TWEET_SETTINGS } = require("./utils/config");
 const {
-  getTweetId,
+  getMetadata,
   createScreenshot,
   checkTweetURL,
 } = require("./utils/twitter");
@@ -11,6 +11,7 @@ const { TWEET_WIDTH, TWEET_PADDING, TWEET_HIDE_CARD, TWEET_HIDE_THREAD } =
 exports.handler = async (event) => {
   const { language, theme, tweetURL, userId } = JSON.parse(event.body);
   let tweetClone;
+  let metadata;
 
   try {
     const isValid = await checkTweetURL(tweetURL, userId);
@@ -26,11 +27,13 @@ exports.handler = async (event) => {
       width: TWEET_WIDTH,
       theme: theme,
       padding: TWEET_PADDING,
-      tweetId: getTweetId(tweetURL),
+      tweetURL: tweetURL,
       hideCard: TWEET_HIDE_CARD,
       hideThread: TWEET_HIDE_THREAD,
       language: language,
     });
+
+    metadata = await getMetadata(tweetURL, theme);
   } catch (err) {
     return {
       statusCode: 400,
@@ -44,6 +47,7 @@ exports.handler = async (event) => {
     statusCode: 200,
     body: JSON.stringify({
       image: tweetClone,
+      metadata: metadata,
     }),
   };
 };

@@ -38,6 +38,7 @@ function Steps({ userId, contract, signer, deployer }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [formIsSubmitting, setFormIsSubmitting] = React.useState(false);
   const [imageData, setImageData] = React.useState();
+  const [nftMetadata, setNftMetadata] = React.useState();
   const [state, setState] = React.useState({
     theme: "light",
     language: "en",
@@ -92,9 +93,9 @@ function Steps({ userId, contract, signer, deployer }) {
         "Content-Type": "application/json;charset=utf-8",
       },
       body: JSON.stringify({
-        metadata: "",
         imageData: imageData,
         tweetURL: state.tweetURL,
+        metadata: nftMetadata,
       }),
     })
       .then(async (res) => {
@@ -131,7 +132,6 @@ function Steps({ userId, contract, signer, deployer }) {
 
     // TODO: what if there is no connection anymore also twitter
     // TODO: don't mint twice
-    // return contract.getTokenCount();
 
     setFormIsSubmitting(false);
     handleNext();
@@ -161,9 +161,12 @@ function Steps({ userId, contract, signer, deployer }) {
         throw new Error(errorMessage);
       })
       .then((data) => {
-        const { image } = data;
+        const { image, metadata } = data;
+        console.log(metadata);
+
         setFormIsSubmitting(false);
         setImageData(image);
+        setNftMetadata(metadata);
         handleNext();
       })
       .catch((err) => {
