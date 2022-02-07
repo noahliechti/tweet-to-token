@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ethers } from "ethers";
 import { useWeb3React } from "@web3-react/core";
 
@@ -47,6 +47,13 @@ function Steps({ userId, contract, signer, deployer }) {
     formErrorMessage: "",
   });
   const { active, account } = useWeb3React();
+
+  useEffect(() => {
+    if (!account || !userId) {
+      setFormIsSubmitting(false);
+      setActiveStep(() => 0);
+    }
+  }, [account, userId]);
 
   const handleChange = (target) => {
     const { value } = target;
@@ -119,7 +126,7 @@ function Steps({ userId, contract, signer, deployer }) {
     const tokenURI = await getTokenURI();
     const tweetId = ethers.BigNumber.from(getTweetId(state.tweetURL));
 
-    // Set allowed tweet
+    // Set allowed Tweet
     let tx = await contract
       .connect(deployer)
       .addVerifiedTweet(account, tweetId, tokenURI);
