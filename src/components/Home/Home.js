@@ -28,32 +28,25 @@ function Home() {
 
   const [contract, setContract] = useState();
   const [twitterUser, setTwitterUser] = useState();
-  const [alertMessages, setAlertMessages] = useState(new Set([]));
+  const [alertMessage, setAlertMessage] = useState();
   const [signer, setSigner] = useState();
   const [deployer, setDeployer] = useState();
 
   useEffect(() => {
     injected.isAuthorized().then((isAuthorized) => {
       const connectedToMM = window.localStorage.getItem("ConnectedToMM");
+
       if (isAuthorized && !active && !error && connectedToMM) {
         activate(injected);
         window.localStorage.setItem("ConnectedToMM", true);
       } else if (!isAuthorized) {
         window.localStorage.removeItem("ConnectedToMM");
       }
+
       if (error instanceof UnsupportedChainIdError) {
-        // TODO: change network?
         // console.log(error.message);
-        setAlertMessages(
-          (prevState) => new Set([...prevState, ALERT_CODES.UNSUP])
-        );
-        return;
+        setAlertMessage(ALERT_CODES.UNSUP);
       }
-      console.log("delete1");
-      setAlertMessages(
-        (prevState) =>
-          new Set([...prevState].filter((code) => code !== ALERT_CODES.UNSUP))
-      );
     });
   }, [activate, active, error]);
 
@@ -70,10 +63,6 @@ function Home() {
   }, [library]);
 
   useEffect(() => {
-    setAlertMessages(
-      (prevState) =>
-        new Set([...prevState].filter((code) => code !== ALERT_CODES.NOTDEP))
-    );
     if (chainId) {
       if (addressMap[chainId]) {
         const tweetTokenAddress = addressMap[chainId].TweetToken;
@@ -85,10 +74,9 @@ function Home() {
           );
           setContract(TweetToken);
         }
+        setAlertMessage(null);
       } else {
-        setAlertMessages(
-          (prevState) => new Set([...prevState, ALERT_CODES.NOTDEP])
-        );
+        setAlertMessage(ALERT_CODES.NOTDEP);
       }
     }
   }, [chainId, signer]);
@@ -118,7 +106,7 @@ function Home() {
 
   return (
     <Container maxWidth="xl">
-      {alertMessages.size && <Alerts activeAlerts={alertMessages} />}
+      {alertMessage && <Alerts activeAlert={alertMessage} />}
       <Header />
       <Grid container spacing={2}>
         <Grid item xs={12}>
@@ -163,7 +151,7 @@ function Home() {
             contract={contract}
             signer={signer}
             deployer={deployer}
-            setAlertMessages={setAlertMessages}
+            setAlertMessage={setAlertMessage}
           />
         </Grid>
         <Grid item xs={12}>

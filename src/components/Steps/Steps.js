@@ -34,7 +34,7 @@ const getTweetId = (tweetURL) => {
   return splitLastItem[0];
 };
 
-function Steps({ userId, contract, signer, deployer, setAlertMessages }) {
+function Steps({ userId, contract, signer, deployer, setAlertMessage }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [formIsSubmitting, setFormIsSubmitting] = React.useState(false);
   const [imageData, setImageData] = React.useState();
@@ -52,11 +52,9 @@ function Steps({ userId, contract, signer, deployer, setAlertMessages }) {
     if ((!account || !userId) && activeStep > 0) {
       setFormIsSubmitting(false);
       setActiveStep(() => 0);
-      setAlertMessages(
-        (prevState) => new Set([...prevState, ALERT_CODES.LOGOUT])
-      );
+      setAlertMessage(ALERT_CODES.LOGOUT);
     }
-  }, [account, activeStep, setAlertMessages, userId]);
+  }, [account, activeStep, setAlertMessage, userId]);
 
   const handleChange = (target) => {
     const { value } = target;
@@ -138,8 +136,6 @@ function Steps({ userId, contract, signer, deployer, setAlertMessages }) {
     // Mint Tweet
     tx = await contract.connect(signer).mintTweet(tweetId);
     await tx.wait();
-
-    // TODO: what if there is no connection anymore also twitter
 
     setFormIsSubmitting(false);
     handleNext();

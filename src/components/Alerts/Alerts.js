@@ -1,5 +1,7 @@
 import React from "react";
-import ClosableAlert from "./ClosableAlert/ClosableAlert";
+import { Box, Slide, Alert, IconButton, AlertTitle } from "@mui/material";
+
+import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg";
 
 const alertMessages = [
   {
@@ -19,10 +21,38 @@ const alertMessages = [
   },
 ];
 
-function Alerts({ activeAlerts }) {
-  return [...activeAlerts].map((alert) => (
-    <ClosableAlert {...alertMessages[alert]} key={alert} />
-  ));
+function Alerts({ activeAlert }) {
+  const [open, setOpen] = React.useState(true);
+  const { severity, title, text } = alertMessages[activeAlert - 1];
+
+  return (
+    <Box sx={{ position: "sticky", top: 16, zIndex: "snackbar" }}>
+      <Slide direction="down" in={open} mountOnEnter unmountOnExit>
+        <Alert
+          severity={severity}
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+          sx={{
+            width: 1,
+            mb: 2,
+          }}
+        >
+          {title && <AlertTitle>{title}</AlertTitle>}
+          {text}
+        </Alert>
+      </Slide>
+    </Box>
+  );
 }
 
 export default Alerts;
