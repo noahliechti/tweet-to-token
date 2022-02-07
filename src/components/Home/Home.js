@@ -23,6 +23,7 @@ function Home() {
 
   const [contract, setContract] = useState();
   const [twitterUser, setTwitterUser] = useState();
+  const [alertMessage, setAlertMessage] = useState();
   const [signer, setSigner] = useState();
   const [deployer, setDeployer] = useState();
 
@@ -36,8 +37,12 @@ function Home() {
         window.localStorage.removeItem("ConnectedToMM");
       }
       if (error instanceof UnsupportedChainIdError) {
-        // TODO: change network
+        // TODO: change network?
         // console.log(error.message);
+        setAlertMessage({
+          title: "Unsupported Network",
+          text: "Please switch to either Mainnet or Rinkeby.",
+        });
       }
     });
   }, [activate, active, error]);
@@ -102,7 +107,7 @@ function Home() {
 
   return (
     <Container maxWidth="xl">
-      <ClosableAlert message="This is an error alert — check it out!" />
+      {alertMessage && <ClosableAlert message={alertMessage} />}
       <Header />
       <Grid container spacing={2}>
         <Grid item xs={12}>

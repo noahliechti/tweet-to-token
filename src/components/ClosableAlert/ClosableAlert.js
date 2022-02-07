@@ -1,5 +1,5 @@
 import React from "react";
-import { Slide, Alert, IconButton, Box } from "@mui/material";
+import { Slide, Alert, IconButton, Box, AlertTitle } from "@mui/material";
 import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg";
 
 function ClosableAlert({ message }) {
@@ -26,7 +26,8 @@ function ClosableAlert({ message }) {
             mb: 2,
           }}
         >
-          {message}
+          <AlertTitle>{message.title}</AlertTitle>
+          {message.text}
         </Alert>
       </Slide>
     </Box>
