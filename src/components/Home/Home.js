@@ -9,6 +9,7 @@ import CustomerCard from "../CustomerCard/CustomerCard";
 import Steps from "../Steps/Steps";
 import About from "../About/About";
 import FAQ from "../Faq/FAQ";
+import ClosableAlert from "../ClosableAlert/ClosableAlert";
 import Milestones from "../Milestones/Milestones";
 
 import { cardsContent, BASE_URL, FUNCTIONS_PREFIX } from "../../config/globals";
@@ -101,6 +102,7 @@ function Home() {
 
   return (
     <Container maxWidth="xl">
+      <ClosableAlert message="This is an error alert — check it out!" />
       <Header />
       <Grid container spacing={2}>
         <Grid item xs={12}>
