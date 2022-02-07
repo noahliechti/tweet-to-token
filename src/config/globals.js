@@ -7,6 +7,12 @@ export const BASE_URL =
 
 export const FUNCTIONS_PREFIX = "/.netlify/functions";
 
+export const ALERT_CODES = {
+  UNSUP: 0,
+  NOTDEP: 1,
+  LOGOUT: 2,
+};
+
 export const cardsContent = [
   {
     title: "🎩 Celebrity who wants to connect with fans",

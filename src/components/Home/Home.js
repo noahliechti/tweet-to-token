@@ -9,10 +9,15 @@ import CustomerCard from "../CustomerCard/CustomerCard";
 import Steps from "../Steps/Steps";
 import About from "../About/About";
 import FAQ from "../Faq/FAQ";
-import ClosableAlert from "../ClosableAlert/ClosableAlert";
+import Alerts from "../Alerts/Alerts";
 import Milestones from "../Milestones/Milestones";
 
-import { cardsContent, BASE_URL, FUNCTIONS_PREFIX } from "../../config/globals";
+import {
+  cardsContent,
+  BASE_URL,
+  FUNCTIONS_PREFIX,
+  ALERT_CODES,
+} from "../../config/globals";
 import { injected } from "../../config/connectors";
 
 import tweetToken from "../../config/contracts/TweetToken.json";
@@ -23,7 +28,7 @@ function Home() {
 
   const [contract, setContract] = useState();
   const [twitterUser, setTwitterUser] = useState();
-  const [alertMessage, setAlertMessage] = useState();
+  const [alertMessages, setAlertMessages] = useState(new Set([]));
   const [signer, setSigner] = useState();
   const [deployer, setDeployer] = useState();
 
@@ -39,11 +44,16 @@ function Home() {
       if (error instanceof UnsupportedChainIdError) {
         // TODO: change network?
         // console.log(error.message);
-        setAlertMessage({
-          title: "Unsupported Network",
-          text: "Please switch to either Mainnet or Rinkeby.",
-        });
+        setAlertMessages(
+          (prevState) => new Set([...prevState, ALERT_CODES.UNSUP])
+        );
+        return;
       }
+      console.log("delete1");
+      setAlertMessages(
+        (prevState) =>
+          new Set([...prevState].filter((code) => code !== ALERT_CODES.UNSUP))
+      );
     });
   }, [activate, active, error]);
 
@@ -60,9 +70,10 @@ function Home() {
   }, [library]);
 
   useEffect(() => {
-    // const saleState = async () => {
-    // console.log("contract is active", await contract.saleIsActive());
-    // };
+    setAlertMessages(
+      (prevState) =>
+        new Set([...prevState].filter((code) => code !== ALERT_CODES.NOTDEP))
+    );
     if (chainId) {
       if (addressMap[chainId]) {
         const tweetTokenAddress = addressMap[chainId].TweetToken;
@@ -72,12 +83,12 @@ function Home() {
             tweetToken.abi,
             signer
           );
-          // saleState(TweetToken);
           setContract(TweetToken);
         }
       } else {
-        // console.err("Smart contract doesn't seem to deployed on this network");
-        // TODO: notification? or disable button?
+        setAlertMessages(
+          (prevState) => new Set([...prevState, ALERT_CODES.NOTDEP])
+        );
       }
     }
   }, [chainId, signer]);
@@ -107,7 +118,7 @@ function Home() {
 
   return (
     <Container maxWidth="xl">
-      {alertMessage && <ClosableAlert message={alertMessage} />}
+      {alertMessages.size && <Alerts activeAlerts={alertMessages} />}
       <Header />
       <Grid container spacing={2}>
         <Grid item xs={12}>
@@ -152,6 +163,7 @@ function Home() {
             contract={contract}
             signer={signer}
             deployer={deployer}
+            setAlertMessages={setAlertMessages}
           />
         </Grid>
         <Grid item xs={12}>

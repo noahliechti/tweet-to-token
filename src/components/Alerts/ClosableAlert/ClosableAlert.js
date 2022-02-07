@@ -1,14 +1,15 @@
 import React from "react";
 import { Slide, Alert, IconButton, Box, AlertTitle } from "@mui/material";
-import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg";
+import { ReactComponent as CloseIcon } from "../../../assets/icons/close.svg";
 
-function ClosableAlert({ message }) {
+function ClosableAlert({ severity, title, text }) {
   const [open, setOpen] = React.useState(true);
+
   return (
     <Box sx={{ position: "sticky", top: 16, zIndex: "snackbar" }}>
       <Slide direction="down" in={open} mountOnEnter unmountOnExit>
         <Alert
-          severity="error"
+          severity={severity}
           action={
             <IconButton
               aria-label="close"
@@ -26,8 +27,8 @@ function ClosableAlert({ message }) {
             mb: 2,
           }}
         >
-          <AlertTitle>{message.title}</AlertTitle>
-          {message.text}
+          {title && <AlertTitle>{title}</AlertTitle>}
+          {text}
         </Alert>
       </Slide>
     </Box>

@@ -21,7 +21,7 @@ import ImageCreation from "./ImageCreation/ImageCreation";
 import Minter from "./Minter/Minter";
 import ConditionalFormWrapper from "./ConditionalFormWrapper/ConditionalFormWrapper";
 
-import { BASE_URL, FUNCTIONS_PREFIX } from "../../config/globals";
+import { BASE_URL, FUNCTIONS_PREFIX, ALERT_CODES } from "../../config/globals";
 
 const tweetURLPattern =
   /^((?:http:\/\/)?|(?:https:\/\/)?)?(?:www\.)?twitter\.com\/(\w+)\/status\/(\d+)$/i;
@@ -34,7 +34,7 @@ const getTweetId = (tweetURL) => {
   return splitLastItem[0];
 };
 
-function Steps({ userId, contract, signer, deployer }) {
+function Steps({ userId, contract, signer, deployer, setAlertMessages }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [formIsSubmitting, setFormIsSubmitting] = React.useState(false);
   const [imageData, setImageData] = React.useState();
@@ -49,11 +49,14 @@ function Steps({ userId, contract, signer, deployer }) {
   const { active, account } = useWeb3React();
 
   useEffect(() => {
-    if (!account || !userId) {
+    if ((!account || !userId) && activeStep > 0) {
       setFormIsSubmitting(false);
       setActiveStep(() => 0);
+      setAlertMessages(
+        (prevState) => new Set([...prevState, ALERT_CODES.LOGOUT])
+      );
     }
-  }, [account, userId]);
+  }, [account, activeStep, setAlertMessages, userId]);
 
   const handleChange = (target) => {
     const { value } = target;
