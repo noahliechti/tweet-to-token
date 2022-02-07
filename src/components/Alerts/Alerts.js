@@ -5,19 +5,24 @@ import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg";
 
 const alertMessages = [
   {
-    severity: "error",
+    severity: "warning",
     title: "Unsupported Network",
     text: "Please switch to Mainnet or Rinkeby.",
   },
   {
     severity: "error",
-    title: "Contract is not deployed",
-    text: "The app has only limited functionality.",
+    title: "Smart Contract not found",
+    text: "Contract missing for this network.",
   },
   {
     severity: "warning",
     title: "Logout during session",
-    text: "Bla.",
+    text: "You must be logged while minting.",
+  },
+  {
+    severity: "warning",
+    title: "MetaMask not found",
+    text: "To continue you must install MetaMask.",
   },
 ];
 

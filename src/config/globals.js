@@ -11,6 +11,7 @@ export const ALERT_CODES = {
   UNSUP: 1,
   NOTDEP: 2,
   LOGOUT: 3,
+  NOMM: 4,
 };
 
 export const cardsContent = [

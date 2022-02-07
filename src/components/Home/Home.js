@@ -36,16 +36,20 @@ function Home() {
     injected.isAuthorized().then((isAuthorized) => {
       const connectedToMM = window.localStorage.getItem("ConnectedToMM");
 
-      if (isAuthorized && !active && !error && connectedToMM) {
-        activate(injected);
-        window.localStorage.setItem("ConnectedToMM", true);
-      } else if (!isAuthorized) {
-        window.localStorage.removeItem("ConnectedToMM");
-      }
+      if (!(window.ethereum && window.ethereum.isMetaMask)) {
+        setAlertMessage(ALERT_CODES.NOMM);
+      } else {
+        if (isAuthorized && !active && !error && connectedToMM) {
+          activate(injected);
+          window.localStorage.setItem("ConnectedToMM", true);
+        } else if (!isAuthorized) {
+          window.localStorage.removeItem("ConnectedToMM");
+        }
 
-      if (error instanceof UnsupportedChainIdError) {
-        // console.log(error.message);
-        setAlertMessage(ALERT_CODES.UNSUP);
+        if (error instanceof UnsupportedChainIdError) {
+          // console.log(error.message);
+          setAlertMessage(ALERT_CODES.UNSUP);
+        }
       }
     });
   }, [activate, active, error]);
