@@ -23,6 +23,8 @@ import ConditionalFormWrapper from "./ConditionalFormWrapper/ConditionalFormWrap
 
 import { BASE_URL, FUNCTIONS_PREFIX, ALERT_CODES } from "../../config/globals";
 
+import { ReactComponent as TwitterIcon } from "../../assets/icons/twitter.svg";
+
 const tweetURLPattern =
   /^((?:http:\/\/)?|(?:https:\/\/)?)?(?:www\.)?twitter\.com\/(\w+)\/status\/(\d+)$/i;
 
@@ -113,7 +115,6 @@ function Steps({ userId, contract, signer, deployer, setAlertMessage }) {
       })
       .then((data) => data.tokenURI)
       .catch((err) => {
-        // TODO: set error message
         setState({
           ...state,
           formErrorMessage: err.message,
@@ -132,33 +133,37 @@ function Steps({ userId, contract, signer, deployer, setAlertMessage }) {
       .connect(deployer)
       .addVerifiedTweet(account, tweetId, tokenURI);
     await tx.wait();
+    // TODO: snackbar
 
     // Mint Tweet
     tx = await contract.connect(signer).mintTweet(tweetId);
     await tx.wait();
+    // TODO: snackbar
 
     setFormIsSubmitting(false);
     handleNext();
   };
 
-  const preventDuplicatedTweets = async () => {
+  const isDuplicateTweet = async () => {
     const tweetId = ethers.BigNumber.from(getTweetId(state.tweetURL));
     if (await contract.tweetIdToTokenURI(tweetId)) {
       setState({
         ...state,
         formErrorMessage: "This Tweet was already minted!",
       });
-      setFormIsSubmitting(false); // TODO: only one setFormIsSubmitting(false) in this function
+      return true;
     }
+    return false;
   };
 
   const handleImageFetch = async () => {
-    // TODO: CACHE IMAGE, AND USE CACHED IMAGE
-
     setFormIsSubmitting(true);
     setImageData("");
 
-    await preventDuplicatedTweets();
+    if (await isDuplicateTweet()) {
+      setFormIsSubmitting(false);
+      return;
+    }
 
     fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/image`, {
       method: "POST",
@@ -245,7 +250,7 @@ function Steps({ userId, contract, signer, deployer, setAlertMessage }) {
   ];
 
   const nextBtnDisabled = [
-    !(active && userId), // TODO: pass as prop; only if valid network and contract exists
+    !(contract && active && userId), // TODO: pass as prop; only if valid network and contract exists
     !(state && state.language && state.theme),
     !!state.invalidTweetURLMessage || !state.tweetURL,
   ];
@@ -288,6 +293,9 @@ function Steps({ userId, contract, signer, deployer, setAlertMessage }) {
           </Typography>
           <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
             Create another NFT
+          </Button>
+          <Button endIcon={TwitterIcon} sx={{ mt: 1, mr: 1 }}>
+            share
           </Button>
         </Paper>
       )}
