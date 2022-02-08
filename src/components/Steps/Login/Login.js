@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useWeb3React } from "@web3-react/core";
 import { Box, Link, Button } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
+import { useWeb3React, UnsupportedChainIdError } from "@web3-react/core";
 
 import { injected } from "../../../config/connectors";
 import { BASE_URL, FUNCTIONS_PREFIX } from "../../../config/globals";
@@ -13,7 +13,8 @@ const beautifyAddress = (address) =>
 
 function Login({ twitterLoggedIn }) {
   const [loading, setLoading] = useState(false);
-  const { active, activate, deactivate, account } = useWeb3React();
+  const [walletButtonText, setWalletButtonText] = useState("connect");
+  const { active, activate, deactivate, account, error } = useWeb3React();
 
   const loginLinkToggle = twitterLoggedIn ? "/auth/logout" : "/auth/login";
 
@@ -24,11 +25,29 @@ function Login({ twitterLoggedIn }) {
     }
   }, []);
 
+  useEffect(() => {
+    if (error instanceof UnsupportedChainIdError) {
+      setWalletButtonText("switch network");
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (active) {
+      setWalletButtonText(beautifyAddress(account));
+    }
+  }, [account, active]);
+
   const handleClick = async (e) => {
     if (e.target.name === "wallet") {
       if (active) {
         deactivate();
         window.localStorage.removeItem("ConnectedToMM");
+      } else if (window.localStorage.getItem("ConnectedToMM")) {
+        // Currently on an unsupported network
+        window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: "0x1" }],
+        });
       } else {
         setLoading(true);
         window.localStorage.setItem("isConnecting", true);
@@ -48,7 +67,6 @@ function Login({ twitterLoggedIn }) {
         name="twitter"
         component={Link}
         href={`${BASE_URL}${FUNCTIONS_PREFIX}${loginLinkToggle}`}
-        // selected={twitterLoggedIn}
         onClick={handleClick}
         variant="contained"
         fullWidth
@@ -68,7 +86,7 @@ function Login({ twitterLoggedIn }) {
         endIcon={<WalletIcon />}
         sx={{ mt: 1 }}
       >
-        {active ? beautifyAddress(account) : "connect"}
+        {walletButtonText}
       </LoadingButton>
     </Box>
   );
