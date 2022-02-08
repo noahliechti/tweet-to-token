@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Slide, Alert, IconButton, AlertTitle } from "@mui/material";
 
 import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg";
@@ -29,6 +29,11 @@ const alertMessages = [
 function Alerts({ activeAlert }) {
   const [open, setOpen] = React.useState(true);
   const { severity, title, text } = alertMessages[activeAlert - 1];
+
+  // reopens alerts if activeAlert changes
+  useEffect(() => {
+    setOpen(true);
+  }, [activeAlert]);
 
   return (
     <Box sx={{ position: "sticky", top: 16, zIndex: "snackbar" }}>
