@@ -31,6 +31,7 @@ function Home() {
   const [alertMessage, setAlertMessage] = useState();
   const [signer, setSigner] = useState();
   const [deployer, setDeployer] = useState();
+  const [persistentChainId, setPersistentChainId] = useState();
 
   useEffect(() => {
     injected.isAuthorized().then((isAuthorized) => {
@@ -80,10 +81,12 @@ function Home() {
         }
       } else {
         // console.error("smart contract is not deployed on this network");
-        // setAlertMessage(ALERT_CODES.NOTDEP);
+        setAlertMessage(ALERT_CODES.NOTDEP);
+        setPersistentChainId(chainId);
+        setContract(null);
       }
     }
-  }, [chainId, signer]);
+  }, [alertMessage, chainId, signer]);
 
   useEffect(() => {
     fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/auth`, {
@@ -104,7 +107,8 @@ function Home() {
         setTwitterUser(user || null);
       })
       .catch(() => {
-        // console.error(err); // TODO: what do I show then?
+        // console.log("catch");
+        // console.error(err); // TODO: what do I show then? alert?
       });
   }, []);
 
@@ -114,7 +118,7 @@ function Home() {
         <Alerts
           activeAlert={alertMessage}
           setAlertMessage={setAlertMessage}
-          chainId={1}
+          persistentChainId={persistentChainId}
         />
       )}
       <Header />

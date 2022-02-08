@@ -14,6 +14,14 @@ export const ALERT_CODES = {
   NOTDEP: 4,
 };
 
+export const CHAIN_ID_MAPPING = {
+  1: "Mainnet",
+  3: "Ropsten Test Network",
+  4: "Rinkeby Test Network",
+  5: "Goerli Test Network",
+  42: "Kovan Test Network",
+};
+
 export const cardsContent = [
   {
     title: "🎩 Celebrity who wants to connect with fans",

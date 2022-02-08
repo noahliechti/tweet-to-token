@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 import { Box, Slide, Alert, IconButton, AlertTitle } from "@mui/material";
 
+import { CHAIN_ID_MAPPING } from "../../config/globals";
 import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg";
 
-function Alerts({ activeAlert, setAlertMessage }) {
+function Alerts({ activeAlert, setAlertMessage, persistentChainId }) {
   const [open, setOpen] = React.useState(true);
   const alertMessages = [
     {
@@ -21,11 +22,11 @@ function Alerts({ activeAlert, setAlertMessage }) {
       title: "MetaMask not found",
       text: "To continue you must install MetaMask.",
     },
-    // {
-    //   severity: "error",
-    //   title: "Smart Contract not found",
-    //   text: `Contract is missing for ${CHAIN_ID_MAPPING[chainId]}.`,
-    // },
+    {
+      severity: "error",
+      title: "Smart Contract not found",
+      text: `Contract is missing for ${CHAIN_ID_MAPPING[persistentChainId]}.`,
+    },
   ];
   const { severity, title, text } = alertMessages[activeAlert - 1];
 
