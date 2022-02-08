@@ -13,7 +13,7 @@ const beautifyAddress = (address) =>
 
 function Login({ twitterLoggedIn }) {
   const [loading, setLoading] = useState(false);
-  const [walletButtonText, setWalletButtonText] = useState("connect");
+  const [walletButtonText, setWalletButtonText] = useState();
   const { active, activate, deactivate, account, error } = useWeb3React();
 
   const loginLinkToggle = twitterLoggedIn ? "/auth/logout" : "/auth/login";
@@ -28,14 +28,12 @@ function Login({ twitterLoggedIn }) {
   useEffect(() => {
     if (error instanceof UnsupportedChainIdError) {
       setWalletButtonText("switch network");
-    }
-  }, [error]);
-
-  useEffect(() => {
-    if (active) {
+    } else if (active) {
       setWalletButtonText(beautifyAddress(account));
+    } else {
+      setWalletButtonText("connect");
     }
-  }, [account, active]);
+  }, [account, active, error]);
 
   const handleClick = async (e) => {
     if (e.target.name === "wallet") {
@@ -44,10 +42,22 @@ function Login({ twitterLoggedIn }) {
         window.localStorage.removeItem("ConnectedToMM");
       } else if (window.localStorage.getItem("ConnectedToMM")) {
         // Currently on an unsupported network
-        window.ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: "0x1" }],
-        });
+        setLoading(true);
+        window.localStorage.setItem("isConnecting", true);
+
+        window.ethereum
+          .request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: "0x1" }],
+          })
+          .then(() => {
+            window.localStorage.removeItem("isConnecting");
+            setLoading(false);
+          })
+          .catch(() => {
+            window.localStorage.removeItem("isConnecting");
+            setLoading(false);
+          });
       } else {
         setLoading(true);
         window.localStorage.setItem("isConnecting", true);
