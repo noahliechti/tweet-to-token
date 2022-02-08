@@ -9,9 +9,9 @@ export const FUNCTIONS_PREFIX = "/.netlify/functions";
 
 export const ALERT_CODES = {
   UNSUP: 1,
-  NOTDEP: 2,
-  LOGOUT: 3,
-  NOMM: 4,
+  LOGOUT: 2,
+  NOMM: 3,
+  NOTDEP: 4,
 };
 
 export const CHAIN_ID_MAPPING = {

@@ -1,24 +1,16 @@
 import React, { useEffect } from "react";
 import { Box, Slide, Alert, IconButton, AlertTitle } from "@mui/material";
-import { useWeb3React } from "@web3-react/core";
 import { CHAIN_ID_MAPPING } from "../../config/globals";
 
 import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg";
 
 function Alerts({ activeAlert, setAlertMessage }) {
-  const { chainId } = useWeb3React();
-
   const [open, setOpen] = React.useState(true);
   const alertMessages = [
     {
       severity: "warning",
       title: "Unsupported Network",
       text: "Please switch to Mainnet or Rinkeby.",
-    },
-    {
-      severity: "error",
-      title: "Smart Contract not found",
-      text: `Contract is missing for ${CHAIN_ID_MAPPING[chainId]}.`,
     },
     {
       severity: "warning",
@@ -30,6 +22,11 @@ function Alerts({ activeAlert, setAlertMessage }) {
       title: "MetaMask not found",
       text: "To continue you must install MetaMask.",
     },
+    // {
+    //   severity: "error",
+    //   title: "Smart Contract not found",
+    //   text: `Contract is missing for ${CHAIN_ID_MAPPING[chainId]}.`,
+    // },
   ];
   const { severity, title, text } = alertMessages[activeAlert - 1];
 

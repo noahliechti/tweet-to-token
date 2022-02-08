@@ -79,7 +79,8 @@ function Home() {
           setContract(TweetToken);
         }
       } else {
-        setAlertMessage(ALERT_CODES.NOTDEP);
+        // console.error("smart contract is not deployed on this network");
+        // setAlertMessage(ALERT_CODES.NOTDEP);
       }
     }
   }, [chainId, signer]);
@@ -110,7 +111,11 @@ function Home() {
   return (
     <Container maxWidth="xl">
       {alertMessage && (
-        <Alerts activeAlert={alertMessage} setAlertMessage={setAlertMessage} />
+        <Alerts
+          activeAlert={alertMessage}
+          setAlertMessage={setAlertMessage}
+          chainId={1}
+        />
       )}
       <Header />
       <Grid container spacing={2}>
