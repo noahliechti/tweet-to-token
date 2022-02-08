@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Box, Slide, Alert, IconButton, AlertTitle } from "@mui/material";
-import { CHAIN_ID_MAPPING } from "../../config/globals";
 
 import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg";
 
