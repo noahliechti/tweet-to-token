@@ -1,33 +1,36 @@
 import React, { useEffect } from "react";
 import { Box, Slide, Alert, IconButton, AlertTitle } from "@mui/material";
+import { useWeb3React } from "@web3-react/core";
+import { CHAIN_ID_MAPPING } from "../../config/globals";
 
 import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg";
 
-const alertMessages = [
-  {
-    severity: "warning",
-    title: "Unsupported Network",
-    text: "Please switch to Mainnet or Rinkeby.",
-  },
-  {
-    severity: "error",
-    title: "Smart Contract not found",
-    text: "Contract missing for this network.",
-  },
-  {
-    severity: "warning",
-    title: "Logout during session",
-    text: "You must be logged while minting.",
-  },
-  {
-    severity: "warning",
-    title: "MetaMask not found",
-    text: "To continue you must install MetaMask.",
-  },
-];
+function Alerts({ activeAlert, setAlertMessage }) {
+  const { chainId } = useWeb3React();
 
-function Alerts({ activeAlert }) {
   const [open, setOpen] = React.useState(true);
+  const alertMessages = [
+    {
+      severity: "warning",
+      title: "Unsupported Network",
+      text: "Please switch to Mainnet or Rinkeby.",
+    },
+    {
+      severity: "error",
+      title: "Smart Contract not found",
+      text: `Contract is missing for ${CHAIN_ID_MAPPING[chainId]}.`,
+    },
+    {
+      severity: "warning",
+      title: "Logout during session",
+      text: "You must be logged while minting.",
+    },
+    {
+      severity: "warning",
+      title: "MetaMask not found",
+      text: "To continue you must install MetaMask.",
+    },
+  ];
   const { severity, title, text } = alertMessages[activeAlert - 1];
 
   // reopens alerts if activeAlert changes
@@ -47,6 +50,7 @@ function Alerts({ activeAlert }) {
               size="small"
               onClick={() => {
                 setOpen(false);
+                setAlertMessage(null); // reopens alert if same error happens
               }}
             >
               <CloseIcon fontSize="inherit" />

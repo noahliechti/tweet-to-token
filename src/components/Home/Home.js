@@ -78,7 +78,6 @@ function Home() {
           );
           setContract(TweetToken);
         }
-        setAlertMessage(null);
       } else {
         setAlertMessage(ALERT_CODES.NOTDEP);
       }
@@ -110,7 +109,9 @@ function Home() {
 
   return (
     <Container maxWidth="xl">
-      {alertMessage && <Alerts activeAlert={alertMessage} />}
+      {alertMessage && (
+        <Alerts activeAlert={alertMessage} setAlertMessage={setAlertMessage} />
+      )}
       <Header />
       <Grid container spacing={2}>
         <Grid item xs={12}>
