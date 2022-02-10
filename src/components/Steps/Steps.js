@@ -313,11 +313,24 @@ function Steps({
             Congratulations! When you see the confirmation, the NFT was
             successfully created
           </Typography>
-          <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
+          <Button
+            variant="contained"
+            onClick={handleReset}
+            sx={{ mt: 1, mr: 1 }}
+          >
             Create another NFT
           </Button>
-          <Button endIcon={<TwitterIcon />} sx={{ mt: 1, mr: 1 }}>
-            share
+          <Button
+            variant="contained"
+            endIcon={<TwitterIcon />}
+            sx={{ mt: 1, mr: 1 }}
+            href={`http://twitter.com/intent/tweet?text=I%20just%20minted%20my%20Tweet%20with%20%0A%40tweettokenio%0A.%20Have%20a%20look%21%0A&url=https%3A%2F%2Ftestnets.opensea.io%2Fassets%2F0x0a6c40aec8f7e26c857b45dfe5d33471c4a8beb0%2F${getTweetId(
+              state.tweetURL
+            )}`}
+            target="_blank"
+            rel="noopener"
+          >
+            share your work
           </Button>
         </Paper>
       )}
