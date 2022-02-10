@@ -14,15 +14,8 @@ exports.handler = async (event) => {
   let metadata;
 
   try {
-    const isValid = await checkTweetURL(tweetURL, userId);
-    if (!isValid) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({
-          error: "This Tweet doesn't belong to the specified user!",
-        }),
-      };
-    }
+    await checkTweetURL(tweetURL, userId);
+
     tweetClone = await createScreenshot({
       width: TWEET_WIDTH,
       theme: theme,

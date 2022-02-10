@@ -106,7 +106,7 @@ exports.getMetadata = async (tweetURL, theme) => {
       .then((res) => {
         // TODO: check for res.statusCode === 200?
         if (res.errors) {
-          reject(new Error(res.errors[0].detail));
+          throw new Error(res.errors[0].detail);
         } else {
           const { username } = res.includes.users[0];
           const attributes = getAttributes(res, theme);
@@ -135,16 +135,19 @@ exports.createScreenshot = async ({
   tweetURL,
 }) => {
   const tweetId = getTweetId(tweetURL);
+
   try {
     const browser = await puppeteer.launch({
-      args: chromium.args,
+      // args: chromium.args, // https://github.com/alixaxel/chrome-aws-lambda/blob/master/source/index.ts
+      // --use-gl=swiftshader -> Throws Navigation failed because browser has disconnected!
       executablePath: CHROME_EXECUTABLE_PATH || (await chromium.executablePath),
       headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
     const page = await browser.newPage();
     await page.goto(
-      `https://platform.twitter.com/embed/index.html?dnt=true&embedId=twitter-widget-0&frame=false&hideCard=${hideCard}&hideThread=${hideThread}&id=${tweetId}&language=${language}&theme=${theme}&widgetsVersion=ed20a2b%3A1601588405575`,
+      `https://platform.twitter.com/embed/index.html?dnt=true&embedId=twitter-widget-0&frame=false&hideCard=${hideCard}&hideThread=${hideThread}&id=${tweetId}&lang=${language}&theme=${theme}&widgetsVersion=ed20a2b%3A1601588405575`,
       { waitUntil: "networkidle0" }
     );
 
@@ -208,7 +211,13 @@ exports.checkTweetURL = (tweetURL, twitterUserId) => {
         } else {
           // Users should only be able to mint their own tweets
           if (twitterUserId === res.data.author_id) {
-            resolve(tweetAuthorName === res.includes.users[0].username);
+            if (tweetAuthorName === res.includes.users[0].username) {
+              resolve();
+            } else {
+              throw new Error(
+                "This Tweet doesn't belong to the specified user!"
+              );
+            }
           }
           throw new Error("You are not the author of this tweet!");
         }
