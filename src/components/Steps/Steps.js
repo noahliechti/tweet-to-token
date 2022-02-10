@@ -20,6 +20,7 @@ import Config from "./Config/Config";
 import ImageCreation from "./ImageCreation/ImageCreation";
 import Minter from "./Minter/Minter";
 import ConditionalFormWrapper from "./ConditionalFormWrapper/ConditionalFormWrapper";
+import MintMessage from "./MintMessage/MintMessage";
 
 import { BASE_URL, FUNCTIONS_PREFIX, ALERT_CODES } from "../../config/globals";
 
@@ -36,7 +37,14 @@ const getTweetId = (tweetURL) => {
   return splitLastItem[0];
 };
 
-function Steps({ userId, contract, signer, deployer, setAlertMessage }) {
+function Steps({
+  userId,
+  contract,
+  signer,
+  deployer,
+  setAlertMessage,
+  setSnackPack,
+}) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [formIsSubmitting, setFormIsSubmitting] = React.useState(false);
   const [imageData, setImageData] = React.useState();
@@ -48,7 +56,7 @@ function Steps({ userId, contract, signer, deployer, setAlertMessage }) {
     invalidTweetURLMessage: "",
     formErrorMessage: "",
   });
-  const { active, account } = useWeb3React();
+  const { active, account, chainId } = useWeb3React();
 
   useEffect(() => {
     if ((!account || !userId) && activeStep > 0) {
@@ -122,9 +130,20 @@ function Steps({ userId, contract, signer, deployer, setAlertMessage }) {
         setFormIsSubmitting(false);
       });
 
+  const showTemporaryMessage = (message) => {
+    setSnackPack((prev) => [
+      ...prev,
+      {
+        message: message,
+        key: new Date().getTime(),
+      },
+    ]);
+  };
+
   const handleMint = async () => {
     setFormIsSubmitting(true);
 
+    showTemporaryMessage("Uploading Tweet and Metadata to IPFS...");
     const tokenURI = await getTokenURI();
     const tweetId = ethers.BigNumber.from(getTweetId(state.tweetURL));
 
@@ -133,18 +152,21 @@ function Steps({ userId, contract, signer, deployer, setAlertMessage }) {
       .connect(deployer)
       .addVerifiedTweet(account, tweetId, tokenURI);
     await tx.wait();
-    // TODO: snackbar
+
+    showTemporaryMessage("Upload successful! Minting has started...");
 
     // Mint Tweet
     tx = await contract.connect(signer).mintTweet(tweetId);
     await tx.wait();
-    // TODO: snackbar
+
+    showTemporaryMessage(<MintMessage tx={tx} chainId={chainId} />); // TODO: what if someone changes chain?
 
     setFormIsSubmitting(false);
     handleNext();
   };
 
   const isDuplicateTweet = async () => {
+    // TODO: different check
     const tweetId = ethers.BigNumber.from(getTweetId(state.tweetURL));
     if (await contract.tweetIdToTokenURI(tweetId)) {
       setState({
@@ -200,14 +222,14 @@ function Steps({ userId, contract, signer, deployer, setAlertMessage }) {
 
   const steps = [
     {
-      label: "Establish Connection",
+      label: "Connect",
       content: <Login twitterLoggedIn={!!userId} />,
       nextBtnText: "Continue",
       handleNext: handleNext,
     },
 
     {
-      label: "Choose Tweet Style",
+      label: "Choose Style",
       content: (
         <Config
           handleChange={handleChange}
@@ -241,10 +263,10 @@ function Steps({ userId, contract, signer, deployer, setAlertMessage }) {
       handleNext: handleImageFetch,
     },
     {
-      label: "Mint Tweet-NFT",
+      label: "Mint Tweet",
       isForm: true,
       content: <Minter imageData={imageData} />,
-      nextBtnText: "Mint NFT",
+      nextBtnText: "Mint",
       handleNext: handleMint,
     },
   ];
@@ -265,7 +287,7 @@ function Steps({ userId, contract, signer, deployer, setAlertMessage }) {
                 {step.label}
               </Typography>
             </StepLabel>
-            <StepContent>
+            <StepContent sx={{ pr: 3 }}>
               <ConditionalFormWrapper
                 condition={step.isForm}
                 error={state.formErrorMessage}
@@ -294,7 +316,7 @@ function Steps({ userId, contract, signer, deployer, setAlertMessage }) {
           <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
             Create another NFT
           </Button>
-          <Button endIcon={TwitterIcon} sx={{ mt: 1, mr: 1 }}>
+          <Button endIcon={<TwitterIcon />} sx={{ mt: 1, mr: 1 }}>
             share
           </Button>
         </Paper>

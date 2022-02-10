@@ -23,6 +23,8 @@ import { injected } from "../../config/connectors";
 import tweetToken from "../../config/contracts/TweetToken.json";
 import addressMap from "../../config/contracts/map.json";
 
+import Snacks from "../Snacks/Snacks";
+
 function Home() {
   const { active, activate, chainId, library, error } = useWeb3React();
 
@@ -32,6 +34,7 @@ function Home() {
   const [signer, setSigner] = useState();
   const [deployer, setDeployer] = useState();
   const [persistentChainId, setPersistentChainId] = useState();
+  const [snackPack, setSnackPack] = React.useState([]);
 
   useEffect(() => {
     injected.isAuthorized().then((isAuthorized) => {
@@ -48,7 +51,6 @@ function Home() {
         }
 
         if (error instanceof UnsupportedChainIdError) {
-          // console.log(error.message);
           setAlertMessage(ALERT_CODES.UNSUP);
         }
       }
@@ -121,6 +123,7 @@ function Home() {
           persistentChainId={persistentChainId}
         />
       )}
+      <Snacks snackPack={snackPack} setSnackPack={setSnackPack} />
       <Header />
       <Grid container spacing={2}>
         <Grid item xs={12}>
@@ -166,6 +169,7 @@ function Home() {
             signer={signer}
             deployer={deployer}
             setAlertMessage={setAlertMessage}
+            setSnackPack={setSnackPack}
           />
         </Grid>
         <Grid item xs={12}>

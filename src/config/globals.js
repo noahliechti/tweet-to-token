@@ -22,6 +22,24 @@ export const CHAIN_ID_MAPPING = {
   42: "Kovan Test Network",
 };
 
+export const ETHERSCAN_URL = (chainId, type, address) => {
+  let link = "";
+  switch (chainId) {
+    case 1:
+      link = "https://etherscan.io/";
+      break;
+    case 4:
+      link = "https://rinkeby.etherscan.io/";
+      break;
+    case 1337:
+      // TODO:
+      break;
+    default:
+      break;
+  }
+  return `${link}/${type}/${address}`;
+};
+
 export const cardsContent = [
   {
     title: "🎩 Celebrity who wants to connect with fans",
