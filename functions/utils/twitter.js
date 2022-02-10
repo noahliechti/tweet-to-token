@@ -28,7 +28,7 @@ const getMonthString = (utcDate) => {
   );
 };
 
-const getAttributes = ({ data, includes }, theme) => [
+const getAttributes = ({ data, includes }, theme, language) => [
   {
     trait_type: "attachments", // e.g 2
     value:
@@ -45,11 +45,11 @@ const getAttributes = ({ data, includes }, theme) => [
   },
   {
     trait_type: "language", // e.g "en"
-    value: data.lang,
+    value: language,
   },
   {
     trait_type: "year", // e.g 2022
-    value: new Date(data.created_at).getUTCFullYear(),
+    value: `${new Date(data.created_at).getUTCFullYear()}`,
   },
   {
     trait_type: "month", // e.g "august"
@@ -93,7 +93,7 @@ const getAttributes = ({ data, includes }, theme) => [
   },
 ];
 
-exports.getMetadata = async (tweetURL, theme) => {
+exports.getMetadata = async (tweetURL, theme, language) => {
   const tweetId = getTweetId(tweetURL);
   const api = `https://api.twitter.com/2/tweets/${tweetId}?tweet.fields=attachments,created_at,lang,text,public_metrics&user.fields=verified&expansions=author_id`;
   const headers = {
@@ -109,7 +109,7 @@ exports.getMetadata = async (tweetURL, theme) => {
           throw new Error(res.errors[0].detail);
         } else {
           const { username } = res.includes.users[0];
-          const attributes = getAttributes(res, theme);
+          const attributes = getAttributes(res, theme, language);
 
           const metadata = {
             name: `@${username} #${tweetId}`,

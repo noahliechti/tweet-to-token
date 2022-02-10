@@ -26,7 +26,7 @@ exports.handler = async (event) => {
       language: language,
     });
 
-    metadata = await getMetadata(tweetURL, theme);
+    metadata = await getMetadata(tweetURL, theme, language);
   } catch (err) {
     return {
       statusCode: 400,
