@@ -25,6 +25,7 @@ import MintMessage from "./MintMessage/MintMessage";
 import { BASE_URL, FUNCTIONS_PREFIX, ALERT_CODES } from "../../config/globals";
 
 import { ReactComponent as TwitterIcon } from "../../assets/icons/twitter.svg";
+import { ReactComponent as OSIcon } from "../../assets/icons/opensea.svg";
 
 const tweetURLPattern =
   /^((?:http:\/\/)?|(?:https:\/\/)?)?(?:www\.)?twitter\.com\/(\w+)\/status\/(\d+)$/i;
@@ -310,27 +311,39 @@ function Steps({
       {activeStep === steps.length && (
         <Paper square elevation={0} sx={{ p: 3 }}>
           <Typography>
-            Congratulations! When you see the confirmation, the NFT was
-            successfully created
+            Congratulations! You successfully minted your NFT. Make sure to
+            share you creation with your Twitter community.
           </Typography>
           <Button
             variant="contained"
-            onClick={handleReset}
-            sx={{ mt: 1, mr: 1 }}
-          >
-            Create another NFT
-          </Button>
-          <Button
-            variant="contained"
             endIcon={<TwitterIcon />}
-            sx={{ mt: 1, mr: 1 }}
+            sx={{ mt: 1, mr: 1, width: 1 }}
             href={`http://twitter.com/intent/tweet?text=I%20just%20minted%20my%20Tweet%20with%20%0A%40tweettokenio%0A.%20Have%20a%20look%21%0A&url=https%3A%2F%2Ftestnets.opensea.io%2Fassets%2F0x0a6c40aec8f7e26c857b45dfe5d33471c4a8beb0%2F${getTweetId(
               state.tweetURL
             )}`}
             target="_blank"
             rel="noopener"
           >
-            share your work
+            share nft
+          </Button>
+          <Button
+            variant="outlined"
+            endIcon={<OSIcon />}
+            sx={{ mt: 1, mr: 1, width: 1 }}
+            href={`https://testnets.opensea.io/assets/${
+              contract.address
+            }/${getTweetId(state.tweetURL)}`}
+            target="_blank"
+            rel="noopener"
+          >
+            view nft
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleReset}
+            sx={{ mt: 1, mr: 1, width: 1 }}
+          >
+            create another
           </Button>
         </Paper>
       )}
