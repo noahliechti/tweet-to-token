@@ -8,11 +8,12 @@ import {
   Typography,
   ToggleButton,
 } from "@mui/material";
+import { HashLink } from "react-router-hash-link";
 
 import { ReactComponent as LogoIcon } from "../../assets/icons/logo.svg";
 import { ReactComponent as MenuIcon } from "../../assets/icons/menu.svg";
 
-const pages = ["About", "Milestones", "FAQ"];
+const pages = ["about", "faq", "milestones"];
 
 function Header() {
   // const [isOpen, setIsOpen] = React.useState(false);
@@ -68,13 +69,20 @@ function Header() {
           }}
         >
           {pages.map((page) => (
-            <Button key={page} variant="text" color="inherit">
+            <Button
+              key={page}
+              variant="text"
+              to={`#${page}`}
+              component={HashLink}
+              smooth
+              color="inherit"
+            >
               <Typography variant="h2" sx={{ m: 0 }}>
                 {page}
               </Typography>
             </Button>
           ))}
-          <Button variant="contained" size="large">
+          <Button to="#steps" component={HashLink} smooth variant="contained">
             create
           </Button>
         </Box>
