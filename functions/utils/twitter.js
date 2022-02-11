@@ -48,7 +48,7 @@ const getAttributes = ({ data, includes }, theme, language) => [
     value: language,
   },
   {
-    trait_type: "year", // e.g 2022
+    trait_type: "year", // e.g "2022"
     value: `${new Date(data.created_at).getUTCFullYear()}`,
   },
   {

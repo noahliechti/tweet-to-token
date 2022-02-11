@@ -115,7 +115,7 @@ function Home() {
   }, []);
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="lg">
       {alertMessage && (
         <Alerts
           activeAlert={alertMessage}
@@ -127,14 +127,20 @@ function Home() {
       <Header />
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Typography variant="h1">
-            Create NFTs from your Tweets and sell them on Ethereum!
+          <Typography
+            variant="h1"
+            sx={{
+              background:
+                "linear-gradient(130deg, rgba(56, 73, 221, 1) 0%, rgba(0, 210, 198, 0.7) 100%);background-clip: text;text-fill-color: transparent;",
+            }}
+          >
+            Turn your Tweets in to NFTs!
           </Typography>
         </Grid>
         <Grid item xs={12}>
           <Typography variant="subtitle1">
-            Connect to your wallet, your Twitter and start minting your Tweets
-            with one click!
+            Our high quality images are automatically enhanced with metadata and
+            will make your NFTs stand out.
           </Typography>
         </Grid>
         <Grid item xs={6}>
@@ -144,7 +150,7 @@ function Home() {
             component={HashLink}
             to="#steps"
             smooth
-            sx={{ width: 1, height: 40 }}
+            sx={{ width: 1 }}
           >
             Let's go!
           </Button>

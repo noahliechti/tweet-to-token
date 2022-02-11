@@ -1,5 +1,4 @@
 import { createTheme } from "@mui/material";
-// import { grey } from "@mui/material/colors";
 
 const theme = createTheme({
   typography: {
@@ -9,7 +8,11 @@ const theme = createTheme({
       "BlinkMacSystemFont",
       "-apple-system",
     ].join(","),
-    h1: 40,
+    h1: {
+      fontSize: 73,
+      fontWeight: "bold",
+      lineHeight: "122.19%",
+    },
     h2: {
       fontSize: 24,
       textAlign: "center",
@@ -23,23 +26,43 @@ const theme = createTheme({
       fontSize: 21,
       fontWeight: "bold",
     },
+    subtitle1: {
+      fontWeight: 200,
+      lineHeight: "130%",
+      letterSpacing: "0.045em",
+    },
     body1: {
       fontSize: 18,
     },
-    // fontSize: 5,
-    // subtitle1: {
-    //   fontSize: 15,
-    // },
-    button: {
-      fontSize: 24,
+  },
+  palette: {
+    primary: {
+      main: "#3849DD",
     },
   },
+  shape: {
+    borderRadius: 8,
+  },
   components: {
+    MuiButton: {
+      styleOverrides: {
+        sizeMedium: {
+          fontSize: 24,
+        },
+        sizeLarge: {
+          fontSize: 27,
+        },
+      },
+      // defaultProps: {
+      //   // The props to change the default for.
+      //   disableRipple: true, // No more ripple!
+      // },
+    },
     MuiCssBaseline: {
       styleOverrides: {
         body: {
           backgroundColor: "rgba(255, 255, 255, 0.932)",
-          color: "rgba(0, 0, 0, 0.87)",
+          color: "rgba(0, 0, 0, 0.87)", // TODO: make color of palette
           paddingTop: 16,
         },
         code: {
