@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { HashLink } from "react-router-hash-link";
-import { Typography, Button, Grid, Container } from "@mui/material";
+import { Typography, Button, Grid, Container, Box } from "@mui/material";
 import { useWeb3React, UnsupportedChainIdError } from "@web3-react/core";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
@@ -22,6 +22,8 @@ import { injected } from "../../config/connectors";
 
 import tweetToken from "../../config/contracts/TweetToken.json";
 import addressMap from "../../config/contracts/map.json";
+
+import { ReactComponent as BallonGraphic } from "../../assets/graphics/ballon_woman.svg";
 
 import Snacks from "../Snacks/Snacks";
 
@@ -126,34 +128,54 @@ function Home() {
       <Snacks snackPack={snackPack} setSnackPack={setSnackPack} />
       <Header />
       <Grid container spacing={2}>
-        <Grid item xs={12}>
+        <Grid item xs={12} md={6}>
           <Typography
             variant="h1"
             sx={{
+              maxWidth: { md: 430, lg: 600 },
               background:
                 "linear-gradient(130deg, rgba(56, 73, 221, 1) 0%, rgba(0, 210, 198, 0.7) 100%);background-clip: text;text-fill-color: transparent;",
             }}
           >
             Turn your Tweets in to NFTs!
           </Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="subtitle1">
+          <Typography
+            variant="subtitle1"
+            sx={{ maxWidth: { md: 430, lg: 600 } }}
+          >
             Our high quality images are automatically enhanced with metadata and
             will make your NFTs stand out.
           </Typography>
-        </Grid>
-        <Grid item xs={6}>
           <Button
             variant="contained"
             color="primary"
             component={HashLink}
             to="#steps"
             smooth
-            sx={{ width: 1 }}
+            sx={{ width: { xs: 1, sm: "50%" } }}
           >
             Let's go!
           </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            component={HashLink}
+            to="#steps"
+            smooth
+            sx={{ width: { xs: 1, sm: "50%" } }}
+          >
+            How?
+          </Button>
+        </Grid>
+        <Grid
+          item
+          md={6}
+          sx={{ display: { xs: "none", md: "block" } }}
+          className="bla"
+        >
+          <Box color="primary" sx={{ ml: 6 }}>
+            <BallonGraphic />
+          </Box>
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h2">Who is this for?</Typography>
@@ -178,15 +200,15 @@ function Home() {
             setSnackPack={setSnackPack}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid id="about" item xs={12}>
           <Typography variant="h2">About TTT</Typography>
           <About />
         </Grid>
-        <Grid item xs={12}>
+        <Grid id="faq" item xs={12}>
           <Typography variant="h2">FAQ</Typography>
           <FAQ />
         </Grid>
-        <Grid item xs={12}>
+        <Grid id="milestones" item xs={12}>
           <Typography variant="h2">Milestones</Typography>
           <Milestones />
         </Grid>

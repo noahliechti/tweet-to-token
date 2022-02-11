@@ -18,11 +18,12 @@ function Footer() {
         <IconButton
           size="large"
           aria-label="scroll to top"
-          sx={{ width: 40, height: 40, p: 0 }}
+          sx={{ width: 40, height: 40, p: 0, borderRadius: 1 }}
           href="/"
           onClick={scrollToTop}
+          color="inherit"
         >
-          <LogoIcon color="black" />
+          <LogoIcon />
         </IconButton>
         <Typography variant="body2">
           Copyright &copy; {new Date().getFullYear()} tweettoken.io
