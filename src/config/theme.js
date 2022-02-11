@@ -1,6 +1,6 @@
 import { createTheme } from "@mui/material";
 
-const theme = createTheme({
+const basicTheme = createTheme({
   typography: {
     fontFamily: [
       "Roboto",
@@ -9,7 +9,6 @@ const theme = createTheme({
       "-apple-system",
     ].join(","),
     h1: {
-      fontSize: 73,
       fontWeight: "bold",
       lineHeight: "122.19%",
     },
@@ -39,6 +38,9 @@ const theme = createTheme({
     primary: {
       main: "#3849DD",
     },
+    secondary: {
+      main: "#00D2C6",
+    },
   },
   shape: {
     borderRadius: 8,
@@ -53,10 +55,6 @@ const theme = createTheme({
           fontSize: 27,
         },
       },
-      // defaultProps: {
-      //   // The props to change the default for.
-      //   disableRipple: true, // No more ripple!
-      // },
     },
     MuiCssBaseline: {
       styleOverrides: {
@@ -72,6 +70,25 @@ const theme = createTheme({
           backgroundColor: "rgba(0, 0, 0, 0.08)",
           borderRadius: 8,
         },
+      },
+    },
+  },
+});
+
+const theme = createTheme(basicTheme, {
+  typography: {
+    h1: {
+      [basicTheme.breakpoints.only("xs")]: {
+        fontSize: 53,
+      },
+      [basicTheme.breakpoints.only("sm")]: {
+        fontSize: 91,
+      },
+      [basicTheme.breakpoints.only("md")]: {
+        fontSize: 53,
+      },
+      [basicTheme.breakpoints.up("lg")]: {
+        fontSize: 71,
       },
     },
   },
