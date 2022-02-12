@@ -103,30 +103,36 @@ function Header() {
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
-            gap: 1,
+            gap: { sx: 1, sm: 3 },
           }}
         >
           <IconButton
             size="large"
             aria-label="twitter"
-            href="/"
+            href="https://twitter.com/tweettokenio"
             color="inherit"
+            target="_blank"
+            rel="noopener"
           >
             <TwitterIcon width="24px" height="24px" />
           </IconButton>
           <IconButton
             size="large"
-            aria-label="twitter"
-            href="/"
+            aria-label="opensea"
+            href="/" // TODO: add link
             color="inherit"
+            target="_blank"
+            rel="noopener"
           >
             <OSIcon width="24px" height="24px" />
           </IconButton>
           <IconButton
             size="large"
-            aria-label="twitter"
-            href="/"
+            aria-label="github"
+            href="https://github.com/noahliechti/tweet-to-token"
             color="inherit"
+            target="_blank"
+            rel="noopener"
           >
             <CodeIcon width="24px" height="24px" />
           </IconButton>
@@ -136,7 +142,8 @@ function Header() {
             display: "flex",
             gap: 2,
             p: 2,
-            flexDirection: "column",
+            flexDirection: { xs: "column", sm: "row" },
+            flexWrap: "wrap",
           }}
         >
           {pages.map((page) => (
@@ -148,13 +155,23 @@ function Header() {
               smooth
               color="inherit"
               onClick={toggleMenu}
+              sx={{
+                flexBasis: { xs: "auto", sm: "40%" },
+                flexGrow: 1,
+              }}
             >
               <Typography variant="h2" sx={{ m: 0 }}>
                 {page}
               </Typography>
             </Button>
           ))}
-          <Button to="#steps" component={HashLink} smooth variant="contained">
+          <Button
+            to="#steps"
+            component={HashLink}
+            smooth
+            variant="contained"
+            sx={{ width: "100%" }}
+          >
             mint tweet
           </Button>
         </Box>

@@ -75,6 +75,7 @@ function Login({ twitterLoggedIn }) {
       <Button
         value="1"
         name="twitter"
+        aria-label="login with twitter"
         component={Link}
         href={`${BASE_URL}${FUNCTIONS_PREFIX}${loginLinkToggle}`}
         onClick={handleClick}
@@ -88,6 +89,7 @@ function Login({ twitterLoggedIn }) {
       <LoadingButton
         loading={loading}
         loadingIndicator="connecting..."
+        aria-label="connect to metamask"
         value="1"
         name="wallet"
         variant="contained"
