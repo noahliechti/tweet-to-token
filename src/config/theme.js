@@ -62,6 +62,7 @@ const basicTheme = createTheme({
           backgroundColor: "rgba(255, 255, 255, 0.932)",
           color: "rgba(0, 0, 0, 0.87)", // TODO: make color of palette
           paddingTop: 16,
+          minWidth: 320,
         },
         code: {
           padding: ".2em .4em",

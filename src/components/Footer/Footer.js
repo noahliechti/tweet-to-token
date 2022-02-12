@@ -25,7 +25,7 @@ function Footer() {
         >
           <LogoIcon />
         </IconButton>
-        <Typography variant="body2">
+        <Typography variant="body2" sx={{ maxWidth: "120px" }}>
           Copyright &copy; {new Date().getFullYear()} tweettoken.io
         </Typography>
       </Toolbar>

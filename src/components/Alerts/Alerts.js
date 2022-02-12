@@ -50,7 +50,7 @@ function Alerts({ activeAlert, setAlertMessage, persistentChainId }) {
                 setAlertMessage(null); // reopens alert if same error happens
               }}
             >
-              <CloseIcon fontSize="inherit" />
+              <CloseIcon fontSize="inherit" width="24px" height="24px" />
             </IconButton>
           }
           sx={{
