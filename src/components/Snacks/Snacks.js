@@ -44,7 +44,7 @@ function Snacks({ snackPack, setSnackPack }) {
           sx={{ p: 0.5 }}
           onClick={handleClose}
         >
-          <CloseIcon />
+          <CloseIcon width="24px" height="24px" />
         </IconButton>
       }
     />

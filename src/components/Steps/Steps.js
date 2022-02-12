@@ -316,7 +316,7 @@ function Steps({
           </Typography>
           <Button
             variant="contained"
-            endIcon={<TwitterIcon />}
+            endIcon={<TwitterIcon width="24px" height="24px" />}
             sx={{ mt: 1, mr: 1, width: 1 }}
             href={`http://twitter.com/intent/tweet?text=I%20just%20minted%20my%20Tweet%20with%20%0A%40tweettokenio%0A.%20Have%20a%20look%21%0A&url=https%3A%2F%2Ftestnets.opensea.io%2Fassets%2F0x0a6c40aec8f7e26c857b45dfe5d33471c4a8beb0%2F${getTweetId(
               state.tweetURL
@@ -328,7 +328,7 @@ function Steps({
           </Button>
           <Button
             variant="outlined"
-            endIcon={<OSIcon />}
+            endIcon={<OSIcon width="24px" height="24px" />}
             sx={{ mt: 1, mr: 1, width: 1 }}
             href={`https://testnets.opensea.io/assets/${
               contract.address
