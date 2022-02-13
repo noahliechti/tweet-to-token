@@ -14,11 +14,15 @@ contract TweetToken is ERC721, ERC721URIStorage, Ownable {
     bool public saleIsActive;
     string public baseURI;
 
-    mapping(address => uint256) private addressTotweetId; //TODO: how private is this?
+    mapping(address => uint256) private addressToTweetId; //TODO: how private is this?
     mapping(uint256 => string) public tweetIdToTokenURI;
 
-    event TokenCreated(uint256 indexed tweetId, string tokenURI);
-    event PostVerified(address account, uint256 indexed tweetId); // TODO: remove?
+    event TokenCreated(
+        uint256 indexed tweetId,
+        string tokenURI,
+        address minter
+    );
+    event TweetVerified(uint256 indexed tweetId, address deployer);
 
     // TODO: burn vs set tokenuri to null
     // TODO: what would be if I had a private mapping of the addresses?
@@ -32,7 +36,7 @@ contract TweetToken is ERC721, ERC721URIStorage, Ownable {
         // TODO: only allow to mint once -> how can I look trough minted ids?
         require(saleIsActive, "Minting is paused");
         require(
-            addressTotweetId[msg.sender] == tweetId,
+            addressToTweetId[msg.sender] == tweetId,
             "You aren't allowed to mint tweet"
         );
 
@@ -42,7 +46,7 @@ contract TweetToken is ERC721, ERC721URIStorage, Ownable {
 
         // TODO: delete account from mapping -> do people still see the address in the history?
 
-        emit TokenCreated(tweetId, tweetIdToTokenURI[tweetId]);
+        emit TokenCreated(tweetId, tweetIdToTokenURI[tweetId], msg.sender);
         return tweetId;
     }
 
@@ -52,9 +56,13 @@ contract TweetToken is ERC721, ERC721URIStorage, Ownable {
         uint256 _tweetId,
         string memory _tokenURI
     ) external onlyOwner {
-        addressTotweetId[_account] = _tweetId;
+        require(saleIsActive, "Minting is paused");
+        require(addressToTweetId[_account] == 0, "Tweet is already verified");
+
+        addressToTweetId[_account] = _tweetId;
         tweetIdToTokenURI[_tweetId] = _tokenURI;
-        // emit addressVerified(_account, _tweetId); // TODO: what about privacy
+
+        emit TweetVerified(_tweetId, msg.sender);
     }
 
     function _baseURI() internal view override returns (string memory) {
