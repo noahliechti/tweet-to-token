@@ -62,11 +62,7 @@ function Header() {
               aria-label="toggle menu"
               onClick={toggleMenu}
             >
-              <MenuIcon
-                color="rgba(0, 0, 0, 0.87)"
-                width="32px"
-                height="32px"
-              />
+              <MenuIcon color="black" width="32px" height="32px" />
             </ToggleButton>
           </Box>
           <Box

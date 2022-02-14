@@ -41,6 +41,14 @@ const basicTheme = createTheme({
     secondary: {
       main: "#00D2C6",
     },
+    white: {
+      main: "rgba(255, 255, 255, 0.932)",
+      contrastText: "rgba(0, 0, 0, 0.87)",
+    },
+    black: {
+      main: "rgba(0, 0, 0, 0.87)",
+      contrastText: "rgba(255, 255, 255, 0.932)",
+    },
   },
   shape: {
     borderRadius: 8,
@@ -60,7 +68,7 @@ const basicTheme = createTheme({
       styleOverrides: {
         body: {
           backgroundColor: "rgba(255, 255, 255, 0.932)",
-          color: "rgba(0, 0, 0, 0.87)", // TODO: make color of palette
+          color: "rgba(0, 0, 0, 0.87)",
           paddingTop: 16,
           minWidth: 320,
         },
