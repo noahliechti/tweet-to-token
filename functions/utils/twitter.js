@@ -142,7 +142,7 @@ exports.createScreenshot = async ({
       // --use-gl=swiftshader -> Throws Navigation failed because browser has disconnected!
       executablePath: CHROME_EXECUTABLE_PATH || (await chromium.executablePath),
       headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      args: ["--no-sandbox", "--disable-setuid-sandbox", "--single-process"],
     });
 
     const page = await browser.newPage();
