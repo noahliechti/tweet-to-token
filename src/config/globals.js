@@ -1,5 +1,3 @@
-import { Typography, Box } from "@mui/material";
-
 export const BASE_URL =
   process.env.REACT_APP_ENV === "development"
     ? "http://localhost:5000"
@@ -39,52 +37,6 @@ export const ETHERSCAN_URL = (chainId, type, address) => {
   }
   return `${link}/${type}/${address}`;
 };
-
-export const cardsContent = [
-  {
-    title: "🎩 Celebrity who wants to connect with fans",
-    text: "Whether you are verified or not, it is always good to give back to the community.",
-  },
-  {
-    title: "🎉 NFT-beginner minting his first NFT",
-    text: "With our platform we made it easy to create your first NFT, even if you aren't very technical. ",
-  },
-  {
-    title: "📚 Twitter poet looking to monetize his work",
-    text: "Your tweets are art. Our platform allows you to generate an additional income stream.",
-  },
-];
-
-export const milestones = [{}]; // TODO:
-
-export const faqs = [
-  { title: "What is MetaMask and how can I set it up", details: `` },
-  {
-    title: "Why do I have to sign in with Twitter?",
-    details:
-      "By signing in with Twitter we can ensure, that users only can mint their own tweets.",
-  },
-  {
-    title: "How can I find the link of a Tweet?",
-    details: (
-      <>
-        <Typography>
-          Finding the link to a Tweet you want to share isn't obvious, but it's
-          also not difficult. Here is an easy method.
-        </Typography>
-        <ol>
-          <li>Navigate to the Tweet</li>
-          <li>Open the Share Menu</li>
-          <li>Click the "Copy link to Tweet" Option</li>
-        </ol>
-        <Typography>Check if your link has the following format:</Typography>
-        <Box sx={{ width: 1, wordWrap: "break-word" }}>
-          <code>https://twitter.com/YourUsername/status/SomeLargeNumber</code>
-        </Box>
-      </>
-    ),
-  },
-];
 
 export const languages = [
   { code: "ar", label: "Arabic" },

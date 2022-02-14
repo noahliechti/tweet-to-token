@@ -80,13 +80,13 @@ const theme = createTheme(basicTheme, {
   typography: {
     h1: {
       [basicTheme.breakpoints.only("xs")]: {
-        fontSize: 53,
+        fontSize: 66,
       },
       [basicTheme.breakpoints.only("sm")]: {
-        fontSize: 91,
+        fontSize: 68,
       },
       [basicTheme.breakpoints.only("md")]: {
-        fontSize: 53,
+        fontSize: 54,
       },
       [basicTheme.breakpoints.up("lg")]: {
         fontSize: 71,

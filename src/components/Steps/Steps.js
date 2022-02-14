@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import { useWeb3React } from "@web3-react/core";
 
 import {
-  Box,
+  Grid,
   Stepper,
   Step,
   StepLabel,
@@ -26,6 +26,7 @@ import { BASE_URL, FUNCTIONS_PREFIX, ALERT_CODES } from "../../config/globals";
 
 import { ReactComponent as TwitterIcon } from "../../assets/icons/twitter.svg";
 import { ReactComponent as OSIcon } from "../../assets/icons/opensea.svg";
+import { ReactComponent as UploadGraphic } from "../../assets/graphics/upload.svg";
 
 const tweetURLPattern =
   /^((?:http:\/\/)?|(?:https:\/\/)?)?(?:www\.)?twitter\.com\/(\w+)\/status\/(\d+)$/i;
@@ -279,75 +280,80 @@ function Steps({
   ];
 
   return (
-    <Box sx={{ maxWidth: 400 }}>
-      <Stepper activeStep={activeStep} orientation="vertical">
-        {steps.map((step, i) => (
-          <Step key={step.label}>
-            <StepLabel sx={{ pt: 0 }}>
-              <Typography variant="h3" color="text.secondary">
-                {step.label}
-              </Typography>
-            </StepLabel>
-            <StepContent sx={{ pr: 3 }}>
-              <ConditionalFormWrapper
-                condition={step.isForm}
-                error={state.formErrorMessage}
-              >
-                {step.content}
-                <Mover
-                  nextBtnDisabled={nextBtnDisabled[i] || formIsSubmitting}
-                  backBtnDisabled={activeStep < 1 || formIsSubmitting}
-                  handleNext={step.handleNext}
-                  handleBack={handleBack}
-                  isForm={step.isForm}
-                  nextBtnText={step.nextBtnText}
-                  isLoading={formIsSubmitting}
-                />
-              </ConditionalFormWrapper>
-            </StepContent>
-          </Step>
-        ))}
-      </Stepper>
-      {activeStep === steps.length && (
-        <Paper square elevation={0} sx={{ p: 3 }}>
-          <Typography>
-            Congratulations! You successfully minted your NFT. Make sure to
-            share you creation with your Twitter community.
-          </Typography>
-          <Button
-            variant="contained"
-            endIcon={<TwitterIcon width="24px" height="24px" />}
-            sx={{ mt: 1, mr: 1, width: 1 }}
-            href={`http://twitter.com/intent/tweet?text=I%20just%20minted%20my%20Tweet%20with%20%0A%40tweettokenio%0A.%20Have%20a%20look%21%0A&url=https%3A%2F%2Ftestnets.opensea.io%2Fassets%2F0x0a6c40aec8f7e26c857b45dfe5d33471c4a8beb0%2F${getTweetId(
-              state.tweetURL
-            )}`}
-            target="_blank"
-            rel="noopener"
-          >
-            share nft
-          </Button>
-          <Button
-            variant="outlined"
-            endIcon={<OSIcon width="24px" height="24px" />}
-            sx={{ mt: 1, mr: 1, width: 1 }}
-            href={`https://testnets.opensea.io/assets/${
-              contract.address
-            }/${getTweetId(state.tweetURL)}`}
-            target="_blank"
-            rel="noopener"
-          >
-            view nft
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleReset}
-            sx={{ mt: 1, mr: 1, width: 1 }}
-          >
-            create another
-          </Button>
-        </Paper>
-      )}
-    </Box>
+    <Grid container spacing={8} alignItems="center">
+      <Grid item xs={12} md={6}>
+        <Stepper activeStep={activeStep} orientation="vertical">
+          {steps.map((step, i) => (
+            <Step key={step.label}>
+              <StepLabel sx={{ pt: 0 }}>
+                <Typography variant="h3" color="text.secondary">
+                  {step.label}
+                </Typography>
+              </StepLabel>
+              <StepContent sx={{ pr: 3 }}>
+                <ConditionalFormWrapper
+                  condition={step.isForm}
+                  error={state.formErrorMessage}
+                >
+                  {step.content}
+                  <Mover
+                    nextBtnDisabled={nextBtnDisabled[i] || formIsSubmitting}
+                    backBtnDisabled={activeStep < 1 || formIsSubmitting}
+                    handleNext={step.handleNext}
+                    handleBack={handleBack}
+                    isForm={step.isForm}
+                    nextBtnText={step.nextBtnText}
+                    isLoading={formIsSubmitting}
+                  />
+                </ConditionalFormWrapper>
+              </StepContent>
+            </Step>
+          ))}
+        </Stepper>
+        {activeStep === steps.length && (
+          <Paper square elevation={0} sx={{ p: 3 }}>
+            <Typography>
+              Congratulations! You successfully minted your NFT. Make sure to
+              share you creation with your Twitter community.
+            </Typography>
+            <Button
+              variant="contained"
+              endIcon={<TwitterIcon width="24px" height="24px" />}
+              sx={{ mt: 1, mr: 1, width: 1 }}
+              href={`http://twitter.com/intent/tweet?text=I%20just%20minted%20my%20Tweet%20with%20%0A%40tweettokenio%0A.%20Have%20a%20look%21%0A&url=https%3A%2F%2Ftestnets.opensea.io%2Fassets%2F0x0a6c40aec8f7e26c857b45dfe5d33471c4a8beb0%2F${getTweetId(
+                state.tweetURL
+              )}`}
+              target="_blank"
+              rel="noopener"
+            >
+              share nft
+            </Button>
+            <Button
+              variant="outlined"
+              endIcon={<OSIcon width="24px" height="24px" />}
+              sx={{ mt: 1, mr: 1, width: 1 }}
+              href={`https://testnets.opensea.io/assets/${
+                contract.address
+              }/${getTweetId(state.tweetURL)}`}
+              target="_blank"
+              rel="noopener"
+            >
+              view nft
+            </Button>
+            <Button
+              variant="contained"
+              onClick={handleReset}
+              sx={{ mt: 1, mr: 1, width: 1 }}
+            >
+              create another
+            </Button>
+          </Paper>
+        )}
+      </Grid>
+      <Grid item md={6} sx={{ display: { xs: "none", md: "block" } }}>
+        <UploadGraphic />
+      </Grid>
+    </Grid>
   );
 }
 

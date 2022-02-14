@@ -18,12 +18,12 @@ contract TweetToken is ERC721, ERC721URIStorage, Ownable {
     mapping(uint256 => string) public tweetIdToTokenURI;
 
     event TokenCreated(uint256 indexed tweetId, string tokenURI);
-    event PostVerified(address account, uint256 indexed tweetId);
+    event PostVerified(address account, uint256 indexed tweetId); // TODO: remove?
 
     // TODO: burn vs set tokenuri to null
     // TODO: what would be if I had a private mapping of the addresses?
 
-    constructor(string memory _newBaseURI) ERC721("TweetToken", "TTT") {
+    constructor(string memory _newBaseURI) ERC721("tweettoken.io", "TTT") {
         baseURI = _newBaseURI;
         saleIsActive = false;
     }
