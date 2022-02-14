@@ -66,11 +66,16 @@ const basicTheme = createTheme({
     },
     MuiCssBaseline: {
       styleOverrides: {
+        html: {
+          height: "100%",
+        },
         body: {
           backgroundColor: "rgba(255, 255, 255, 0.932)",
           color: "rgba(0, 0, 0, 0.87)",
           paddingTop: 16,
+          paddingBottom: 16,
           minWidth: 320,
+          minHeight: "100%",
         },
         code: {
           padding: ".2em .4em",
