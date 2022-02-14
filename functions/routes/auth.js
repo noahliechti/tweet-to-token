@@ -15,8 +15,8 @@ router.get("/login", passport.authenticate("twitter"));
 router.get(
   "/redirect",
   passport.authenticate("twitter", {
-    successRedirect: "/#steps",
-    failureRedirect: "/#steps",
+    successRedirect: "#steps",
+    failureRedirect: "#steps",
   })
 );
 
