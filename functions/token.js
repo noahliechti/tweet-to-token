@@ -46,29 +46,16 @@ exports.handler = async (event) => {
   let tokenURI;
 
   try {
+    // TODO: if second fails revert first one
     const ipfsImagePath = await uploadToPinata(
       imageData,
       `${tweetId}.png`,
       false
     );
 
-    const metadata2 = {
-      name: "#1 from @Rainmaker1973",
-      description:
-        "Tweet by @Rainmaker1973 tweeted on 21.12.21. Original: https://twitter.com/Rainmaker1973/status/1478285768493834240",
-      image: ipfsImagePath,
-      attributes: [
-        { trait_type: "likes", value: 50 },
-        { trait_type: "retweets", value: 13 },
-        { trait_type: "comments", value: 3 },
-        { trait_type: "language", value: "en" },
-      ],
-    };
-
     metadata.image = ipfsImagePath;
-    // console.log(metadata);
 
-    tokenURI = await uploadToPinata(metadata2, `${tweetId}.json`, true);
+    tokenURI = await uploadToPinata(metadata, `${tweetId}.json`, true);
   } catch (err) {
     console.log(err);
     return {

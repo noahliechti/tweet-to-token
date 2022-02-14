@@ -4,6 +4,7 @@ import { Web3ReactProvider } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers"; // TODO: very big
 import theme from "./config/theme";
 import Home from "./components/Home/Home";
+import NotFound from "./components/NotFound/NotFound";
 
 // eslint-disable-next-line no-console
 console.log(
@@ -25,7 +26,7 @@ function App() {
           <CssBaseline /> {/* normalize and add custom global styles */}
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="*" element={<div>404</div>} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </ThemeProvider>
       </Web3ReactProvider>

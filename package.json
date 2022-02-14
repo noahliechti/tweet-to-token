@@ -78,17 +78,12 @@
     "format": "prettier '**' -c --no-error-on-unmatched-pattern --ignore-unknown",
     "format:fix": "prettier '**' -w --no-error-on-unmatched-pattern --ignore-unknown"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "supports es6-module"
     ],
     "development": [
       "last 1 chrome version",

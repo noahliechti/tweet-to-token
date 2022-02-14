@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import { HashLink } from "react-router-hash-link";
-import { Typography, Button, Grid, Container } from "@mui/material";
+import { Typography, Grid, Container } from "@mui/material";
 import { useWeb3React, UnsupportedChainIdError } from "@web3-react/core";
+
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
-import CustomerCard from "../CustomerCard/CustomerCard";
+import CustomerCards from "../CustomerCards/CustomerCards";
 import Steps from "../Steps/Steps";
 import About from "../About/About";
-import FAQ from "../Faq/FAQ";
+import Faq from "../Faq/Faq";
+import Alerts from "../Alerts/Alerts";
 import Milestones from "../Milestones/Milestones";
+import LandingPage from "../LandingPage/LandingPage";
+import Snacks from "../Snacks/Snacks";
 
-import { cardsContent, BASE_URL, FUNCTIONS_PREFIX } from "../../config/globals";
+import { BASE_URL, FUNCTIONS_PREFIX, ALERT_CODES } from "../../config/globals";
+
 import { injected } from "../../config/connectors";
-
 import tweetToken from "../../config/contracts/TweetToken.json";
 import addressMap from "../../config/contracts/map.json";
 
@@ -22,21 +25,29 @@ function Home() {
 
   const [contract, setContract] = useState();
   const [twitterUser, setTwitterUser] = useState();
+  const [alertMessage, setAlertMessage] = useState();
   const [signer, setSigner] = useState();
   const [deployer, setDeployer] = useState();
+  const [persistentChainId, setPersistentChainId] = useState();
+  const [snackPack, setSnackPack] = React.useState([]);
 
   useEffect(() => {
     injected.isAuthorized().then((isAuthorized) => {
       const connectedToMM = window.localStorage.getItem("ConnectedToMM");
-      if (isAuthorized && !active && !error && connectedToMM) {
-        activate(injected);
-        window.localStorage.setItem("ConnectedToMM", true);
-      } else if (!isAuthorized) {
-        window.localStorage.removeItem("ConnectedToMM");
-      }
-      if (error instanceof UnsupportedChainIdError) {
-        // TODO: change network
-        // console.log(error.message);
+
+      if (!(window.ethereum && window.ethereum.isMetaMask)) {
+        setAlertMessage(ALERT_CODES.NOMM);
+      } else {
+        if (isAuthorized && !active && !error && connectedToMM) {
+          activate(injected);
+          window.localStorage.setItem("ConnectedToMM", true);
+        } else if (!isAuthorized) {
+          window.localStorage.removeItem("ConnectedToMM");
+        }
+
+        if (error instanceof UnsupportedChainIdError) {
+          setAlertMessage(ALERT_CODES.UNSUP);
+        }
       }
     });
   }, [activate, active, error]);
@@ -54,9 +65,6 @@ function Home() {
   }, [library]);
 
   useEffect(() => {
-    // const saleState = async () => {
-    // console.log("contract is active", await contract.saleIsActive());
-    // };
     if (chainId) {
       if (addressMap[chainId]) {
         const tweetTokenAddress = addressMap[chainId].TweetToken;
@@ -66,15 +74,16 @@ function Home() {
             tweetToken.abi,
             signer
           );
-          // saleState(TweetToken);
           setContract(TweetToken);
         }
       } else {
-        // console.err("Smart contract doesn't seem to deployed on this network");
-        // TODO: notification? or disable button?
+        // console.error("smart contract is not deployed on this network");
+        setAlertMessage(ALERT_CODES.NOTDEP);
+        setPersistentChainId(chainId);
+        setContract(null);
       }
     }
-  }, [chainId, signer]);
+  }, [alertMessage, chainId, signer]);
 
   useEffect(() => {
     fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/auth`, {
@@ -95,67 +104,50 @@ function Home() {
         setTwitterUser(user || null);
       })
       .catch(() => {
-        // console.error(err); // TODO: what do I show then?
+        // console.log("catch");
+        // console.error(err); // TODO: what do I show then? alert?
       });
   }, []);
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="lg">
+      {alertMessage && (
+        <Alerts
+          activeAlert={alertMessage}
+          setAlertMessage={setAlertMessage}
+          persistentChainId={persistentChainId}
+        />
+      )}
+      <Snacks snackPack={snackPack} setSnackPack={setSnackPack} />
       <Header />
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Typography variant="h1">
-            Create NFTs from your Tweets and sell them on Ethereum!
-          </Typography>
+      <Grid container rowSpacing={{ xs: 1, sm: 6, md: 10 }}>
+        <Grid id="home" item xs={12}>
+          <LandingPage />
         </Grid>
-        <Grid item xs={12}>
-          <Typography variant="subtitle1">
-            Connect to your wallet, your Twitter and start minting your Tweets
-            with one click!
-          </Typography>
-        </Grid>
-        <Grid item xs={6}>
-          <Button
-            variant="contained"
-            color="primary"
-            component={HashLink}
-            to="#steps"
-            smooth
-            sx={{ width: 1, height: 40 }}
-          >
-            Let's go!
-          </Button>
-        </Grid>
-        <Grid item xs={12}>
+        <Grid id="use-case" item xs={12}>
           <Typography variant="h2">Who is this for?</Typography>
-          <Typography variant="body1" sx={{ textAlign: "center" }}>
-            We have all types of people who mint their tweets, from celebrities
-            to people who just posted a tweet the first time.
-          </Typography>
+          <CustomerCards />
         </Grid>
-        {cardsContent.map((content) => (
-          <Grid key={content.title} item xs={12}>
-            <CustomerCard content={content} />
-          </Grid>
-        ))}
         <Grid id="steps" item xs={12}>
-          <Typography variant="h2">How does it work?</Typography>
+          <Typography variant="h2">Mint a Tweet</Typography>
           <Steps
             userId={twitterUser ? twitterUser.userId : null}
             contract={contract}
             signer={signer}
             deployer={deployer}
+            setAlertMessage={setAlertMessage}
+            setSnackPack={setSnackPack}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid id="about" item xs={12}>
           <Typography variant="h2">About TTT</Typography>
           <About />
         </Grid>
-        <Grid item xs={12}>
+        <Grid id="faq" item xs={12}>
           <Typography variant="h2">FAQ</Typography>
-          <FAQ />
+          <Faq />
         </Grid>
-        <Grid item xs={12}>
+        <Grid id="milestones" item xs={12}>
           <Typography variant="h2">Milestones</Typography>
           <Milestones />
         </Grid>

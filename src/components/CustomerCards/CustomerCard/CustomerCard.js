@@ -2,7 +2,7 @@ import { Card, CardContent, Typography } from "@mui/material";
 
 function CustomerCard({ content }) {
   return (
-    <Card sx={{ mt: 2 }}>
+    <Card sx={{ mb: 2 }}>
       <CardContent sx={{ p: 3 }}>
         <Typography
           sx={{ lineHeight: 1.4, mb: 2 }}
