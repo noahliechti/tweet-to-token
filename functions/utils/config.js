@@ -1,7 +1,7 @@
 exports.BASE_URL =
   process.env.NODE_ENV === "development"
     ? "http://localhost:5000"
-    : "https://tweet-token.netlify.app";
+    : "https://tweettoken.io";
 
 exports.FUNCTIONS_PREFIX = "/.netlify/functions";
 exports.COOKIE_KEY = process.env.COOKIE_KEY;
@@ -26,10 +26,13 @@ exports.CHROME_EXECUTABLE_PATH =
     ? process.env.CHROME_EXECUTABLE_PATH
     : null;
 
-exports.MONGO_URL =
+// redis[s]://[[username][:password]@][host][:port][/db-number]
+exports.REDIS_CONN_OBJ =
   process.env.NODE_ENV === "development"
-    ? "mongodb://localhost/userDB"
-    : `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PW}@users.s9tkz.mongodb.net/UserDB?retryWrites=true&w=majority`;
+    ? { host: "127.0.0.1", port: 6379 }
+    : {
+        url: `redis://${process.env.MONGO_USER}:${process.env.MONGO_PW}@awesome.redis.server:6380`,
+      };
 
 exports.TWEET_SETTINGS = {
   TWEET_WIDTH: 1000,

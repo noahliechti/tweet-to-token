@@ -1,13 +1,20 @@
 const express = require("express");
 const session = require("express-session");
 const serverless = require("serverless-http");
-const MongoStore = require("connect-mongo");
-const passport = require("passport");
-const authRoutes = require("./routes/auth");
-const { COOKIE_KEY, MONGO_URL, FUNCTIONS_PREFIX } = require("./utils/config");
+const RedisStore = require("connect-redis")(session);
+const redis = require("redis");
 
-require("./utils/passport");
-require("./utils/db");
+const {
+  COOKIE_KEY,
+  REDIS_CONN_OBJ,
+  FUNCTIONS_PREFIX,
+} = require("./utils/config");
+
+const client = redis.createClient(REDIS_CONN_OBJ);
+client.on("error", (err) => console.log("Redis Client Error", err));
+
+const passport = require("./utils/passport")(client);
+const authRoutes = require("./routes/auth");
 
 const app = express();
 
@@ -17,21 +24,18 @@ app.use(express.urlencoded({ extended: true }));
 // load session data and make it available at `req.session`
 app.use(
   session({
-    name: "TTT Session",
-    secret: COOKIE_KEY,
-    resave: true,
+    name: "TTT Session Redis",
+    store: new RedisStore({ client: client }),
     saveUninitialized: false,
-    store: MongoStore.create({
-      mongoUrl: MONGO_URL, // TODO: use redis or serverless mongodb link
-    }),
-    cookie: { secure: true, maxAge: 1000 * 60 * 60 * 24 * 90 }, // 90 Days
+    secret: COOKIE_KEY,
+    resave: false,
+    //     TODO: cookie: { secure: true, maxAge: 1000 * 60 * 60 * 24 * 90 }, // 90 Days
   })
 );
 
-// initialize passport and authenticate the request based on session
-// data.
+// run serializeUser on each request
 app.use(passport.initialize());
-// deserialize cookie from the browser
+// run deserializeUser on each request
 app.use(passport.session());
 
 app.use(`${FUNCTIONS_PREFIX}/auth`, authRoutes);
