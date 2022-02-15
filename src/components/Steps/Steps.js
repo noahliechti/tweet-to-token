@@ -72,17 +72,24 @@ function Steps({
     const { value } = target;
     const { name } = target;
 
-    let invalidTweetURLMessage;
-
     if (name === "tweetURL") {
-      invalidTweetURLMessage =
-        value && !tweetURLPattern.test(value) ? "This URL is not valid." : "";
+      const trimmedURL = value.split("?")[0];
+      const invalidTweetURLMessage =
+        value && !tweetURLPattern.test(trimmedURL)
+          ? "This URL is not valid."
+          : "";
+
+      setState({
+        ...state,
+        [name]: trimmedURL,
+        invalidTweetURLMessage: invalidTweetURLMessage,
+      });
+      return;
     }
 
     setState({
       ...state,
       [name]: value,
-      invalidTweetURLMessage: invalidTweetURLMessage,
     });
   };
 
