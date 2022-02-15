@@ -65,7 +65,7 @@
     "dev": "REACT_APP_ENV=development react-scripts start",
     "serve": "NODE_ENV=development netlify dev --port 5000",
     "db:start": "brew services start redis",
-    "db:stop": "brew stop services redis",
+    "db:stop": "brew services stop redis",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

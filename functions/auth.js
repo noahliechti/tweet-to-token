@@ -11,7 +11,10 @@ const {
 } = require("./utils/config");
 
 const client = redis.createClient(REDIS_CONN_OBJ);
-client.on("error", (err) => console.log("Redis Client Error", err));
+
+client.on("error", (err) => {
+  console.log("Redis Client Error!", err);
+});
 
 const passport = require("./utils/passport")(client);
 const authRoutes = require("./routes/auth");
@@ -24,12 +27,11 @@ app.use(express.urlencoded({ extended: true }));
 // load session data and make it available at `req.session`
 app.use(
   session({
-    name: "TTT Session Redis",
-    store: new RedisStore({ client: client }),
+    name: "TTT Login",
+    store: new RedisStore({ client: client, ttl: 1000 * 60 * 60 * 24 * 7 }), // 90 Days
     saveUninitialized: false,
     secret: COOKIE_KEY,
     resave: false,
-    //     TODO: cookie: { secure: true, maxAge: 1000 * 60 * 60 * 24 * 90 }, // 90 Days
   })
 );
 

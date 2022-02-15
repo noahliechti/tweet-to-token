@@ -12,7 +12,12 @@ function Footer() {
     <AppBar
       position="static"
       color="transparent"
-      sx={{ boxShadow: 0, border: 3, borderRadius: 2, mt: 2 }}
+      sx={{
+        boxShadow: 0,
+        border: 3,
+        borderRadius: 2,
+        mt: { xs: 1, sm: 6, md: 10 },
+      }}
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
         <IconButton

@@ -31,7 +31,7 @@ exports.REDIS_CONN_OBJ =
   process.env.NODE_ENV === "development"
     ? { host: "127.0.0.1", port: 6379 }
     : {
-        url: `redis://${process.env.MONGO_USER}:${process.env.MONGO_PW}@awesome.redis.server:6380`,
+        url: `redis://default:${process.env.REDIS_PW}@redis-16429.c274.us-east-1-3.ec2.cloud.redislabs.com:16429`,
       };
 
 exports.TWEET_SETTINGS = {
