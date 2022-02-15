@@ -1,6 +1,6 @@
 const passport = require("passport");
 const TwitterStrategy = require("passport-twitter").Strategy;
-const User = require("../models/user");
+
 const {
   BASE_URL,
   TWITTER_CONSUMER_KEY,
@@ -8,51 +8,51 @@ const {
   FUNCTIONS_PREFIX,
 } = require("./config");
 
-// save user._id to session as req.session.passport.user = '..'
-passport.serializeUser((user, done) => {
-  // TODO: how do I only save the id in the session but get the whole user in the db and req.user?
-  // eslint-disable-next-line no-underscore-dangle
-  done(null, user._id);
-});
+module.exports = (client) => {
+  // save user.userId to req.session.passport.user = '..' if a user is found in db
+  passport.serializeUser((user, done) => {
+    done(null, user.userId);
+  });
 
-passport.deserializeUser((id, done) => {
-  User.findById(id)
-    .then((user) => {
-      done(null, user); // attach user object to the request as req.user
-    })
-    .catch(() => {
-      done(new Error("Failed to deserialize user"));
-    });
-});
-
-passport.use(
-  new TwitterStrategy(
-    {
-      consumerKey: TWITTER_CONSUMER_KEY,
-      consumerSecret: TWITTER_CONSUMER_SECRET,
-      callbackURL: `${BASE_URL}${FUNCTIONS_PREFIX}/auth/redirect`,
-    },
-    async (token, tokenSecret, profile, done) => {
-      // eslint-disable-next-line no-underscore-dangle
-      const profileData = profile._json;
-      const user = {
-        userId: profileData.id_str,
-        name: profileData.name,
-        screenName: profileData.screen_name,
-        photo: profileData.profile_image_url,
-        verified: profileData.verified,
-      };
-
-      // find current user in UserModel
-      let currentUser = await User.findOne({ userId: profileData.id_str });
-      // if user already exist then update user fields
-      if (currentUser) {
-        await User.updateOne({ userId: profileData.id_str }, { $set: user });
+  // save additional user data (with matching id) in req.user
+  passport.deserializeUser((id, done) => {
+    client.hgetall(`t:user:${id}`, (err, user) => {
+      if (err) throw err;
+      if (user) {
+        const userEnhanced = user;
+        userEnhanced.verified = userEnhanced.verified === "true"; // convert string to bool
+        done(null, userEnhanced); // attach user object to the request as req.user
       } else {
-        // create new user if the database doesn't have this user
-        currentUser = await new User(user).save();
+        done(new Error("Failed to deserialize user"));
       }
-      done(null, currentUser);
-    }
-  )
-);
+    });
+  });
+
+  passport.use(
+    new TwitterStrategy(
+      {
+        consumerKey: TWITTER_CONSUMER_KEY,
+        consumerSecret: TWITTER_CONSUMER_SECRET,
+        callbackURL: `${BASE_URL}${FUNCTIONS_PREFIX}/auth/redirect`,
+      },
+      async (token, tokenSecret, profile, done) => {
+        const {
+          id_str: userId,
+          name,
+          screen_name: screenName,
+          profile_image_url: photo,
+          verified,
+        } = profile._json; // eslint-disable-line no-underscore-dangle
+
+        // TODO: its already in the username
+        const user = { userId, name, screenName, photo, verified };
+
+        // create or overwrite user in db
+        await client.hmset(`t:user:${userId}`, user);
+
+        done(null, user);
+      }
+    )
+  );
+  return passport;
+};
