@@ -26,11 +26,11 @@ exports.CHROME_EXECUTABLE_PATH =
     ? process.env.CHROME_EXECUTABLE_PATH
     : null;
 
-// redis[s]://[[username][:password]@][host][:port][/db-number]
 exports.REDIS_CONN_OBJ =
   process.env.NODE_ENV === "development"
     ? { host: "127.0.0.1", port: 6379 }
     : {
+        // redis[s]://[[username][:password]@][host][:port][/db-number]
         url: `redis://default:${process.env.REDIS_PW}@redis-16429.c274.us-east-1-3.ec2.cloud.redislabs.com:16429`,
       };
 

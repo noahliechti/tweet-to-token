@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
     name: "TTT Login",
-    store: new RedisStore({ client: client, ttl: 1000 * 60 * 60 * 24 * 7 }), // 90 Days
+    store: new RedisStore({ client: client, ttl: 1000 * 60 * 60 * 24 * 7 }), // 7 Days
     saveUninitialized: false,
     secret: COOKIE_KEY,
     resave: false,
