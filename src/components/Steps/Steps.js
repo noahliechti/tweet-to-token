@@ -61,70 +61,13 @@ function Steps({
   const { active, account, chainId } = useWeb3React();
 
   useEffect(() => {
-    const currentLocalStorageStep = parseInt(
-      window.localStorage.getItem("step"),
-      10
-    );
-
     if ((!account || !userId) && activeStep > 0) {
       setFormIsSubmitting(false);
       window.localStorage.setItem("step", 0);
       setActiveStep(() => 0);
       setActiveAlert(ALERT_CODES.LOGOUT);
     }
-    // jumps to active step after page reload
-    if (account && userId && currentLocalStorageStep > activeStep) {
-      setActiveStep(currentLocalStorageStep);
-    }
   }, [account, activeStep, setActiveAlert, userId]);
-
-  // TODO: cache
-  useEffect(() => {
-    const activeTweetURL = window.localStorage.getItem("activeTweetURL");
-
-    if (activeTweetURL && !state.tweetURL) {
-      setState({
-        ...state,
-        tweetURL: activeTweetURL,
-      });
-    }
-  }, [state]);
-
-  useEffect(() => {
-    const activeTweetURL = window.localStorage.getItem("activeTweetURL");
-
-    if (activeStep === 3) {
-      if ((!nftMetadata || !imageData) && activeTweetURL) {
-        // get cached data
-        fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/cache`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json;charset=utf-8",
-          },
-          body: JSON.stringify({
-            tweetId: getTweetId(activeTweetURL),
-          }),
-        })
-          .then(async (res) => {
-            if (res.status === 200) return res.json();
-            const errorMessage = (await res.json()).error;
-            throw new Error(errorMessage);
-          })
-          .then((data) => {
-            const { image, metadata } = data;
-            setImageData(image);
-            setNftMetadata(metadata);
-          })
-          .catch(() => {
-            window.localStorage.setItem("step", 0);
-            setActiveStep(0);
-          });
-      } else {
-        // window.localStorage.setItem("step", 0);
-        // setActiveStep(0);
-      }
-    }
-  }, [activeStep, imageData, nftMetadata, state.tweetURL]);
 
   const handleChange = (target) => {
     const { value } = target;
@@ -136,8 +79,6 @@ function Steps({
         value && !tweetURLPattern.test(trimmedURL)
           ? "This URL is not valid."
           : "";
-      // TODO: cache
-      window.localStorage.setItem("activeTweetURL", trimmedURL);
 
       setState({
         ...state,
@@ -265,7 +206,6 @@ function Steps({
     });
   };
 
-  // eslint-disable-next-line arrow-body-style
   const isImageCached = () => {
     const { tweetURL, language, theme } = state;
 
@@ -291,12 +231,7 @@ function Steps({
         }
         return false;
       })
-      .catch(
-        () =>
-          // window.localStorage.setItem("step", 0);
-          // setActiveStep(0);
-          false
-      );
+      .catch(() => false);
   };
 
   const handleImageFetch = async () => {
