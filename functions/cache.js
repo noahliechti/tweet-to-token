@@ -1,5 +1,6 @@
 const redis = require("redis");
 const { REDIS_CONN_OBJ } = require("./utils/config");
+const { getTweetId } = require("./utils/twitter");
 
 const client = redis.createClient(REDIS_CONN_OBJ);
 
@@ -9,36 +10,49 @@ client.on("error", (err) => {
 });
 
 exports.handler = async (event) => {
-  const { metadata, image, tweetId } = JSON.parse(event.body);
+  const { metadata, image, tweetURL, language, theme } = JSON.parse(event.body);
+  const tweetId = getTweetId(tweetURL);
 
   try {
-    if (metadata && image && tweetId) {
-      // cache data
+    if (metadata && image && tweetId && language && theme) {
+      // cache data for 10 minutes
       const tweet = { metadata: JSON.stringify(metadata), image: image };
-
-      await client.hmset(`t:tweet:${tweetId}`, tweet, (err) => {
-        if (err) throw err;
-      });
+      await client.hmset(
+        `t:tweet:${tweetId}:${language}:${theme}`,
+        tweet,
+        (err) => {
+          if (err) throw err;
+        }
+      );
+      await client.expire(`t:tweet:${tweetId}:${language}:${theme}`, 60 * 10);
 
       return {
         statusCode: 200,
       };
     }
-    if ((!metadata || !image) && tweetId) {
+    if ((!metadata || !image) && tweetId && language && theme) {
       // get cached data
-      const res = await new Promise((resolve, reject) => {
-        client.hgetall(`t:tweet:${tweetId}}`, (err, tweet) => {
-          if (err) throw err;
-          if (tweet) {
+      const res = await new Promise((resolve) => {
+        client.hgetall(
+          `t:tweet:${tweetId}:${language}:${theme}`,
+          (err, tweet) => {
+            if (err) throw err;
+            if (tweet) {
+              resolve(
+                JSON.stringify({
+                  image: tweet.image,
+                  metadata: JSON.parse(tweet.metadata),
+                })
+              );
+            }
             resolve(
               JSON.stringify({
-                image: tweet.image,
-                metadata: JSON.parse(tweet.metadata),
+                image: null,
+                metadata: null,
               })
             );
           }
-          reject(new Error(`No cached Tweet with the id "${tweetId}", found!`));
-        });
+        );
       });
       return {
         statusCode: 200,
