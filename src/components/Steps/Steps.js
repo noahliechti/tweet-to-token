@@ -61,10 +61,20 @@ function Steps({
   const { active, account, chainId } = useWeb3React();
 
   useEffect(() => {
+    const currentLocalStorageStep = parseInt(
+      window.localStorage.getItem("step"),
+      10
+    );
+
     if ((!account || !userId) && activeStep > 0) {
       setFormIsSubmitting(false);
+      window.localStorage.setItem("step", 0);
       setActiveStep(() => 0);
       setActiveAlert(ALERT_CODES.LOGOUT);
+    }
+    // jumps to active step after page reload
+    if (account && userId && currentLocalStorageStep > activeStep) {
+      setActiveStep(currentLocalStorageStep);
     }
   }, [account, activeStep, setActiveAlert, userId]);
 
@@ -98,14 +108,17 @@ function Steps({
       ...state,
       formErrorMessage: "",
     });
+    window.localStorage.setItem("step", activeStep + 1);
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   const handleBack = () => {
+    window.localStorage.setItem("step", activeStep - 1);
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
   const handleReset = () => {
+    window.localStorage.setItem("step", 2);
     setActiveStep(2);
     setState({
       ...state,
