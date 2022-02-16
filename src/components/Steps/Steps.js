@@ -78,6 +78,54 @@ function Steps({
     }
   }, [account, activeStep, setActiveAlert, userId]);
 
+  // TODO: cache
+  useEffect(() => {
+    const activeTweetURL = window.localStorage.getItem("activeTweetURL");
+
+    if (activeTweetURL && !state.tweetURL) {
+      setState({
+        ...state,
+        tweetURL: activeTweetURL,
+      });
+    }
+  }, [state]);
+
+  useEffect(() => {
+    const activeTweetURL = window.localStorage.getItem("activeTweetURL");
+
+    if (activeStep === 3) {
+      if ((!nftMetadata || !imageData) && activeTweetURL) {
+        // get cached data
+        fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/cache`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json;charset=utf-8",
+          },
+          body: JSON.stringify({
+            tweetId: getTweetId(activeTweetURL),
+          }),
+        })
+          .then(async (res) => {
+            if (res.status === 200) return res.json();
+            const errorMessage = (await res.json()).error;
+            throw new Error(errorMessage);
+          })
+          .then((data) => {
+            const { image, metadata } = data;
+            setImageData(image);
+            setNftMetadata(metadata);
+          })
+          .catch(() => {
+            window.localStorage.setItem("step", 0);
+            setActiveStep(0);
+          });
+      } else {
+        // window.localStorage.setItem("step", 0);
+        // setActiveStep(0);
+      }
+    }
+  }, [activeStep, imageData, nftMetadata, state.tweetURL]);
+
   const handleChange = (target) => {
     const { value } = target;
     const { name } = target;
@@ -88,6 +136,8 @@ function Steps({
         value && !tweetURLPattern.test(trimmedURL)
           ? "This URL is not valid."
           : "";
+      // TODO: cache
+      window.localStorage.setItem("activeTweetURL", trimmedURL);
 
       setState({
         ...state,
@@ -200,6 +250,26 @@ function Steps({
     return false;
   };
 
+  // TODO: cache
+  const saveToCache = async (image, metadata) => {
+    await fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/cache`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify({
+        image: image,
+        metadata: metadata,
+        tweetId: getTweetId(state.tweetURL),
+      }),
+    }).then(async (res) => {
+      if (res.status !== 200) {
+        const errorMessage = (await res.json()).error;
+        throw new Error(errorMessage); // get's catched in function caller
+      }
+    });
+  };
+
   const handleImageFetch = async () => {
     setFormIsSubmitting(true);
     setImageData("");
@@ -226,11 +296,13 @@ function Steps({
         const errorMessage = (await res.json()).error;
         throw new Error(errorMessage);
       })
-      .then((data) => {
+      .then(async (data) => {
         const { image, metadata } = data;
         setFormIsSubmitting(false);
         setImageData(image);
         setNftMetadata(metadata);
+        // TODO: cache
+        await saveToCache(image, metadata);
         handleNext();
       })
       .catch((err) => {

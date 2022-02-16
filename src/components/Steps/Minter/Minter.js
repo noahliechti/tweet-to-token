@@ -1,4 +1,4 @@
-import { Typography, Card, CardMedia } from "@mui/material";
+import { Typography, Card, CardMedia, Skeleton } from "@mui/material";
 
 function Minter({ imageData }) {
   return (
@@ -8,11 +8,15 @@ function Minter({ imageData }) {
       </Typography>
 
       <Card sx={{ width: 1, mt: 2 }}>
-        <CardMedia
-          component="img"
-          image={`data:image/png;base64,${imageData}`}
-          alt="screenshot of tweet"
-        />
+        {imageData ? (
+          <CardMedia
+            component="img"
+            image={`data:image/png;base64,${imageData}`}
+            alt="screenshot of tweet"
+          />
+        ) : (
+          <Skeleton variant="rectangular" width={210} height={118} />
+        )}
       </Card>
     </>
   );
