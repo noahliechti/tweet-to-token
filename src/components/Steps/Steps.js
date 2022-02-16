@@ -44,7 +44,7 @@ function Steps({
   contract,
   signer,
   deployer,
-  setAlertMessage,
+  setActiveAlert,
   setSnackPack,
 }) {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -64,9 +64,9 @@ function Steps({
     if ((!account || !userId) && activeStep > 0) {
       setFormIsSubmitting(false);
       setActiveStep(() => 0);
-      setAlertMessage(ALERT_CODES.LOGOUT);
+      setActiveAlert(ALERT_CODES.LOGOUT);
     }
-  }, [account, activeStep, setAlertMessage, userId]);
+  }, [account, activeStep, setActiveAlert, userId]);
 
   const handleChange = (target) => {
     const { value } = target;

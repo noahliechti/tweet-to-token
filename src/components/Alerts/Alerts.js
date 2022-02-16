@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { Box, Slide, Alert, IconButton, AlertTitle } from "@mui/material";
 
-import { CHAIN_ID_MAPPING } from "../../config/globals";
+import { CHAIN_ID_MAPPING, ALERT_CODES } from "../../config/globals";
 import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg";
 
-function Alerts({ activeAlert, setAlertMessage, persistentChainId }) {
-  const [open, setOpen] = React.useState(true);
+function Alerts({ activeAlert, setActiveAlert, persistentChainId }) {
+  const [open, setOpen] = React.useState(false);
   const alertMessages = [
     {
       severity: "warning",
@@ -30,9 +30,10 @@ function Alerts({ activeAlert, setAlertMessage, persistentChainId }) {
   ];
   const { severity, title, text } = alertMessages[activeAlert - 1];
 
-  // reopens alerts if activeAlert changes
   useEffect(() => {
-    setOpen(true);
+    if (activeAlert) {
+      setOpen(true);
+    }
   }, [activeAlert]);
 
   return (
@@ -47,7 +48,9 @@ function Alerts({ activeAlert, setAlertMessage, persistentChainId }) {
               size="small"
               onClick={() => {
                 setOpen(false);
-                setAlertMessage(null); // reopens alert if same error happens
+                if (activeAlert !== ALERT_CODES.NOTDEP) {
+                  setActiveAlert(null); // reopens alert if same error happens
+                }
               }}
             >
               <CloseIcon fontSize="inherit" width="24px" height="24px" />

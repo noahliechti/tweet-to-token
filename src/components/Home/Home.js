@@ -25,7 +25,7 @@ function Home() {
 
   const [contract, setContract] = useState();
   const [twitterUser, setTwitterUser] = useState();
-  const [alertMessage, setAlertMessage] = useState();
+  const [activeAlert, setActiveAlert] = useState();
   const [signer, setSigner] = useState();
   const [deployer, setDeployer] = useState();
   const [persistentChainId, setPersistentChainId] = useState();
@@ -36,7 +36,7 @@ function Home() {
       const connectedToMM = window.localStorage.getItem("ConnectedToMM");
 
       if (!(window.ethereum && window.ethereum.isMetaMask)) {
-        setAlertMessage(ALERT_CODES.NOMM);
+        setActiveAlert(ALERT_CODES.NOMM);
       } else {
         if (isAuthorized && !active && !error && connectedToMM) {
           activate(injected);
@@ -46,7 +46,7 @@ function Home() {
         }
 
         if (error instanceof UnsupportedChainIdError) {
-          setAlertMessage(ALERT_CODES.UNSUP);
+          setActiveAlert(ALERT_CODES.UNSUP);
         }
       }
     });
@@ -78,12 +78,12 @@ function Home() {
         }
       } else {
         // console.error("smart contract is not deployed on this network");
-        setAlertMessage(ALERT_CODES.NOTDEP);
+        setActiveAlert(ALERT_CODES.NOTDEP);
         setPersistentChainId(chainId);
         setContract(null);
       }
     }
-  }, [alertMessage, chainId, signer]);
+  }, [activeAlert, chainId, signer]);
 
   useEffect(() => {
     fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/auth`, {
@@ -111,11 +111,11 @@ function Home() {
 
   return (
     <Container maxWidth="lg">
-      {alertMessage && (
+      {activeAlert && (
         <Alerts
-          activeAlert={alertMessage}
-          setAlertMessage={setAlertMessage}
+          activeAlert={activeAlert}
           persistentChainId={persistentChainId}
+          setActiveAlert={setActiveAlert}
         />
       )}
       <Snacks snackPack={snackPack} setSnackPack={setSnackPack} />
@@ -135,7 +135,7 @@ function Home() {
             contract={contract}
             signer={signer}
             deployer={deployer}
-            setAlertMessage={setAlertMessage}
+            setActiveAlert={setActiveAlert}
             setSnackPack={setSnackPack}
           />
         </Grid>

@@ -1,12 +1,12 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { IconButton, Snackbar } from "@mui/material";
 import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg";
 
 function Snacks({ snackPack, setSnackPack }) {
-  const [open, setOpen] = React.useState(false);
-  const [messageInfo, setMessageInfo] = React.useState(undefined);
+  const [open, setOpen] = useState(false);
+  const [messageInfo, setMessageInfo] = useState(undefined);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (snackPack.length && !messageInfo) {
       // Set a new snack when we don't have an active one
       setMessageInfo({ ...snackPack[0] });
