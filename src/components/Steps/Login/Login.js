@@ -82,7 +82,6 @@ function Login({ twitterLoggedIn }) {
         variant="contained"
         fullWidth
         endIcon={<TwitterIcon width="24px" height="24px" />}
-        sx={{ mt: 1 }}
       >
         {twitterLoggedIn ? "disconnect" : "connect"}
       </Button>

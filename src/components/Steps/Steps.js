@@ -11,7 +11,6 @@ import {
   Button,
   Typography,
   Paper,
-  TextField,
 } from "@mui/material";
 
 import Login from "./Login/Login";
@@ -365,20 +364,11 @@ function Steps({
       label: "Clone Tweet",
       isForm: true,
       content: (
-        <>
-          <ImageCreation />
-          <TextField
-            label="Tweet URL"
-            fullWidth
-            name="tweetURL"
-            value={state.tweetURL}
-            disabled={formIsSubmitting}
-            onChange={(e) => handleChange(e.target)}
-            error={!!state.invalidTweetURLMessage}
-            helperText={state.invalidTweetURLMessage}
-            sx={{ mt: 2 }}
-          />
-        </>
+        <ImageCreation
+          state={state}
+          formIsSubmitting={formIsSubmitting}
+          handleChange={handleChange}
+        />
       ),
       nextBtnText: "Clone",
       handleNext: handleImageFetch,
