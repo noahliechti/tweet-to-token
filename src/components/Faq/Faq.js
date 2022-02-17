@@ -1,4 +1,5 @@
 import { Grid, Box, Typography, Link } from "@mui/material";
+import { useEffect, useState } from "react";
 import FaqElement from "./FaqElement/FaqElement";
 import { ETHERSCAN_URL } from "../../config/globals";
 
@@ -6,6 +7,16 @@ import { ReactComponent as QuestionsGraphic } from "../../assets/graphics/questi
 import addressMap from "../../config/contracts/map.json";
 
 function Faq({ chainId }) {
+  const [etherscanURL, setEtherscanURL] = useState();
+
+  useEffect(() => {
+    if (chainId) {
+      setEtherscanURL(
+        ETHERSCAN_URL(chainId, "address", addressMap[chainId].TweetToken)
+      );
+    }
+  }, [chainId]);
+
   const faqs = [
     {
       summary: "Why do I have to sign in with Twitter?",
@@ -48,15 +59,7 @@ function Faq({ chainId }) {
       detail: (
         <Typography>
           Our smart contracts are verified and open-source. Inspect them on{" "}
-          <Link
-            href={ETHERSCAN_URL(
-              chainId,
-              "address",
-              addressMap[chainId].TweetToken
-            )}
-            target="_blank"
-            rel="noopener"
-          >
+          <Link href={etherscanURL} target="_blank" rel="noopener">
             Etherscan
           </Link>
           .

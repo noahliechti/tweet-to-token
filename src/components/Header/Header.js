@@ -11,11 +11,9 @@ import {
 } from "@mui/material";
 import { HashLink } from "react-router-hash-link";
 
+import Social from "../Social/Social";
 import { ReactComponent as LogoIcon } from "../../assets/icons/logo.svg";
 import { ReactComponent as MenuIcon } from "../../assets/icons/menu.svg";
-import { ReactComponent as TwitterIcon } from "../../assets/icons/twitter.svg";
-import { ReactComponent as CodeIcon } from "../../assets/icons/code.svg";
-import { ReactComponent as OSIcon } from "../../assets/icons/opensea.svg";
 
 const pages = ["use-case", "about", "faq", "milestones"];
 
@@ -102,36 +100,7 @@ function Header() {
             gap: { sx: 1, sm: 3 },
           }}
         >
-          <IconButton
-            size="large"
-            aria-label="twitter"
-            href="https://twitter.com/tweettokenio"
-            color="inherit"
-            target="_blank"
-            rel="noopener"
-          >
-            <TwitterIcon width="24px" height="24px" />
-          </IconButton>
-          <IconButton
-            size="large"
-            aria-label="opensea"
-            href="/" // TODO: add link
-            color="inherit"
-            target="_blank"
-            rel="noopener"
-          >
-            <OSIcon width="24px" height="24px" />
-          </IconButton>
-          <IconButton
-            size="large"
-            aria-label="github"
-            href="https://github.com/noahliechti/tweet-to-token"
-            color="inherit"
-            target="_blank"
-            rel="noopener"
-          >
-            <CodeIcon width="24px" height="24px" />
-          </IconButton>
+          <Social />
         </Box>
         <Box
           sx={{
