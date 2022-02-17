@@ -17,14 +17,17 @@ exports.handler = async (event) => {
     if (metadata && image && tweetId && language && theme) {
       // cache data for 10 minutes
       const tweet = { metadata: JSON.stringify(metadata), image: image };
-      await client.hmset(
+
+      client.hmset(`t:tweet:${tweetId}:${language}:${theme}`, tweet, (err) => {
+        if (err) throw err;
+      });
+      client.expire(
         `t:tweet:${tweetId}:${language}:${theme}`,
-        tweet,
+        60 * 10,
         (err) => {
           if (err) throw err;
         }
       );
-      await client.expire(`t:tweet:${tweetId}:${language}:${theme}`, 60 * 10);
 
       return {
         statusCode: 200,

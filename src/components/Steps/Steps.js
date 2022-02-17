@@ -63,7 +63,6 @@ function Steps({
   useEffect(() => {
     if ((!account || !userId) && activeStep > 0) {
       setFormIsSubmitting(false);
-      window.localStorage.setItem("step", 0);
       setActiveStep(() => 0);
       setActiveAlert(ALERT_CODES.LOGOUT);
     }
@@ -99,17 +98,18 @@ function Steps({
       ...state,
       formErrorMessage: "",
     });
-    window.localStorage.setItem("step", activeStep + 1);
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   const handleBack = () => {
-    window.localStorage.setItem("step", activeStep - 1);
+    setState({
+      ...state,
+      formErrorMessage: "",
+    });
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
   const handleReset = () => {
-    window.localStorage.setItem("step", 2);
     setActiveStep(2);
     setState({
       ...state,
@@ -117,8 +117,9 @@ function Steps({
     });
   };
 
-  const getTokenURI = () =>
-    fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/token`, {
+  // eslint-disable-next-line arrow-body-style
+  const getTokenURI = () => {
+    return fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/token`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json;charset=utf-8",
@@ -142,6 +143,7 @@ function Steps({
         });
         setFormIsSubmitting(false);
       });
+  };
 
   const showTemporaryMessage = (message) => {
     setSnackPack((prev) => [
@@ -153,35 +155,95 @@ function Steps({
     ]);
   };
 
+  // eslint-disable-next-line arrow-body-style
+  const handleMintingStatus = (method) => {
+    return fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/state`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify({
+        tweetURL: state.tweetURL,
+        get: method === "get",
+      }),
+    })
+      .then(async (res) => {
+        if (res.status === 200) return res;
+        const errorMessage = (await res.json()).error;
+        throw new Error(errorMessage);
+      })
+      .then(async (res) => {
+        if (method === "get") {
+          const data = await res.json();
+          const { pending } = data;
+          return pending;
+        }
+        return null;
+      })
+      .catch((err) => {
+        setState({
+          ...state,
+          formErrorMessage: err.message,
+        });
+        setFormIsSubmitting(false);
+      });
+  };
+
+  // eslint-disable-next-line arrow-body-style
+  const promoteMintingStatus = async () => {
+    await handleMintingStatus("set");
+  };
+
+  const isNotAlreadyVerified = async () => {
+    const res = await handleMintingStatus("get");
+    return !res;
+  };
+
   const handleMint = async () => {
     setFormIsSubmitting(true);
-
-    showTemporaryMessage("Uploading Tweet and Metadata to IPFS...");
-    const tokenURI = await getTokenURI();
+    let tx;
     const tweetId = ethers.BigNumber.from(getTweetId(state.tweetURL));
 
-    // Set allowed Tweet
-    let tx = await contract
-      .connect(deployer)
-      .addVerifiedTweet(account, tweetId, tokenURI);
-    await tx.wait();
+    if (await isNotAlreadyVerified()) {
+      showTemporaryMessage("Uploading Tweet and Metadata to IPFS...");
+      const tokenURI = await getTokenURI();
+
+      // set allowed Tweet
+      tx = await contract
+        .connect(deployer)
+        .addVerifiedTweet(account, tweetId, tokenURI);
+
+      await tx.wait();
+      await promoteMintingStatus(); // none to pending
+    }
 
     showTemporaryMessage("Upload successful! Minting has started...");
 
-    // Mint Tweet
-    tx = await contract.connect(signer).mintTweet(tweetId);
-    await tx.wait();
+    // mint Tweet
+    try {
+      tx = await contract.connect(signer).mintTweet(tweetId);
+      await tx.wait();
+      showTemporaryMessage(<MintMessage tx={tx} chainId={chainId} />); // TODO: what if someone changes chain?
 
-    showTemporaryMessage(<MintMessage tx={tx} chainId={chainId} />); // TODO: what if someone changes chain?
+      await promoteMintingStatus(); // pending to minted
+      handleNext();
+    } catch (err) {
+      setState({
+        ...state,
+        formErrorMessage: "Transaction was rejected! Please try again.",
+      });
+    }
 
     setFormIsSubmitting(false);
-    handleNext();
   };
 
   const isDuplicateTweet = async () => {
-    // TODO: different check
     const tweetId = ethers.BigNumber.from(getTweetId(state.tweetURL));
-    if (await contract.tweetIdToTokenURI(tweetId)) {
+
+    if (
+      (await contract.tweetIdToTokenURI(tweetId)) &&
+      (await isNotAlreadyVerified())
+    ) {
       setState({
         ...state,
         formErrorMessage: "This Tweet was already minted!",
@@ -377,7 +439,7 @@ function Steps({
               variant="contained"
               endIcon={<TwitterIcon width="24px" height="24px" />}
               sx={{ mt: 1, mr: 1, width: 1 }}
-              href={`http://twitter.com/intent/tweet?text=I%20just%20minted%20my%20Tweet%20with%20%0A%40tweettokenio%0A.%20Have%20a%20look%21%0A&url=https%3A%2F%2Ftestnets.opensea.io%2Fassets%2F0x0a6c40aec8f7e26c857b45dfe5d33471c4a8beb0%2F${getTweetId(
+              href={`http://twitter.com/intent/tweet?text=I%20just%20minted%20my%20Tweet%20with%20%40tweettokenio.%20Have%20a%20look%21%0A&url=https%3A%2F%2Ftestnets.opensea.io%2Fassets%2F0x0a6c40aec8f7e26c857b45dfe5d33471c4a8beb0%2F${getTweetId(
                 state.tweetURL
               )}`}
               target="_blank"
