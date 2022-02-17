@@ -14,9 +14,7 @@ function FaqElement({ summary, detail }) {
       <AccordionSummary expandIcon={<ExpandIcon />}>
         <Typography>{summary}</Typography>
       </AccordionSummary>
-      <AccordionDetails>
-        <Typography>{detail}</Typography>
-      </AccordionDetails>
+      <AccordionDetails>{detail}</AccordionDetails>
     </Accordion>
   );
 }

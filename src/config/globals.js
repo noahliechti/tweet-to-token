@@ -24,10 +24,10 @@ export const ETHERSCAN_URL = (chainId, type, address) => {
   let link = "";
   switch (chainId) {
     case 1:
-      link = "https://etherscan.io/";
+      link = "https://etherscan.io";
       break;
     case 4:
-      link = "https://rinkeby.etherscan.io/";
+      link = "https://rinkeby.etherscan.io";
       break;
     case 1337:
       // TODO:

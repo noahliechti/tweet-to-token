@@ -145,7 +145,7 @@ function Home() {
         </Grid>
         <Grid id="faq" item xs={12}>
           <Typography variant="h2">FAQ</Typography>
-          <Faq />
+          <Faq chainId={chainId} />
         </Grid>
         <Grid id="milestones" item xs={12}>
           <Typography variant="h2">Milestones</Typography>
