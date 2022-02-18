@@ -13,19 +13,22 @@ function LandingPage() {
             maxWidth: { sm: 545, md: 430, lg: 580 },
           }}
         >
-          <Typography
-            variant="h1"
-            sx={{
-              background:
-                "linear-gradient(130deg, rgba(56, 73, 221, 1) 0%, rgba(0, 210, 198, 0.7) 100%);background-clip: text;text-fill-color: transparent;",
-            }}
-          >
-            Turn your Tweets in to NFTs!
-          </Typography>
-          <Typography variant="subtitle1">
-            Our high quality images are automatically enhanced with metadata and
-            will make your NFTs stand out.
-          </Typography>
+          <header>
+            <Typography
+              variant="h1"
+              sx={{
+                background:
+                  "linear-gradient(130deg, rgba(56, 73, 221, 1) 0%, rgba(0, 210, 198, 0.7) 100%);background-clip: text;text-fill-color: transparent;",
+              }}
+            >
+              Turn your Tweets in to NFTs!
+            </Typography>
+            <Typography variant="subtitle1" component="p">
+              Our high quality images are automatically enhanced with metadata
+              and will make your NFTs stand out.
+            </Typography>
+          </header>
+
           <Box
             sx={{
               display: "flex",

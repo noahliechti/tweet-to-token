@@ -9,6 +9,8 @@ node_modules
 *.svg
 *.html
 *.sol
+*.xml
+*/site.webmanifest
 
 # Netlify
 .netlify

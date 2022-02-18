@@ -15,8 +15,8 @@ module.exports = (client) => {
   });
 
   // save additional user data (with matching id) in req.user
-  passport.deserializeUser((id, done) => {
-    client.hgetall(`t:user:${id}`, (err, user) => {
+  passport.deserializeUser((userId, done) => {
+    client.hgetall(`t:user:${userId}`, (err, user) => {
       if (err) throw err;
       if (user) {
         const userEnhanced = user;

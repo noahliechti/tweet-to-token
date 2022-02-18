@@ -15,6 +15,7 @@ function ThemeToggle({ defaultTheme, handleChange: propsChange }) {
       exclusive
       onChange={handleChange}
       size="large"
+      sx={{ mt: 2 }}
     >
       <ToggleButton name="theme" value="light" aria-label="light theme">
         Light

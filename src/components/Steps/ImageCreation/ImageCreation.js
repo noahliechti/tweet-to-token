@@ -1,4 +1,4 @@
-import { Typography, Box } from "@mui/material";
+import { Typography, Box, TextField } from "@mui/material";
 
 import FaqElement from "../../Faq/FaqElement/FaqElement";
 
@@ -17,22 +17,33 @@ const faq = {
       </ol>
       <Typography>Check if your link has the following format:</Typography>
       <Box sx={{ width: 1, wordWrap: "break-word" }}>
-        <code>https://twitter.com/YourUsername/status/SomeLargeNumber</code>
+        <code>https://twitter.com/yourUsername/status/aBigNumber</code>
       </Box>
     </>
   ),
 };
 
-function ImageCreation() {
+function ImageCreation({ state, formIsSubmitting, handleChange }) {
   return (
     <>
       <Typography component="div" variant="body">
-        Copy the link of the Tweet you want to mint and paste it into the input
-        field.
+        Paste the link of your Tweet into the input field. This process can take
+        a while. <b>Don't reload</b> the page.
       </Typography>
       <Box sx={{ mt: 2 }}>
         <FaqElement {...faq} />
       </Box>
+      <TextField
+        label="Tweet URL"
+        fullWidth
+        name="tweetURL"
+        value={state.tweetURL}
+        disabled={formIsSubmitting}
+        onChange={(e) => handleChange(e.target)}
+        error={!!state.invalidTweetURLMessage}
+        helperText={state.invalidTweetURLMessage}
+        sx={{ mt: 2 }}
+      />
     </>
   );
 }
