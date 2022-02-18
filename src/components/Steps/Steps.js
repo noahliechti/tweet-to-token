@@ -154,95 +154,22 @@ function Steps({
     ]);
   };
 
-  // eslint-disable-next-line arrow-body-style
-  const handleMintingStatus = (method) => {
-    return fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/state`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-      },
-      body: JSON.stringify({
-        tweetURL: state.tweetURL,
-        get: method === "get",
-      }),
-    })
-      .then(async (res) => {
-        if (res.status === 200) return res;
-        const errorMessage = (await res.json()).error;
-        throw new Error(errorMessage);
-      })
-      .then(async (res) => {
-        if (method === "get") {
-          const data = await res.json();
-          const { pending } = data;
-          return pending;
-        }
-        return null;
-      })
-      .catch((err) => {
-        setState({
-          ...state,
-          formErrorMessage: err.message,
-        });
-        setFormIsSubmitting(false);
-      });
+  const isVerified = async (tweetId) => {
+    const eventFilter = contract.filters.TweetVerified(tweetId);
+    const events = await contract.queryFilter(eventFilter);
+    return events.length;
   };
 
-  // eslint-disable-next-line arrow-body-style
-  const promoteMintingStatus = async () => {
-    await handleMintingStatus("set");
-  };
-
-  const isNotAlreadyVerified = async () => {
-    const res = await handleMintingStatus("get");
-    return !res;
-  };
-
-  const handleMint = async () => {
-    setFormIsSubmitting(true);
-    let tx;
-    const tweetId = ethers.BigNumber.from(getTweetId(state.tweetURL));
-
-    if (await isNotAlreadyVerified()) {
-      showTemporaryMessage("Uploading Tweet and Metadata to IPFS...");
-      const tokenURI = await getTokenURI();
-
-      // set allowed Tweet
-      tx = await contract
-        .connect(deployer)
-        .addVerifiedTweet(account, tweetId, tokenURI);
-
-      await tx.wait();
-      await promoteMintingStatus(); // none to pending
-    }
-
-    showTemporaryMessage("Upload successful! Minting has started...");
-
-    // mint Tweet
-    try {
-      tx = await contract.connect(signer).mintTweet(tweetId);
-      await tx.wait();
-      showTemporaryMessage(<MintMessage tx={tx} chainId={chainId} />); // TODO: what if someone changes chain?
-
-      await promoteMintingStatus(); // pending to minted
-      handleNext();
-    } catch (err) {
-      setState({
-        ...state,
-        formErrorMessage: "Transaction was rejected! Please try again.",
-      });
-    }
-
-    setFormIsSubmitting(false);
+  const isMinted = async (tweetId) => {
+    const eventFilter = contract.filters.TokenCreated(tweetId);
+    const events = await contract.queryFilter(eventFilter);
+    return events.length;
   };
 
   const isDuplicateTweet = async () => {
     const tweetId = ethers.BigNumber.from(getTweetId(state.tweetURL));
 
-    if (
-      (await contract.tweetIdToTokenURI(tweetId)) &&
-      (await isNotAlreadyVerified())
-    ) {
+    if (await isMinted(tweetId)) {
       setState({
         ...state,
         formErrorMessage: "This Tweet was already minted!",
@@ -250,6 +177,73 @@ function Steps({
       return true;
     }
     return false;
+  };
+
+  const handleMint = async () => {
+    setFormIsSubmitting(true);
+    const tweetId = ethers.BigNumber.from(getTweetId(state.tweetURL));
+    let tx;
+
+    let verified = await isVerified(tweetId);
+
+    if (!verified) {
+      showTemporaryMessage("Uploading Tweet and Metadata to IPFS...");
+      const tokenURI = await getTokenURI();
+
+      try {
+        tx = await contract
+          .connect(deployer)
+          .addVerifiedTweet(account, tweetId, tokenURI);
+        await tx.wait();
+        verified = true;
+      } catch (err) {
+        const errorMessage = await err.error.error.message;
+        const alreadyVerifiedMessage =
+          "execution reverted: Tweet is already verified";
+        const salePausedMessage = "execution reverted: Minting is paused";
+        let outputMessage;
+
+        if (errorMessage === salePausedMessage) {
+          outputMessage =
+            "Minting is paused! Checkout @tweettokenio for more information.";
+        } else if (errorMessage !== alreadyVerifiedMessage) {
+          outputMessage = "Ups, something went wrong! Please try again.";
+        }
+        if (outputMessage) {
+          setState({
+            ...state,
+            formErrorMessage: outputMessage,
+          });
+          setFormIsSubmitting(false);
+          return;
+        }
+      }
+    }
+
+    const minted = await isMinted(tweetId);
+
+    if (verified && !minted) {
+      showTemporaryMessage("Upload successful! Minting has started...");
+
+      try {
+        tx = await contract.connect(signer).mintTweet(tweetId);
+        await tx.wait();
+
+        showTemporaryMessage(<MintMessage tx={tx} chainId={chainId} />); // TODO: what if someone changes chain?
+        handleNext();
+      } catch (err) {
+        const errorMessage =
+          err.code === 4001
+            ? "Transaction was rejected! Please try again."
+            : err.message;
+        setState({
+          ...state,
+          formErrorMessage: errorMessage,
+        });
+      }
+    }
+
+    setFormIsSubmitting(false);
   };
 
   const saveToCache = async (image, metadata, language, theme, tweetURL) => {
@@ -429,9 +423,9 @@ function Steps({
               variant="contained"
               endIcon={<TwitterIcon width="24px" height="24px" />}
               sx={{ mt: 1, mr: 1, width: 1 }}
-              href={`http://twitter.com/intent/tweet?text=I%20just%20minted%20my%20Tweet%20with%20%40tweettokenio.%20Have%20a%20look%21%0A&url=https%3A%2F%2Ftestnets.opensea.io%2Fassets%2F0x0a6c40aec8f7e26c857b45dfe5d33471c4a8beb0%2F${getTweetId(
-                state.tweetURL
-              )}`}
+              href={`http://twitter.com/intent/tweet?text=I%20just%20minted%20my%20Tweet%20with%20%40tweettokenio.%20Have%20a%20look%21%0A&url=https%3A%2F%2Ftestnets.opensea.io%2Fassets%2F${
+                contract.address
+              }%2F${getTweetId(state.tweetURL)}`}
               target="_blank"
               rel="noopener"
             >

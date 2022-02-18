@@ -27,8 +27,8 @@ function Footer() {
           justifyContent: "space-between",
           pl: 2,
           pr: 2,
-          pt: "12px",
-          pb: "12px",
+          pt: { xs: 2, md: "12px" },
+          pb: { xs: 2, md: "12px" },
         }}
       >
         <IconButton
