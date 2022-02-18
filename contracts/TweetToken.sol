@@ -57,7 +57,10 @@ contract TweetToken is ERC721, ERC721URIStorage, Ownable {
         string memory _tokenURI
     ) external onlyOwner {
         require(saleIsActive, "Minting is paused");
-        require(addressToTweetId[_account] == 0, "Tweet is already verified");
+        require(
+            bytes(tweetIdToTokenURI[_tweetId]).length == 0,
+            "Tweet is already verified"
+        );
 
         addressToTweetId[_account] = _tweetId;
         tweetIdToTokenURI[_tweetId] = _tokenURI;
