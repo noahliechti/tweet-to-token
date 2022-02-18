@@ -219,7 +219,7 @@ exports.checkTweetURL = (tweetURL, twitterUserId) => {
               );
             }
           }
-          throw new Error("You are not the author of this tweet!");
+          throw new Error("You are not the author of this Tweet!");
         }
       })
       .catch((err) => {

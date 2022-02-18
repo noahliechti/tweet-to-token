@@ -66,6 +66,10 @@ function Faq({ chainId }) {
         </Typography>
       ),
     },
+    {
+      summary: "Can I mint protected Tweets?",
+      detail: "Minting protected Tweets is not supported at the moment.",
+    },
   ];
 
   return (

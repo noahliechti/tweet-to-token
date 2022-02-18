@@ -4,7 +4,7 @@ function Minter({ imageData }) {
   return (
     <>
       <Typography>
-        Your Tweet is ready to be minted. The process can take a while.{" "}
+        Your Tweet is ready to be minted. This process can take a while.{" "}
         <b>Don't reload</b> the page.
       </Typography>
 

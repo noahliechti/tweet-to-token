@@ -33,7 +33,7 @@ exports.handler = async (event) => {
         statusCode: 200,
       };
     }
-    if ((!metadata || !image) && tweetId && language && theme) {
+    if (!metadata && !image && tweetId && language && theme) {
       // get cached data
       const res = await new Promise((resolve) => {
         client.hgetall(
