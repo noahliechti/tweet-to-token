@@ -5,7 +5,9 @@ function ThemeToggle({ defaultTheme, handleChange: propsChange }) {
   const [theme, setTheme] = React.useState(defaultTheme);
 
   const handleChange = (e, newTheme) => {
-    setTheme(newTheme);
+    if (newTheme) {
+      setTheme(newTheme);
+    }
     propsChange(e.target);
   };
   return (
