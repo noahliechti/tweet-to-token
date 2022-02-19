@@ -127,6 +127,7 @@ function Steps({
         imageData: imageData,
         tweetURL: state.tweetURL,
         metadata: nftMetadata,
+        chainId: chainId,
       }),
     })
       .then(async (res) => {

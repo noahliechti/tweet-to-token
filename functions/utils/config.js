@@ -3,6 +3,8 @@ exports.BASE_URL =
     ? "http://localhost:5000"
     : "https://tweettoken.io";
 
+exports.NODE_ENV = process.env.NODE_ENV;
+
 exports.FUNCTIONS_PREFIX = "/.netlify/functions";
 exports.COOKIE_KEY = process.env.COOKIE_KEY;
 

@@ -1,6 +1,7 @@
 const FormData = require("form-data");
 const fetch = require("node-fetch");
 const { Readable } = require("stream");
+const { NODE_ENV } = require("./utils/config");
 
 const { getTweetId } = require("./utils/twitter");
 
@@ -41,21 +42,25 @@ async function uploadToPinata(pinataContent, fileName, isJSON = false) {
 }
 
 exports.handler = async (event) => {
-  const { metadata, imageData, tweetURL } = JSON.parse(event.body);
+  const { metadata, imageData, tweetURL, chainId } = JSON.parse(event.body);
   const tweetId = getTweetId(tweetURL);
+  const prefixChain = NODE_ENV === "development" ? "dev_" : "";
+  const prefixEnv = chainId === 1 ? "" : `${chainId}_`;
+  const prefix = prefixChain + prefixEnv;
+  console.log("prefix", prefix, chainId, NODE_ENV);
   let tokenURI;
 
   try {
     // TODO: if second fails revert first one
     const ipfsImagePath = await uploadToPinata(
       imageData,
-      `${tweetId}.png`,
+      `${prefix}${tweetId}.png`,
       false
     );
 
     metadata.image = ipfsImagePath;
 
-    tokenURI = await uploadToPinata(metadata, `${tweetId}.json`, true);
+    tokenURI = await uploadToPinata(metadata, `${prefix}${tweetId}.json`, true);
   } catch (err) {
     console.log(err);
     return {
