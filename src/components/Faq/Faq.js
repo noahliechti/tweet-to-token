@@ -32,8 +32,8 @@ function Faq({ chainId }) {
             <li>Time: month, year</li>
             <li>User: user id, username, verified</li>
             <li>
-              Tweet: characters, likes, retweets, quotes, replies, attachments,
-              polls
+              Tweet: characters, device, likes, retweets, quotes, replies,
+              attachments, polls
             </li>
             <li>Custom: theme, language</li>
           </ul>

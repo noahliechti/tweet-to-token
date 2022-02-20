@@ -91,6 +91,10 @@ const getAttributes = ({ data, includes }, theme, language) => [
     trait_type: "characters", // e.g 120
     value: data.text.length,
   },
+  {
+    trait_type: "device", // e.g 120
+    value: data.source,
+  },
 ];
 
 exports.getMetadata = async (tweetURL, theme, language) => {
