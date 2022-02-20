@@ -46,7 +46,7 @@ function Roadmap() {
               <Typography variant="h3" component="span">
                 Wallets
               </Typography>
-              <Typography>Enable Tweet Creation on mobile Browsers</Typography>
+              <Typography>Enable Tweet creation on mobile browsers</Typography>
             </TimelineContent>
           </TimelineItem>
           <TimelineItem>

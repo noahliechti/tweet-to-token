@@ -21,7 +21,13 @@ import Minter from "./Minter/Minter";
 import ConditionalFormWrapper from "./ConditionalFormWrapper/ConditionalFormWrapper";
 import MintMessage from "./MintMessage/MintMessage";
 
-import { BASE_URL, FUNCTIONS_PREFIX, ALERT_CODES } from "../../config/globals";
+import {
+  BASE_URL,
+  FUNCTIONS_PREFIX,
+  ALERT_CODES,
+  OPENSEA_TWEET_URL,
+  URL_TO_TWEET_ID,
+} from "../../config/globals";
 
 import { ReactComponent as TwitterIcon } from "../../assets/icons/twitter.svg";
 import { ReactComponent as OSIcon } from "../../assets/icons/opensea.svg";
@@ -29,14 +35,6 @@ import { ReactComponent as UploadGraphic } from "../../assets/graphics/upload.sv
 
 const tweetURLPattern =
   /^((?:http:\/\/)?|(?:https:\/\/)?)?(?:www\.)?twitter\.com\/(\w+)\/status\/(\d+)$/i;
-
-// TODO: DRY
-const getTweetId = (tweetURL) => {
-  const splitTweetURL = tweetURL.split("/");
-  const lastItem = splitTweetURL[splitTweetURL.length - 1];
-  const splitLastItem = lastItem.split("?");
-  return splitLastItem[0];
-};
 
 function Steps({
   userId,
@@ -168,7 +166,7 @@ function Steps({
   };
 
   const isDuplicateTweet = async () => {
-    const tweetId = ethers.BigNumber.from(getTweetId(state.tweetURL));
+    const tweetId = ethers.BigNumber.from(URL_TO_TWEET_ID(state.tweetURL));
 
     if (await isMinted(tweetId)) {
       setState({
@@ -182,7 +180,7 @@ function Steps({
 
   const handleMint = async () => {
     setFormIsSubmitting(true);
-    const tweetId = ethers.BigNumber.from(getTweetId(state.tweetURL));
+    const tweetId = ethers.BigNumber.from(URL_TO_TWEET_ID(state.tweetURL));
     let tx;
 
     let verified = await isVerified(tweetId);
@@ -426,7 +424,7 @@ function Steps({
               sx={{ mt: 1, mr: 1, width: 1 }}
               href={`http://twitter.com/intent/tweet?text=I%20just%20minted%20my%20Tweet%20with%20%40tweettokenio.%20Have%20a%20look%21%0A&url=https%3A%2F%2Ftestnets.opensea.io%2Fassets%2F${
                 contract.address
-              }%2F${getTweetId(state.tweetURL)}`}
+              }%2F${URL_TO_TWEET_ID(state.tweetURL)}`}
               target="_blank"
               rel="noopener"
             >
@@ -436,9 +434,11 @@ function Steps({
               variant="outlined"
               endIcon={<OSIcon width="24px" height="24px" />}
               sx={{ mt: 1, mr: 1, width: 1 }}
-              href={`https://testnets.opensea.io/assets/${
-                contract.address
-              }/${getTweetId(state.tweetURL)}`}
+              href={OPENSEA_TWEET_URL(
+                chainId,
+                contract,
+                URL_TO_TWEET_ID(state.tweetURL)
+              )}
               target="_blank"
               rel="noopener"
             >

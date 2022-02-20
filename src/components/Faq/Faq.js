@@ -21,7 +21,23 @@ function Faq({ chainId }) {
     {
       summary: "Why do I have to sign in with Twitter?",
       detail:
-        "By signing in with Twitter we can ensure, that users only mint their own tweets.",
+        "By signing in with Twitter we can ensure, that users only mint their own tweets. This is also enforced at the smart contract level.",
+    },
+    {
+      summary: "I don't want to creat an NFT, but how can I buy one?",
+      detail: (
+        <Box>
+          Head over to our{" "}
+          <Link
+            href="https://opensea.io/collection/tweettoken.io" // TODO: dev link
+            target="_blank"
+            rel="noopener"
+          >
+            OpenSea
+          </Link>{" "}
+          collection to see the NFTs that are currently in the market!
+        </Box>
+      ),
     },
     {
       summary: "What metadata gets stored?",
@@ -29,11 +45,10 @@ function Faq({ chainId }) {
         <Box>
           <Typography>We store the following metadata:</Typography>
           <ul>
-            <li>Time: month, year</li>
             <li>User: user id, username, verified</li>
             <li>
               Tweet: characters, device, likes, retweets, quotes, replies,
-              attachments, polls
+              attachments, polls, creation date
             </li>
             <li>Custom: theme, language</li>
           </ul>
@@ -55,6 +70,19 @@ function Faq({ chainId }) {
         "Creating a Tweet with tweettoken.io is free. You only pay the gas fees for the minting.",
     },
     {
+      summary: "Why does tweettoken.io use Polygon?",
+      detail: (
+        <Box>
+          <Typography>There are three main reasons:</Typography>
+          <ul>
+            <li>environmentally friendly</li>
+            <li>fast transactions</li>
+            <li>low gas fees</li>
+          </ul>
+        </Box>
+      ),
+    },
+    {
       summary: "Where can I look at the smart contract?",
       detail: (
         <Typography>
@@ -66,10 +94,10 @@ function Faq({ chainId }) {
         </Typography>
       ),
     },
-    {
-      summary: "Can I mint protected Tweets?",
-      detail: "Minting protected Tweets is not supported at the moment.",
-    },
+    // {
+    //   summary: "Can I mint protected Tweets?",
+    //   detail: "Minting protected Tweets is not supported at the moment.",
+    // },
     {
       summary: "How can I contact tweettoken.io",
       detail: (

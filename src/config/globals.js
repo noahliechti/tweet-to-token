@@ -35,6 +35,23 @@ export const ETHERSCAN_URL = (chainId, type, address) => {
   return `${link}/${type}/${address}`;
 };
 
+// TODO: DRY
+const getTweetId = (tweetURL) => {
+  const splitTweetURL = tweetURL.split("/");
+  const lastItem = splitTweetURL[splitTweetURL.length - 1];
+  const splitLastItem = lastItem.split("?");
+  return splitLastItem[0];
+};
+
+export const URL_TO_TWEET_ID = (tweetURL) => getTweetId(tweetURL);
+
+// eslint-disable-next-line arrow-body-style
+export const OPENSEA_TWEET_URL = (chainId, contract, tweetId) => {
+  return `https://${chainId === 1 ? "" : "testnets."}opensea.io/assets/${
+    contract.address
+  }/${tweetId}`;
+};
+
 export const languages = [
   { code: "ar", label: "Arabic" },
   { code: "bn", label: "Bangla" },
