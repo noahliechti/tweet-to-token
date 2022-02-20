@@ -8,6 +8,7 @@ const {
   COOKIE_KEY,
   REDIS_CONN_OBJ,
   FUNCTIONS_PREFIX,
+  NODE_ENV,
 } = require("./utils/config");
 
 const client = redis.createClient(REDIS_CONN_OBJ);
@@ -27,11 +28,11 @@ app.use(express.urlencoded({ extended: true }));
 // load session data and make it available at `req.session`
 app.use(
   session({
-    name: "TTT Login",
+    name: `TTT Login ${NODE_ENV === "development" ? "Dev" : ""}`,
     store: new RedisStore({ client: client, ttl: 1000 * 60 * 60 * 24 * 7 }), // 7 Days
     saveUninitialized: false,
-    secret: COOKIE_KEY,
     resave: false,
+    secret: COOKIE_KEY,
   })
 );
 
