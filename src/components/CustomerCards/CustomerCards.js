@@ -5,16 +5,16 @@ import { ReactComponent as StepsGraphic } from "../../assets/graphics/steps.svg"
 
 const cardsContent = [
   {
-    title: "🎩 Celebrity who wants to connect with fans",
-    text: "Whether you are verified or not, it is always good to give back to the community.",
+    title: "🎩 Celebrity developing his community",
+    text: "Whether you are verified or not, it is always good to give back to the community. We guarantee uniqueness. Only you can mint your tweets and there will be only one of a kind.",
   },
   {
     title: "🎉 NFT beginner minting his first NFT",
-    text: "With our platform we made it easy to create your first NFT, even if you aren't very technical. ",
+    text: "With our platform we made it easy to create your first NFT, even if you aren't very technical. Our four step process will guide you through the creation.",
   },
   {
     title: "📚 Twitter poet looking to monetize his work",
-    text: "Your tweets are art. Our platform allows you to generate an additional income stream.",
+    text: "Your Tweets are art. Our platform allows you to generate an additional income stream. Sell your Tweets on Opensea or Rarible. We allow you to customize your Tweet and give it a personal note.",
   },
 ];
 
