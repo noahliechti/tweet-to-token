@@ -43,7 +43,7 @@ function Header() {
         >
           <IconButton
             size="large"
-            aria-label="go to home page"
+            aria-label="tweettoken.io logo"
             href="/"
             sx={{ p: 0, borderRadius: 1 }}
             color="inherit"
