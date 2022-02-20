@@ -21,7 +21,7 @@ function LandingPage() {
                   "linear-gradient(130deg, rgba(56, 73, 221, 1) 0%, rgba(0, 210, 198, 0.7) 100%);background-clip: text;text-fill-color: transparent;",
               }}
             >
-              Turn your Tweets in to NFTs!
+              Turn your Tweets into NFTs!
             </Typography>
             <Typography variant="subtitle1" component="p">
               Our high quality images are automatically enhanced with metadata

@@ -41,17 +41,15 @@ function Header() {
             justifyContent: "space-between",
           }}
         >
-          <Typography variant="span" component="h1">
-            <IconButton
-              size="large"
-              aria-label="go to home page"
-              href="/"
-              sx={{ p: 0, borderRadius: 1 }}
-              color="inherit"
-            >
-              <LogoIcon />
-            </IconButton>
-          </Typography>
+          <IconButton
+            size="large"
+            aria-label="go to home page"
+            href="/"
+            sx={{ p: 0, borderRadius: 1 }}
+            color="inherit"
+          >
+            <LogoIcon />
+          </IconButton>
 
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <ToggleButton
