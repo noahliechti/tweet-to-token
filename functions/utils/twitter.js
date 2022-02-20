@@ -21,13 +21,6 @@ const getTweetAuthorName = (tweetURL) => {
 
 exports.getTweetAuthorName = this.getTweetAuthorName;
 
-const getMonthString = (utcDate) => {
-  const monthNumber = new Date(utcDate).getUTCMonth() + 1;
-  return Intl.DateTimeFormat("en", { month: "long" }).format(
-    new Date(monthNumber.toString())
-  );
-};
-
 const getAttributes = ({ data, includes }, theme, language) => [
   {
     trait_type: "attachments", // e.g 2
