@@ -13,6 +13,7 @@ function Footer() {
     <AppBar
       position="static"
       color="transparent"
+      component="footer"
       sx={{
         boxShadow: 0,
         border: 3,
