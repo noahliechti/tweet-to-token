@@ -3,6 +3,12 @@
 
 [[redirects]]
   from = "/*"
-  to = "/?success"
+  to = "/?denied/#steps"
   query = {oauth_token = ":token", oauth_verifier = ":verifier"}
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/?denied/#steps"
+  query = {denied = ":status"}
   force = true
