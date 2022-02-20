@@ -48,12 +48,9 @@ const getAttributes = ({ data, includes }, theme, language) => [
     value: language,
   },
   {
-    trait_type: "year", // e.g "2022"
-    value: `${new Date(data.created_at).getUTCFullYear()}`,
-  },
-  {
-    trait_type: "month", // e.g "august"
-    value: getMonthString(data.created_at).toLowerCase(),
+    display_type: "date",
+    trait_type: "creation", // e.g 1546360800
+    value: new Date(data.created_at).getTime(),
   },
   {
     trait_type: "retweets", // e.g 155
