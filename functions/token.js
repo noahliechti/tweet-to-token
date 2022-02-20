@@ -44,9 +44,7 @@ async function uploadToPinata(pinataContent, fileName, isJSON = false) {
 exports.handler = async (event) => {
   const { metadata, imageData, tweetURL, chainId } = JSON.parse(event.body);
   const tweetId = getTweetId(tweetURL);
-  const prefixChain = NODE_ENV === "development" ? "dev_" : "";
-  const prefixEnv = chainId === 1 ? "" : `${chainId}_`;
-  const prefix = prefixChain + prefixEnv;
+  const prefix = chainId === 1 ? "" : `${chainId}_`;
   console.log("prefix", prefix, chainId, NODE_ENV);
   let tokenURI;
 
