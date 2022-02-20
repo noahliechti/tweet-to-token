@@ -21,7 +21,6 @@ module.exports = (client) => {
       if (user) {
         const userEnhanced = user;
         userEnhanced.verified = userEnhanced.verified === "true"; // convert string to bool
-        userEnhanced.userId = userId;
         done(null, userEnhanced); // attach user object to the request as req.user
       } else {
         done(new Error("Failed to deserialize user"));
@@ -46,7 +45,7 @@ module.exports = (client) => {
         } = profile._json; // eslint-disable-line no-underscore-dangle
 
         // TODO: its already in the username
-        const user = { name, screenName, photo, verified };
+        const user = { userId, name, screenName, photo, verified };
 
         // create or overwrite user in db
         await client.hmset(`t:user:${userId}`, user);
