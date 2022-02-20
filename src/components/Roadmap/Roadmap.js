@@ -9,18 +9,13 @@ import {
   TimelineContent,
 } from "@mui/lab";
 
-import { ReactComponent as MilestonesGraphic } from "../../assets/graphics/milestones.svg";
+import { ReactComponent as RoadmapGraphic } from "../../assets/graphics/roadmap.svg";
 
-// const milestones = [{
-//   content:
-
-// }]
-
-function MileStones() {
+function Roadmap() {
   return (
     <Grid container spacing={8} alignItems="center">
       <Grid item md={6} sx={{ display: { xs: "none", md: "block" } }}>
-        <MilestonesGraphic />
+        <RoadmapGraphic />
       </Grid>
       <Grid item xs={12} md={6}>
         <Timeline position="alternate" sx={{ mt: 0, pt: 0 }}>
@@ -75,4 +70,4 @@ function MileStones() {
   );
 }
 
-export default MileStones;
+export default Roadmap;

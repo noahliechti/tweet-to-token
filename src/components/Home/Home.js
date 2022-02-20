@@ -10,7 +10,7 @@ import Steps from "../Steps/Steps";
 import About from "../About/About";
 import Faq from "../Faq/Faq";
 import Alerts from "../Alerts/Alerts";
-import Milestones from "../Milestones/Milestones";
+import Roadmap from "../Roadmap/Roadmap";
 import LandingPage from "../LandingPage/LandingPage";
 import Snacks from "../Snacks/Snacks";
 
@@ -147,9 +147,9 @@ function Home() {
           <Typography variant="h2">FAQ</Typography>
           <Faq chainId={chainId} />
         </Grid>
-        <Grid id="milestones" item xs={12}>
-          <Typography variant="h2">Milestones</Typography>
-          <Milestones />
+        <Grid id="roadmap" item xs={12}>
+          <Typography variant="h2">Roadmap</Typography>
+          <Roadmap />
         </Grid>
       </Grid>
       <Footer />

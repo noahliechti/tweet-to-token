@@ -14,7 +14,7 @@ import Social from "../Social/Social";
 import { ReactComponent as LogoIcon } from "../../assets/icons/logo.svg";
 import { ReactComponent as MenuIcon } from "../../assets/icons/menu.svg";
 
-const pages = ["use-case", "about", "faq", "milestones"];
+const pages = ["use-case", "about", "faq", "roadmap"];
 
 function Header() {
   const [open, setOpen] = React.useState(false);
