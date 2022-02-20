@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 // load session data and make it available at `req.session`
 app.use(
   session({
-    name: `TTT Login ${NODE_ENV === "development" ? "Dev" : ""}`,
+    name: `TTT Login${NODE_ENV === "development" ? " Dev" : ""}`,
     store: new RedisStore({ client: client, ttl: 1000 * 60 * 60 * 24 * 7 }), // 7 Days
     saveUninitialized: false,
     resave: false,

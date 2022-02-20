@@ -44,7 +44,6 @@ module.exports = (client) => {
           verified,
         } = profile._json; // eslint-disable-line no-underscore-dangle
 
-        // TODO: its already in the username
         const user = { userId, name, screenName, photo, verified };
 
         // create or overwrite user in db
