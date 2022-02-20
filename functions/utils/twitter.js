@@ -82,14 +82,14 @@ const getAttributes = ({ data, includes }, theme, language) => [
     value: data.text.length,
   },
   {
-    trait_type: "device", // e.g 120
+    trait_type: "device", // e.g "Twitter Web App"
     value: data.source,
   },
 ];
 
 exports.getMetadata = async (tweetURL, theme, language) => {
   const tweetId = getTweetId(tweetURL);
-  const api = `https://api.twitter.com/2/tweets/${tweetId}?tweet.fields=attachments,created_at,lang,text,public_metrics&user.fields=verified&expansions=author_id`;
+  const api = `https://api.twitter.com/2/tweets/${tweetId}?tweet.fields=attachments,created_at,lang,text,public_metrics,source&user.fields=verified&expansions=author_id`;
   const headers = {
     Authorization: `Bearer ${TWITTER_BEARER_TOKEN}`,
   };
