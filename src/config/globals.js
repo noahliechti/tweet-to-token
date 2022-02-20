@@ -29,11 +29,8 @@ export const ETHERSCAN_URL = (chainId, type, address) => {
     case 4:
       link = "https://rinkeby.etherscan.io";
       break;
-    case 1337:
-      // TODO:
-      break;
     default:
-      break;
+      return "https://etherscan.io";
   }
   return `${link}/${type}/${address}`;
 };

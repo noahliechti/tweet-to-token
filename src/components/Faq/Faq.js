@@ -7,10 +7,10 @@ import { ReactComponent as QuestionsGraphic } from "../../assets/graphics/questi
 import addressMap from "../../config/contracts/map.json";
 
 function Faq({ chainId }) {
-  const [etherscanURL, setEtherscanURL] = useState();
+  const [etherscanURL, setEtherscanURL] = useState("https://etherscan.io");
 
   useEffect(() => {
-    if (chainId) {
+    if (chainId && addressMap[chainId]) {
       setEtherscanURL(
         ETHERSCAN_URL(chainId, "address", addressMap[chainId].TweetToken)
       );
@@ -69,6 +69,59 @@ function Faq({ chainId }) {
     {
       summary: "Can I mint protected Tweets?",
       detail: "Minting protected Tweets is not supported at the moment.",
+    },
+    {
+      summary: "How can I contact tweettoken.io",
+      detail: (
+        <Box>
+          <Typography>
+            There are many ways to contact us. Please choose the appropriate
+            channel:
+          </Typography>
+          <ul>
+            <li>
+              Found a security vulnerability? Drop us a DM on{" "}
+              <Link
+                href="https://twitter.com/messages/compose?recipient_id=1472196662902808579"
+                target="_blank"
+                rel="noopener"
+              >
+                Twitter
+              </Link>
+            </li>
+            <li>
+              Found a bug? Open an issue on{" "}
+              <Link
+                href="https://github.com/noahliechti/tweet-to-token/issues"
+                target="_blank"
+                rel="noopener"
+              >
+                GitHub
+              </Link>
+            </li>
+            <li>
+              Feature request? Open an issue on{" "}
+              <Link
+                href="https://github.com/noahliechti/tweet-to-token/issues"
+                target="_blank"
+                rel="noopener"
+              >
+                GitHub
+              </Link>
+            </li>
+            <li>
+              Question? Drop us a DM on{" "}
+              <Link
+                href="https://twitter.com/messages/compose?recipient_id=1472196662902808579"
+                target="_blank"
+                rel="noopener"
+              >
+                Twitter
+              </Link>
+            </li>
+          </ul>
+        </Box>
+      ),
     },
   ];
 
