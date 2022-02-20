@@ -13,7 +13,7 @@ function LandingPage() {
             maxWidth: { sm: 545, md: 430, lg: 580 },
           }}
         >
-          <header>
+          <header title="Turn your Tweets into NFTs!">
             <Typography
               variant="h1"
               sx={{
