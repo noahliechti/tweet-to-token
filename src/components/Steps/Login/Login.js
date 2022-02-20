@@ -81,6 +81,7 @@ function Login({ twitterLoggedIn }) {
         onClick={handleClick}
         variant="contained"
         fullWidth
+        rel="nofollow"
         endIcon={<TwitterIcon width="24px" height="24px" />}
       >
         {twitterLoggedIn ? "disconnect" : "connect"}

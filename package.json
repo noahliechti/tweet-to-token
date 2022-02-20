@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "https://tweettoken.io/",
-  "description": "The easiest and fastest way to mint metadata-rich Tweet NFTs",
+  "description": "The easiest and fastest way to mint metadata-rich Tweet NFTs. We turn your Tweets into ERC-721 Tokens with Polygon.",
   "files": [],
   "engines": {
     "node": ">=12.3.0"

@@ -140,7 +140,7 @@ function Home() {
           />
         </Grid>
         <Grid id="about" item xs={12}>
-          <Typography variant="h2">About TTT</Typography>
+          <Typography variant="h2">About</Typography>
           <About />
         </Grid>
         <Grid id="faq" item xs={12}>

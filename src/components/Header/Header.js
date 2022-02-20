@@ -5,7 +5,6 @@ import {
   IconButton,
   Box,
   Button,
-  Typography,
   ToggleButton,
   Drawer,
 } from "@mui/material";
@@ -68,6 +67,7 @@ function Header() {
               columnGap: 3,
               display: { xs: "none", md: "flex" },
             }}
+            component="nav"
           >
             {pages.map((page) => (
               <Button
@@ -78,9 +78,7 @@ function Header() {
                 smooth
                 color="inherit"
               >
-                <Typography variant="h2" sx={{ m: 0 }}>
-                  {page}
-                </Typography>
+                {page}
               </Button>
             ))}
             <Button to="#steps" component={HashLink} smooth variant="contained">
@@ -108,6 +106,7 @@ function Header() {
             flexDirection: { xs: "column", sm: "row" },
             flexWrap: "wrap",
           }}
+          component="nav"
         >
           {pages.map((page) => (
             <Button
@@ -123,9 +122,7 @@ function Header() {
                 flexGrow: 1,
               }}
             >
-              <Typography variant="h2" sx={{ m: 0 }}>
-                {page}
-              </Typography>
+              {page}
             </Button>
           ))}
           <Button

@@ -1,7 +1,7 @@
 {
   "name": "tweettoken.io",
-  "short_name": "tweettoken.io",
-  "description": "The easiest and fastest way to mint metadata-rich Tweet NFTs.",
+  "short_name": "TTT",
+  "description": "The easiest and fastest way to mint metadata-rich Tweet NFTs. We turn your Tweets into ERC-721 Tokens with Polygon.",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
