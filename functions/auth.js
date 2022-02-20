@@ -33,6 +33,7 @@ app.use(
     saveUninitialized: false,
     resave: false,
     secret: COOKIE_KEY,
+    cookie: { secure: true },
   })
 );
 
