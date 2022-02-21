@@ -27,7 +27,7 @@ function Home() {
   const [twitterUser, setTwitterUser] = useState();
   const [activeAlert, setActiveAlert] = useState();
   const [signer, setSigner] = useState();
-  const [deployer, setDeployer] = useState();
+  const [minter, setMinter] = useState();
   const [persistentChainId, setPersistentChainId] = useState();
   const [snackPack, setSnackPack] = React.useState([]);
 
@@ -56,8 +56,8 @@ function Home() {
     const saveSigners = async () => {
       if (library) {
         setSigner(await library.getSigner());
-        setDeployer(
-          new ethers.Wallet(process.env.REACT_APP_DEPLOYER_PRIVATE_KEY, library)
+        setMinter(
+          new ethers.Wallet(process.env.REACT_APP_MINTER_PRIVATE_KEY, library)
         );
       }
     };
@@ -133,8 +133,7 @@ function Home() {
           <Steps
             userId={twitterUser ? twitterUser.userId : null}
             contract={contract}
-            signer={signer}
-            deployer={deployer}
+            minter={minter}
             setActiveAlert={setActiveAlert}
             setSnackPack={setSnackPack}
           />
