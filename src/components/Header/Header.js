@@ -3,6 +3,7 @@ import {
   AppBar,
   Toolbar,
   IconButton,
+  Typography,
   Box,
   Button,
   ToggleButton,
@@ -78,7 +79,9 @@ function Header() {
                 smooth
                 color="inherit"
               >
-                {page}
+                <Typography variant="h2" component="span" sx={{ m: 0 }}>
+                  {page}
+                </Typography>
               </Button>
             ))}
             <Button to="#steps" component={HashLink} smooth variant="contained">
@@ -122,7 +125,9 @@ function Header() {
                 flexGrow: 1,
               }}
             >
-              {page}
+              <Typography variant="h2" component="span" sx={{ m: 0 }}>
+                {page}
+              </Typography>
             </Button>
           ))}
           <Button

@@ -1,7 +1,6 @@
 const FormData = require("form-data");
 const fetch = require("node-fetch");
 const { Readable } = require("stream");
-const { NODE_ENV } = require("./utils/config");
 
 const { getTweetId } = require("./utils/twitter");
 
