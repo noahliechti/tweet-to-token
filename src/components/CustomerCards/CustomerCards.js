@@ -10,7 +10,7 @@ const cardsContent = [
   },
   {
     title: "🎉 NFT beginner minting his first NFT",
-    text: "With our platform we made it easy to create your first NFT, even if you aren't very technical. Our four step process will guide you through the creation.",
+    text: "With our platform we made it easy to create your first NFT, even if you aren't very technical. Our four step process will guide you through the creation. You don't even have to own coins.",
   },
   {
     title: "📚 Twitter poet looking to monetize his work",

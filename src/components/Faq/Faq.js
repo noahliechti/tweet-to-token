@@ -67,7 +67,7 @@ function Faq({ chainId }) {
     {
       summary: "How much does it cost to mint a Tweet with tweettoken.io?",
       detail:
-        "Creating a Tweet with tweettoken.io is free. You only pay the gas fees for the minting.",
+        "Creating a Tweet with tweettoken.io is free. The gas fees are on the house!",
     },
     {
       summary: "Why does tweettoken.io use Polygon?",
