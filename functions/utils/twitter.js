@@ -108,6 +108,7 @@ exports.getMetadata = async (tweetURL, theme, language) => {
           const metadata = {
             name: `@${username} #${tweetId}`,
             description: `Tweet by @${username}.\nOriginal: ${tweetURL}`,
+            external_link: "https://tweettoken.io",
             attributes: attributes,
           };
           resolve(metadata);
