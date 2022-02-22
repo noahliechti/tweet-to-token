@@ -53,7 +53,7 @@ const getTweetId = (tweetURL) => {
 export const URL_TO_TWEET_ID = (tweetURL) => getTweetId(tweetURL);
 
 // eslint-disable-next-line arrow-body-style
-export const OPENSEA_TWEET_URL = (chainId, contract, tweetId) => {
+export const OPENSEA_TWEET_URL = (chainId, address, tweetId) => {
   let link;
   switch (chainId) {
     case 1:
@@ -71,7 +71,7 @@ export const OPENSEA_TWEET_URL = (chainId, contract, tweetId) => {
     default:
       return "https://opensea.io/";
   }
-  return `${link}/${contract.address}/${tweetId}`;
+  return `${link}/${address}/${tweetId}`;
 };
 
 export const languages = [

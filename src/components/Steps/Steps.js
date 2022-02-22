@@ -58,6 +58,20 @@ function Steps({ userId, contract, minter, setActiveAlert, setSnackPack }) {
     }
   }, [account, activeStep, setActiveAlert, userId]);
 
+  const getPreWrittenTweet = (address, tweetURL) => {
+    const openseaTweetURL = OPENSEA_TWEET_URL(
+      chainId,
+      address,
+      URL_TO_TWEET_ID(tweetURL)
+    );
+    const encodedText = encodeURI(
+      "I just minted my Tweet with @tweettokenio. Have a look!\n"
+    );
+    const encodedURL = encodeURI(openseaTweetURL);
+
+    return `http://twitter.com/intent/tweet?text=${encodedText}&url=${encodedURL}`;
+  };
+
   const handleChange = (target) => {
     const { value } = target;
     const { name } = target;
@@ -377,9 +391,7 @@ function Steps({ userId, contract, minter, setActiveAlert, setSnackPack }) {
               variant="contained"
               endIcon={<TwitterIcon width="24px" height="24px" />}
               sx={{ mt: 1, mr: 1, width: 1 }}
-              href={`http://twitter.com/intent/tweet?text=I%20just%20minted%20my%20Tweet%20with%20%40tweettokenio.%20Have%20a%20look%21%0A&url=https%3A%2F%2Ftestnets.opensea.io%2Fassets%2F${
-                contract.address
-              }%2F${URL_TO_TWEET_ID(state.tweetURL)}`}
+              href={getPreWrittenTweet(contract.address, state.tweetURL)}
               target="_blank"
               rel="noopener"
             >
@@ -391,7 +403,7 @@ function Steps({ userId, contract, minter, setActiveAlert, setSnackPack }) {
               sx={{ mt: 1, mr: 1, width: 1 }}
               href={OPENSEA_TWEET_URL(
                 chainId,
-                contract,
+                contract.address,
                 URL_TO_TWEET_ID(state.tweetURL)
               )}
               target="_blank"
