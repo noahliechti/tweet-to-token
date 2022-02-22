@@ -147,9 +147,13 @@ function Steps({ userId, contract, minter, setActiveAlert, setSnackPack }) {
   };
 
   const isMinted = async (tweetId) => {
-    const eventFilter = contract.filters.TokenCreated(tweetId);
-    const events = await contract.queryFilter(eventFilter);
-    return events.length;
+    let tx;
+    try {
+      tx = await contract.ownerOf(tweetId);
+    } catch (err) {
+      return false;
+    }
+    return !!tx;
   };
 
   const isDuplicateTweet = async () => {
@@ -193,7 +197,6 @@ function Steps({ userId, contract, minter, setActiveAlert, setSnackPack }) {
         });
       }
     }
-
     setFormIsSubmitting(false);
   };
 
