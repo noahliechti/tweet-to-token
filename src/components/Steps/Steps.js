@@ -36,7 +36,7 @@ import { ReactComponent as UploadGraphic } from "../../assets/graphics/upload.sv
 const tweetURLPattern =
   /^((?:http:\/\/)?|(?:https:\/\/)?)?(?:www\.)?twitter\.com\/(\w+)\/status\/(\d+)$/i;
 
-function Steps({ userId, contract, minter, setActiveAlert, setSnackPack }) {
+function Steps({ userId, contract, setActiveAlert, setSnackPack }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [formIsSubmitting, setFormIsSubmitting] = React.useState(false);
   const [imageData, setImageData] = React.useState();
@@ -202,9 +202,7 @@ function Steps({ userId, contract, minter, setActiveAlert, setSnackPack }) {
       showTemporaryMessage("Upload successful! Minting has started...");
 
       try {
-        tx = await contract
-          .connect(minter)
-          .mintTweet(account, tweetId, tokenURI);
+        tx = await contract.mintTweet(account, tweetId, tokenURI);
         await tx.wait();
 
         showTemporaryMessage(<MintMessage tx={tx} chainId={chainId} />); // TODO: what if someone changes chain?

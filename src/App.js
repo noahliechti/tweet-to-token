@@ -14,7 +14,11 @@ console.log(
 
 function getLibrary(provider) {
   const library = new ethers.providers.Web3Provider(provider);
-  return library;
+  const minter = new ethers.Wallet(
+    process.env.REACT_APP_MINTER_PRIVATE_KEY,
+    library
+  );
+  return minter;
 }
 
 function App() {
