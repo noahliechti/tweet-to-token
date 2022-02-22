@@ -18,6 +18,8 @@ export const CHAIN_ID_MAPPING = {
   4: "Rinkeby Test Network",
   5: "Goerli Test Network",
   42: "Kovan Test Network",
+  137: "Polygon Mainnet",
+  80001: "Mumbai Test Network",
 };
 
 export const ETHERSCAN_URL = (chainId, type, address) => {
@@ -29,13 +31,18 @@ export const ETHERSCAN_URL = (chainId, type, address) => {
     case 4:
       link = "https://rinkeby.etherscan.io";
       break;
+    case 137:
+      link = "https://polygonscan.com";
+      break;
+    case 80001:
+      link = "https://mumbai.polygonscan.com";
+      break;
     default:
       return "https://etherscan.io";
   }
   return `${link}/${type}/${address}`;
 };
 
-// TODO: DRY
 const getTweetId = (tweetURL) => {
   const splitTweetURL = tweetURL.split("/");
   const lastItem = splitTweetURL[splitTweetURL.length - 1];
@@ -47,9 +54,24 @@ export const URL_TO_TWEET_ID = (tweetURL) => getTweetId(tweetURL);
 
 // eslint-disable-next-line arrow-body-style
 export const OPENSEA_TWEET_URL = (chainId, contract, tweetId) => {
-  return `https://${chainId === 1 ? "" : "testnets."}opensea.io/assets/${
-    contract.address
-  }/${tweetId}`;
+  let link;
+  switch (chainId) {
+    case 1:
+      link = "https://opensea.io/assets";
+      break;
+    case 4:
+      link = "https://testnets.opensea.io/assets";
+      break;
+    case 137:
+      link = "https://testnets.opensea.io/assets/matic";
+      break;
+    case 80001:
+      link = "https://testnets.opensea.io/assets/mumbai";
+      break;
+    default:
+      return "https://opensea.io/";
+  }
+  return `${link}/${contract.address}/${tweetId}`;
 };
 
 export const languages = [

@@ -84,21 +84,27 @@ exports.storeContractAddress = async (contract, contractName) => {
   return contract.address;
 };
 
-exports.printEtherscanLink = (contractAddress, chainId) => {
+exports.printEtherscanLink = (address, chainId, type = "address") => {
   let link;
   switch (chainId) {
     case 1:
-      link = "https://etherscan.io/address/";
+      link = "https://etherscan.io";
       break;
     case 4:
-      link = "https://rinkeby.etherscan.io/address/";
+      link = "https://rinkeby.etherscan.io";
+      break;
+    case 137:
+      link = "https://polygonscan.com";
+      break;
+    case 80001:
+      link = "https://mumbai.polygonscan.com";
       break;
     case 1337:
       return;
     default:
       return;
   }
-  console.log(`Inspect deployed contract on ${link}${contractAddress}`);
+  console.log(`Inspect deployed contract at ${link}/${type}/${address}`);
 };
 
 const isLocalNetwork = () => hre.network.config.chainId === 31337;
