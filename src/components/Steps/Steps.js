@@ -56,7 +56,12 @@ function Steps({ userId, contract, minter, setActiveAlert, setSnackPack }) {
       setActiveStep(() => 0);
       setActiveAlert(ALERT_CODES.LOGOUT);
     }
-  }, [account, activeStep, setActiveAlert, userId]);
+    if ((!contract || !active) && activeStep > 0) {
+      setFormIsSubmitting(false);
+      setActiveStep(() => 0);
+      // setActiveAlert(ALERT_CODES.LOGOUT);
+    }
+  }, [account, active, activeStep, contract, setActiveAlert, userId]);
 
   const getPreWrittenTweet = (address, tweetURL) => {
     const openseaTweetURL = OPENSEA_TWEET_URL(
@@ -381,7 +386,8 @@ function Steps({ userId, contract, minter, setActiveAlert, setSnackPack }) {
             </Step>
           ))}
         </Stepper>
-        {activeStep === steps.length && (
+
+        {activeStep === steps.length && contract && (
           <Paper square elevation={0} sx={{ p: 3 }}>
             <Typography>
               Congratulations! You successfully minted your NFT. Make sure to
