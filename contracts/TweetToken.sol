@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.6; // TODO: which version?
+pragma solidity 0.8.6;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol"; // TODO: needed?
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
@@ -22,7 +22,7 @@ contract TweetToken is ERC721, ERC721URIStorage, AccessControl {
 
     event TokenCreated(
         uint256 indexed tweetId,
-        string indexed tokenURI,
+        string tokenURI,
         address indexed minter
     );
 
