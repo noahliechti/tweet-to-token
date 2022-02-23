@@ -36,14 +36,7 @@ import { ReactComponent as UploadGraphic } from "../../assets/graphics/upload.sv
 const tweetURLPattern =
   /^((?:http:\/\/)?|(?:https:\/\/)?)?(?:www\.)?twitter\.com\/(\w+)\/status\/(\d+)$/i;
 
-function Steps({
-  userId,
-  contract,
-  signer,
-  deployer,
-  setActiveAlert,
-  setSnackPack,
-}) {
+function Steps({ userId, contract, setActiveAlert, setSnackPack }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [formIsSubmitting, setFormIsSubmitting] = React.useState(false);
   const [imageData, setImageData] = React.useState();
@@ -63,7 +56,26 @@ function Steps({
       setActiveStep(() => 0);
       setActiveAlert(ALERT_CODES.LOGOUT);
     }
-  }, [account, activeStep, setActiveAlert, userId]);
+    if ((!contract || !active) && activeStep > 0) {
+      setFormIsSubmitting(false);
+      setActiveStep(() => 0);
+      // setActiveAlert(ALERT_CODES.LOGOUT);
+    }
+  }, [account, active, activeStep, contract, setActiveAlert, userId]);
+
+  const getPreWrittenTweet = (address, tweetURL) => {
+    const openseaTweetURL = OPENSEA_TWEET_URL(
+      chainId,
+      address,
+      URL_TO_TWEET_ID(tweetURL)
+    );
+    const encodedText = encodeURI(
+      "I just minted my Tweet with @tweettokenio. Have a look!\n"
+    );
+    const encodedURL = encodeURI(openseaTweetURL);
+
+    return `http://twitter.com/intent/tweet?text=${encodedText}&url=${encodedURL}`;
+  };
 
   const handleChange = (target) => {
     const { value } = target;
@@ -153,16 +165,14 @@ function Steps({
     ]);
   };
 
-  const isVerified = async (tweetId) => {
-    const eventFilter = contract.filters.TweetVerified(tweetId);
-    const events = await contract.queryFilter(eventFilter);
-    return events.length;
-  };
-
   const isMinted = async (tweetId) => {
-    const eventFilter = contract.filters.TokenCreated(tweetId);
-    const events = await contract.queryFilter(eventFilter);
-    return events.length;
+    let tx;
+    try {
+      tx = await contract.ownerOf(tweetId);
+    } catch (err) {
+      return false;
+    }
+    return !!tx;
   };
 
   const isDuplicateTweet = async () => {
@@ -183,65 +193,27 @@ function Steps({
     const tweetId = ethers.BigNumber.from(URL_TO_TWEET_ID(state.tweetURL));
     let tx;
 
-    let verified = await isVerified(tweetId);
+    const minted = await isMinted(tweetId);
 
-    if (!verified) {
+    if (!minted) {
       showTemporaryMessage("Uploading Tweet and Metadata to IPFS...");
       const tokenURI = await getTokenURI();
 
-      try {
-        tx = await contract
-          .connect(deployer)
-          .addVerifiedTweet(account, tweetId, tokenURI);
-        await tx.wait();
-        verified = true;
-      } catch (err) {
-        const errorMessage = await err.error.error.message;
-        const alreadyVerifiedMessage =
-          "execution reverted: Tweet is already verified";
-        const salePausedMessage = "execution reverted: Minting is paused";
-        let outputMessage;
-
-        if (errorMessage === salePausedMessage) {
-          outputMessage =
-            "Minting is paused! Checkout @tweettokenio for more information.";
-        } else if (errorMessage !== alreadyVerifiedMessage) {
-          outputMessage = "Ups, something went wrong! Please try again.";
-        }
-        if (outputMessage) {
-          setState({
-            ...state,
-            formErrorMessage: outputMessage,
-          });
-          setFormIsSubmitting(false);
-          return;
-        }
-      }
-    }
-
-    const minted = await isMinted(tweetId);
-
-    if (verified && !minted) {
       showTemporaryMessage("Upload successful! Minting has started...");
 
       try {
-        tx = await contract.connect(signer).mintTweet(tweetId);
+        tx = await contract.mintTweet(account, tweetId, tokenURI);
         await tx.wait();
 
         showTemporaryMessage(<MintMessage tx={tx} chainId={chainId} />); // TODO: what if someone changes chain?
         handleNext();
       } catch (err) {
-        const errorMessage =
-          err.code === 4001
-            ? "Transaction was rejected! Please try again."
-            : err.message;
         setState({
           ...state,
-          formErrorMessage: errorMessage,
+          formErrorMessage: "Ups, something went wrong! Pleas try again.",
         });
       }
     }
-
     setFormIsSubmitting(false);
   };
 
@@ -412,7 +384,8 @@ function Steps({
             </Step>
           ))}
         </Stepper>
-        {activeStep === steps.length && (
+
+        {activeStep === steps.length && contract && (
           <Paper square elevation={0} sx={{ p: 3 }}>
             <Typography>
               Congratulations! You successfully minted your NFT. Make sure to
@@ -422,9 +395,7 @@ function Steps({
               variant="contained"
               endIcon={<TwitterIcon width="24px" height="24px" />}
               sx={{ mt: 1, mr: 1, width: 1 }}
-              href={`http://twitter.com/intent/tweet?text=I%20just%20minted%20my%20Tweet%20with%20%40tweettokenio.%20Have%20a%20look%21%0A&url=https%3A%2F%2Ftestnets.opensea.io%2Fassets%2F${
-                contract.address
-              }%2F${URL_TO_TWEET_ID(state.tweetURL)}`}
+              href={getPreWrittenTweet(contract.address, state.tweetURL)}
               target="_blank"
               rel="noopener"
             >
@@ -436,7 +407,7 @@ function Steps({
               sx={{ mt: 1, mr: 1, width: 1 }}
               href={OPENSEA_TWEET_URL(
                 chainId,
-                contract,
+                contract.address,
                 URL_TO_TWEET_ID(state.tweetURL)
               )}
               target="_blank"

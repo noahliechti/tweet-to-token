@@ -25,7 +25,7 @@ function LandingPage() {
             </Typography>
             <Typography variant="subtitle1" component="p">
               Our high quality images are automatically enhanced with metadata
-              and will make your NFTs stand out.
+              and will make your NFTs stand out. And the best of all: It's free!
             </Typography>
           </header>
 

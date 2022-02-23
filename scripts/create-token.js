@@ -64,7 +64,8 @@ async function getTokenURIHash(tweetId) {
 
 async function mintTweet(contract, tweetOwner, tweetId) {
   let tx;
-  tx = await contract.addVerifiedTweet(
+  tx = await contract.makeTweetMintable(
+    // TODO: outdated -> use mintTweet()
     tweetOwner.address,
     tweetId,
     getTokenURIHash(tweetId)

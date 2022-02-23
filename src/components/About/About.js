@@ -11,7 +11,7 @@ function About() {
       <Grid item xs={12} md={6}>
         <Box sx={{ textAlign: { xs: "center", md: "left" } }}>
           <Typography>
-            <em>tweettoken.io</em> is a platform built on Ethereum. It let's you
+            <em>tweettoken.io</em> is a platform built on Polygon. It let's you
             mint your Tweets with a few clicks <strong>for free</strong>. We
             offer
             <strong> customization options</strong> for the theme and the

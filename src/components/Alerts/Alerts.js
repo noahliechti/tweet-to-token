@@ -10,7 +10,7 @@ function Alerts({ activeAlert, setActiveAlert, persistentChainId }) {
     {
       severity: "warning",
       title: "Unsupported Network",
-      text: "Please switch to Mainnet or Rinkeby.",
+      text: "Please switch to Polygon or Mumbai.",
     },
     {
       severity: "warning",

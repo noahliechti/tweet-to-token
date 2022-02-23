@@ -26,8 +26,6 @@ function Home() {
   const [contract, setContract] = useState();
   const [twitterUser, setTwitterUser] = useState();
   const [activeAlert, setActiveAlert] = useState();
-  const [signer, setSigner] = useState();
-  const [deployer, setDeployer] = useState();
   const [persistentChainId, setPersistentChainId] = useState();
   const [snackPack, setSnackPack] = React.useState([]);
 
@@ -53,26 +51,15 @@ function Home() {
   }, [activate, active, error]);
 
   useEffect(() => {
-    const saveSigners = async () => {
-      if (library) {
-        setSigner(await library.getSigner());
-        setDeployer(
-          new ethers.Wallet(process.env.REACT_APP_DEPLOYER_PRIVATE_KEY, library)
-        );
-      }
-    };
-    saveSigners();
-  }, [library]);
-
-  useEffect(() => {
     if (chainId) {
       if (addressMap[chainId]) {
         const tweetTokenAddress = addressMap[chainId].TweetToken;
-        if (signer) {
+        if (library) {
+          // TODO: if needed?
           const TweetToken = new ethers.Contract(
             tweetTokenAddress,
             tweetToken.abi,
-            signer
+            library
           );
           setContract(TweetToken);
         }
@@ -83,7 +70,7 @@ function Home() {
         setContract(null);
       }
     }
-  }, [activeAlert, chainId, signer]);
+  }, [activeAlert, chainId, library]);
 
   useEffect(() => {
     fetch(`${BASE_URL}${FUNCTIONS_PREFIX}/auth`, {
@@ -133,8 +120,6 @@ function Home() {
           <Steps
             userId={twitterUser ? twitterUser.userId : null}
             contract={contract}
-            signer={signer}
-            deployer={deployer}
             setActiveAlert={setActiveAlert}
             setSnackPack={setSnackPack}
           />

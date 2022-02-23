@@ -1,7 +1,7 @@
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { Web3ReactProvider } from "@web3-react/core";
-import { Web3Provider } from "@ethersproject/providers"; // TODO: very big
+import { ethers } from "ethers";
 import theme from "./config/theme";
 import Home from "./components/Home/Home";
 import NotFound from "./components/NotFound/NotFound";
@@ -10,12 +10,15 @@ import NotFound from "./components/NotFound/NotFound";
 console.log(
   "%c👨🏽‍💻 Found a bug? Please open an issue here: https://github.com/noahliechti/tweet-to-token/issues",
   "font-size:20px"
-); // TODO: privacy link
+);
 
 function getLibrary(provider) {
-  const library = new Web3Provider(provider, "any"); // TODO: which?
-  // library.pollingInterval = 15000; TODO: what's this?
-  return library;
+  const library = new ethers.providers.Web3Provider(provider);
+  const minter = new ethers.Wallet(
+    process.env.REACT_APP_MINTER_PRIVATE_KEY,
+    library
+  );
+  return minter;
 }
 
 function App() {
