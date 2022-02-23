@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Link, Button } from "@mui/material";
+import { ethers } from "ethers";
 import { LoadingButton } from "@mui/lab";
 import { useWeb3React, UnsupportedChainIdError } from "@web3-react/core";
 
@@ -45,10 +46,34 @@ function Login({ twitterLoggedIn }) {
         setLoading(true);
         window.localStorage.setItem("isConnecting", true);
 
+        // window.ethereum.request({
+        //   method: "wallet_addEthereumChain",
+        //   params: [
+        //     {
+        //       chainId: ethers.utils.hexValue(137), // TODO: change to mainnet polygon
+        //       nativeCurrency: { name: "MATIC", symbol: "MATIC", decimals: 18 },
+        //       chainName: "Polygon Mainnet",
+        //       rpcUrls: ["https://polygon-rpc.com/"],
+        //       blockExplorerUrls: ["https://polygonscan.com"],
+        //     },
+        //   ],
+        // });
+        await window.ethereum.request({
+          method: "wallet_addEthereumChain",
+          params: [
+            {
+              chainId: ethers.utils.hexValue(80001), // TODO: change to mainnet polygon
+              nativeCurrency: { name: "MATIC", symbol: "MATIC", decimals: 18 },
+              chainName: "Mumbai",
+              rpcUrls: ["https://rpc-mumbai.maticvigil.com"],
+              blockExplorerUrls: ["https://mumbai.polygonscan.com"],
+            },
+          ],
+        });
         window.ethereum
           .request({
             method: "wallet_switchEthereumChain",
-            params: [{ chainId: "0x1" }],
+            params: [{ chainId: ethers.utils.hexValue(80001) }], // TODO: change to mainnet polygon
           })
           .then(() => {
             window.localStorage.removeItem("isConnecting");
