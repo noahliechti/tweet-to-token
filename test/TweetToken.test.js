@@ -16,6 +16,7 @@ describe("TweetToken Contract", () => {
   });
 
   describe("Deployment", () => {
+    // TODO:
     // it("Should set the right owner", async () => {
     //   expect(await ttt.owner()).to.equal(owner.address);
     // });
