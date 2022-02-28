@@ -15,7 +15,12 @@ async function main() {
   const { chainId } = network.config;
   const deployedContractAddress = addresses[chainId][contractName];
   const ttt = await ethers.getContractAt(contractName, deployedContractAddress);
-  await flipSaleState(ttt);
+  const isActive = await flipSaleState(ttt);
+  console.log(
+    `Contract ${deployedContractAddress} is now: ${
+      isActive ? "active" : "paused"
+    }`
+  );
 }
 
 main().catch((error) => {
