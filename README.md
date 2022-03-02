@@ -5,6 +5,8 @@
 
 🚧 The project is currently available on mumbai testnet.
 
+👨🏽‍💻 Dev environment is designed for MacOs/Linux
+
 ## client
 
 ### serverless function
